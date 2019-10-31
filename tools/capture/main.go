@@ -37,9 +37,9 @@ func main() {
 }
 
 func capture_get(c *gin.Context) {
-	fmt.Println("dvrs_get")
+	fmt.Println("capture_get")
 }
 
 func capture_post(c *gin.Context) {
-	fmt.Println("dvrs_post")
+	fmt.Println("capture_post")
 }
