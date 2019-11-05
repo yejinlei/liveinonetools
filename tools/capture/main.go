@@ -1,15 +1,20 @@
 package main
 
 import (
-	"bytes"
+	"context"
+	"errors"
 	"fmt"
+	"log"
+	"os"
+	"os/exec"
+	"strings"
+	_ "strings"
+	"sync"
+	"time"
+
 	"github.com/Shopify/sarama"
 	"github.com/gin-gonic/gin"
 	_ "github.com/tedcy/fdfs_client"
-	_ "log"
-	"os/exec"
-	_ "strings"
-	"sync"
 )
 
 var count = 1
@@ -30,7 +35,7 @@ func restful_service() {
 func kafka_service() {
 	for {
 		fmt.Println("kafka_service")
-		fetch_msg()
+		go consumer_msg()
 		ffmpeg_warp()
 	}
 	count -= 1
@@ -53,39 +58,48 @@ func capture_post(c *gin.Context) {
 }
 
 func ffmpeg_warp() {
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-	//list := strings.Split(ffmpeg_args, " ")
 	for {
-		ffmpeg_args := "ffmpeg -i rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov -r 1 -f image2 image%d.jpg"
-		cmd := exec.Command("bash", "-c", ffmpeg_args)
-		cmd.Stdout = &stdout
-		cmd.Stderr = &stderr
-		err := cmd.Run()
-		if err != nil {
-			continue
-		}
+		select {
+		case <-CS:
+			ffmpeg_args := "-i rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov -r 1 -f image2 image%d.jpg"
+			arg := strings.Split(ffmpeg_args, " ")
+			out, err := Command("ffmpeg", arg[:]...)
+			if err != nil {
+				log.Println("错误返回:", err.Error())
+			} else {
+				log.Println("正常返回:", out)
+			}
 
-		fmt.Println(stdout)
-		fmt.Println("finish")
+			fmt.Println(out)
+			fmt.Println("finish")
+		}
 	}
 }
 
-func fetch_msg() {
-	fmt.Println("fetch_msg")
+func init() {
+	sarama.Logger = log.New(os.Stdout, "[Sarama] ", log.LstdFlags)
+}
+
+var CS = make(chan bool, 1)
+
+func consumer_msg() {
+	fmt.Println("consumer_msg")
 
 	config := sarama.NewConfig()
-	config.Consumer.Return.Errors = true
-	config.Version = sarama.V0_11_0_2
+	config.Producer.Retry.Max = 1
+	config.Producer.RequiredAcks = sarama.WaitForAll
+	config.Producer.Return.Successes = true
+	config.Metadata.Full = true
+	config.Version = sarama.V0_10_0_0
+	config.ClientID = "sasl_scram_client"
+	config.Metadata.Full = true
 
 	// consumer
-	consumer, err := sarama.NewConsumer([]string{"localhost:9092"}, config)
+	consumer, err := sarama.NewConsumer([]string{"10.10.82.66:9092"}, config)
 	if err != nil {
 		fmt.Printf("consumer_test create consumer error %s\n", err.Error())
 		return
-
 	}
-
 	defer consumer.Close()
 
 	partition_consumer, err := consumer.ConsumePartition("kafka_go_test", 0, sarama.OffsetOldest)
@@ -96,15 +110,36 @@ func fetch_msg() {
 	}
 	defer partition_consumer.Close()
 
+	c := time.Tick(20 * time.Second)
 	for {
 		select {
-		case msg := <-partition_consumer.Messages():
-			fmt.Printf("msg offset: %d, partition: %d, timestamp: %s, value: %s\n",
-				msg.Offset, msg.Partition, msg.Timestamp.String(), string(msg.Value))
-		case err := <-partition_consumer.Errors():
-			fmt.Printf("err :%s\n", err.Error())
+		//case msg := <-partition_consumer.Messages():
+		//	fmt.Printf("msg offset: %d, partition: %d, timestamp: %s, value: %s\n",
+		//		msg.Offset, msg.Partition, msg.Timestamp.String(), string(msg.Value))
+		//case err := <-partition_consumer.Errors():
+		//	fmt.Printf("err :%s\n", err.Error())
 
+		case <-c:
+			CS <- true
+			fmt.Println("cs <- true")
 		}
 
+	}
+}
+
+var Timeout = 10 * time.Second
+
+func Command(name string, arg ...string) (string, error) {
+	ctxt, cancel := context.WithTimeout(context.Background(), Timeout)
+	defer cancel()
+	cmd := exec.CommandContext(ctxt, name, arg...)
+	if out, err := cmd.Output(); err != nil {
+		if ctxt.Err() != nil && ctxt.Err() == context.DeadlineExceeded {
+			return "", errors.New("command timeout")
+
+		}
+		return string(out), err
+	} else {
+		return string(out), nil
 	}
 }
