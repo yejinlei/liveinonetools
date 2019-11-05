@@ -15,6 +15,7 @@ var (
 	h bool
 	i string
 	p string
+	t int64
 )
 
 func usage() {
@@ -30,6 +31,7 @@ func init() {
 	flag.BoolVar(&h, "h", false, "this help")
 	flag.StringVar(&i, "i", "camera.conf", "流地址文件或流地址")
 	flag.StringVar(&p, "p", "none", "流地址变化策略")
+	flag.Int64Var(&t, "t", 10, "默认超时：10s")
 	flag.Usage = usage
 }
 
@@ -50,12 +52,6 @@ func main() {
 	//id := streamidRange[len(streamidRange)-1]
 	if "none" == p {
 		out, _ := Command("ffprobe", strings.Split("-i "+i, " ")[:]...)
-		//if err != nil {
-		//	log.Println("错误返回:", err.Error())
-		//} else {
-		//	log.Printf("正常返回:%s", out)
-		//}
-
 		if strings.Index(out, "title") != -1 && strings.Index(out, "Stream") != -1 {
 			fmt.Println("=======================================> stream is living")
 		} else {
@@ -64,9 +60,8 @@ func main() {
 	}
 }
 
-var Timeout = 10 * time.Second
-
 func Command(name string, arg ...string) (string, error) {
+	Timeout := time.Duration(t) * time.Second
 	ctxt, cancel := context.WithTimeout(context.Background(), Timeout)
 	defer cancel()
 	cmd := exec.CommandContext(ctxt, name, arg...)
