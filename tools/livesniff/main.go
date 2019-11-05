@@ -9,6 +9,8 @@ import (
 	"os/exec"
 	"strings"
 	"time"
+
+	_ "github.com/go-echarts/go-echarts/charts"
 )
 
 var (
