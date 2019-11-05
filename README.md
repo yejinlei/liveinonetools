@@ -3,4 +3,5 @@
 
 ## 工具集（tools）
 ### capture，截图工具
-### checkvideo，视频流地址有效性检测工具
+### checkvideo，视频分析工具
+### livesniff, 视频嗅探工具
