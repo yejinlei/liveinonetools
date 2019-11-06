@@ -23,7 +23,7 @@ var (
 	m string
 
 	lock sync.Mutex
-	id   = make(chan string, 1)
+	id   = make(chan string, 500)
 )
 
 func usage() {
@@ -85,16 +85,15 @@ func main() {
 				go func(u string) {
 					out, _ := Command("ffprobe", strings.Split("-i "+u, " ")[:]...)
 					if strings.Index(out, "title") != -1 && strings.Index(out, "Stream") != -1 {
-						lock.Lock()
-						fmt.Println(u, "status: living")
-						lock.Unlock()
+						//fmt.Println(u, "status: living")
 						//lock.Lock()
-						//id <- u
+						id <- u + ":living"
 						//lock.Unlock()
 					} else {
 						//lock.Lock()
 						//fmt.Println(u, "status: death")
 						//lock.Unlock()
+						id <- u + ":death"
 					}
 				}(u)
 			}
@@ -159,14 +158,10 @@ func PipeCommand() {
 }
 
 func stat() {
-Loop:
 	for {
 		select {
-		case urlId, ok := <-id:
-			if !ok {
-				break Loop
-			}
-			fmt.Println(urlId, "living")
+		case urlId := <-id:
+			fmt.Println(urlId)
 		}
 	}
 }
