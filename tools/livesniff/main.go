@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	_ "github.com/go-echarts/go-echarts/charts"
@@ -19,6 +21,9 @@ var (
 	p string
 	t int64
 	m string
+
+	lock sync.Mutex
+	id   = make(chan string, 1)
 )
 
 func usage() {
@@ -48,8 +53,21 @@ func main() {
 	}
 
 	/*动态生成、文件读取*/
+	var liveUrl []string
 	if strings.Index(i, "://") != -1 {
-
+		url := strings.Split(i, "/")
+		urlLen := len(url)
+		if strings.Contains(url[urlLen-1], "-") {
+			urlRange := strings.Split(url[urlLen-1], "-")
+			s, _ := strconv.Atoi(urlRange[0])
+			e, _ := strconv.Atoi(urlRange[1])
+			for s <= e {
+				s += 1
+				liveUrl = append(liveUrl, strings.Join(url[:urlLen-1], "/")+"/"+strconv.Itoa(s))
+			}
+		} else {
+			liveUrl = append(liveUrl, i)
+		}
 	} else {
 
 	}
@@ -58,7 +76,7 @@ func main() {
 	//streamidRange := strings.Split(i, "/")
 	//id := streamidRange[len(streamidRange)-1]
 
-	liveUrl := []string{"rtmp://10.10.82.66:11936/live/6058", "rtmp://10.10.82.66:11936/live/6057"}
+	//liveUrl = []string{"rtmp://10.10.82.66:11936/live/6058", "rtmp://10.10.82.66:11936/live/5021"}
 
 	/*选择模式，嗅探、压力、显示*/
 	for _, v := range strings.Split(m, ";") {
@@ -67,9 +85,16 @@ func main() {
 				go func(u string) {
 					out, _ := Command("ffprobe", strings.Split("-i "+u, " ")[:]...)
 					if strings.Index(out, "title") != -1 && strings.Index(out, "Stream") != -1 {
-						fmt.Println(u, "status: live")
+						lock.Lock()
+						fmt.Println(u, "status: living")
+						lock.Unlock()
+						//lock.Lock()
+						//id <- u
+						//lock.Unlock()
 					} else {
-						fmt.Println(u, "status: death")
+						//lock.Lock()
+						//fmt.Println(u, "status: death")
+						//lock.Unlock()
 					}
 				}(u)
 			}
@@ -80,6 +105,7 @@ func main() {
 		}
 	}
 
+	go stat()
 	time.Sleep(100000000000)
 }
 
@@ -104,7 +130,7 @@ func PipeCommand() {
 	var commands []*exec.Cmd
 	//ffmpeg_args := "ffmpeg -i rtmp://10.10.82.66:11936/live/6057 -i rtmp://10.10.82.66:11936/live/6058 -filter_complex '[1]scale=iw/2:ih/2[pip];[0][pip]overlay=main_w-overlay_w-10:main_h-overlay_h-10' -f flv -"
 	//ffmpeg_args := "ffmpeg -i rtmp://10.10.82.66:11936/live/6057 -i rtmp://10.10.82.66:11936/live/6058 -filter_complex 'nullsrc=size=200x200[base]; [0:v]setpts=PTS-STARTPTS,scale=100x100[l1]; [1:v]setpts=PTS-STARTPTS,scale=100x100[l2]; [base][l1]overlay=x=0:y=0[tmp1]; [tmp1][l2]overlay=x=100:y=100' -f flv -"
-	ffmpeg_args := "ffmpeg -i rtmp://10.10.82.66:11936/live/6057 -i rtmp://10.10.82.66:11936/live/6058 -filter_complex 'nullsrc=size=1024x768[base]; [0:v]setpts=PTS-STARTPTS,scale=517x384[l1]; [1:v]setpts=PTS-STARTPTS,scale=517x384[l2]; [base][l1]overlay=x=0:y=0[tmp1]; [tmp1][l2]overlay=x=0:y=384' -f flv -"
+	ffmpeg_args := "ffmpeg -i rtmp://10.10.82.66:11936/live/5021 -i rtmp://10.10.82.66:11936/live/6058 -filter_complex 'nullsrc=size=1024x768[base]; [0:v]setpts=PTS-STARTPTS,scale=517x384[l1]; [1:v]setpts=PTS-STARTPTS,scale=517x384[l2]; [base][l1]overlay=x=0:y=0[tmp1]; [tmp1][l2]overlay=x=0:y=384' -f flv -"
 	ffplay_args := "ffplay -i -"
 	commands = append(commands, exec.Command("sh", "-c", ffmpeg_args))
 	commands = append(commands, exec.Command("sh", "-c", ffplay_args))
@@ -128,6 +154,19 @@ func PipeCommand() {
 		err := commands[i].Wait()
 		if err != nil {
 			panic(err)
+		}
+	}
+}
+
+func stat() {
+Loop:
+	for {
+		select {
+		case urlId, ok := <-id:
+			if !ok {
+				break Loop
+			}
+			fmt.Println(urlId, "living")
 		}
 	}
 }
