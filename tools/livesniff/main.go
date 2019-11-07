@@ -16,14 +16,14 @@ import (
 )
 
 var (
-	h bool
-	i string
-	p string
-	t int64
-	m string
+	h  bool
+	i  string
+	ip string
+	t  int64
+	m  string
 
 	lock sync.Mutex
-	id   = make(chan string, 1)
+	id   = make(chan string, 1000)
 )
 
 func usage() {
@@ -37,10 +37,9 @@ Options:
 
 func init() {
 	flag.BoolVar(&h, "h", false, "this help")
-	flag.StringVar(&i, "i", "camera.conf", "流地址文件或流地址")
-	flag.StringVar(&p, "p", "seq", "流地址变化策略")
-	flag.Int64Var(&t, "t", 10, "默认超时：10s")
 	flag.StringVar(&m, "m", "sniff", "sniff嗅探模式|stress压力测试模式|show显示模式")
+	flag.StringVar(&i, "i", "camera.conf", "流地址文件或流地址")
+	flag.Int64Var(&t, "t", 10, "默认超时：10s")
 
 	flag.Usage = usage
 }
@@ -62,8 +61,8 @@ func main() {
 			s, _ := strconv.Atoi(urlRange[0])
 			e, _ := strconv.Atoi(urlRange[1])
 			for s <= e {
-				s += 1
 				liveUrl = append(liveUrl, strings.Join(url[:urlLen-1], "/")+"/"+strconv.Itoa(s))
+				s += 1
 			}
 		} else {
 			liveUrl = append(liveUrl, i)
@@ -85,16 +84,9 @@ func main() {
 				go func(u string) {
 					out, _ := Command("ffprobe", strings.Split("-i "+u, " ")[:]...)
 					if strings.Index(out, "title") != -1 && strings.Index(out, "Stream") != -1 {
-						lock.Lock()
-						fmt.Println(u, "status: living")
-						lock.Unlock()
-						//lock.Lock()
-						//id <- u
-						//lock.Unlock()
+						id <- u + ":living"
 					} else {
-						//lock.Lock()
-						//fmt.Println(u, "status: death")
-						//lock.Unlock()
+						id <- u + ":death"
 					}
 				}(u)
 			}
@@ -105,8 +97,8 @@ func main() {
 		}
 	}
 
-	go stat()
-	time.Sleep(100000000000)
+	stat()
+	//time.Sleep(100000000000)
 }
 
 func Command(name string, arg ...string) (string, error) {
@@ -159,14 +151,10 @@ func PipeCommand() {
 }
 
 func stat() {
-Loop:
 	for {
 		select {
-		case urlId, ok := <-id:
-			if !ok {
-				break Loop
-			}
-			fmt.Println(urlId, "living")
+		case urlId := <-id:
+			fmt.Println(urlId)
 		}
 	}
 }
