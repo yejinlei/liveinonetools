@@ -1,0 +1,24 @@
+# github.com/gwuhaolin/livego v0.0.0-20191025074832-36aaf27ee5c7
+github.com/gwuhaolin/livego/av
+github.com/gwuhaolin/livego/configure
+github.com/gwuhaolin/livego/container/flv
+github.com/gwuhaolin/livego/container/ts
+github.com/gwuhaolin/livego/parser
+github.com/gwuhaolin/livego/parser/aac
+github.com/gwuhaolin/livego/parser/h264
+github.com/gwuhaolin/livego/parser/mp3
+github.com/gwuhaolin/livego/protocol/amf
+github.com/gwuhaolin/livego/protocol/hls
+github.com/gwuhaolin/livego/protocol/httpflv
+github.com/gwuhaolin/livego/protocol/httpopera
+github.com/gwuhaolin/livego/protocol/rtmp
+github.com/gwuhaolin/livego/protocol/rtmp/cache
+github.com/gwuhaolin/livego/protocol/rtmp/core
+github.com/gwuhaolin/livego/protocol/rtmp/rtmprelay
+github.com/gwuhaolin/livego/utils/pio
+github.com/gwuhaolin/livego/utils/pool
+github.com/gwuhaolin/livego/utils/uid
+# github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6
+github.com/orcaman/concurrent-map
+# github.com/satori/go.uuid v1.2.0
+github.com/satori/go.uuid
