@@ -1,7 +1,7 @@
 emconfigure ./configure --cc="emcc" --cxx="em++" --ar="emar" --prefix=$(pwd)/../dist --enable-cross-compile --target-os=none --arch=x86_32 --cpu=generic \
 	 --enable-gpl --enable-version3 --disable-avdevice --disable-avformat --disable-swresample --disable-postproc --disable-avfilter \
 	  --disable-programs --disable-logging --disable-everything --enable-decoder=hevc --enable-decoder=h264 \
-	   --disable-ffplay --disable-ffprobe --disable-ffserver --disable-asm --disable-doc --disable-devices --disable-network \
+	   --disable-ffplay --disable-ffprobe --disable-asm --disable-doc --disable-devices --disable-network \
 	    --disable-hwaccels --disable-parsers --disable-bsfs --disable-debug --disable-protocols --disable-indevs --disable-outdevs 
 make
 make install
