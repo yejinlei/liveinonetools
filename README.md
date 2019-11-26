@@ -6,7 +6,9 @@
 ### srstools，srs相关
 - clangtools，各种clang分析工具及脚本
 - gperf，google性能分析工具及脚本
+- valgrind，valgrind分析脚本
 - build_srs.sh，srs构建脚本
+- build_srs_gprof.sh，srs gprof编译脚本
 - pull_srs.sh，拉取srs代码
 - centos6.5_dev.sh，srs centos6.5的容器开发环境
 ### liveanalysis，多媒体协议分析
@@ -14,6 +16,8 @@
 - livesniff，多功能多媒体嗅探，压测工具
 ### liveaccels，多媒体加速
 - wasm，各种webassembly播放器、服务器等
+    - install_emsdk.sh，emsdk安装脚本
+    - livegowasm，livego wasm形式服务器
 ### liveplayer，多媒体播放
 - call_run_nginx.sh，nginx启动脚本，会拷贝player到/
 - call_run_livego.sh，livego启动脚本
