@@ -55,14 +55,13 @@ func main() {
 	/*动态生成、文件读取*/
 	var liveUrl []string
 	if strings.Index(i, "://") != -1 {
-		url := strings.Split(i, "/")
-		urlLen := len(url)
-		if strings.Contains(url[urlLen-1], "-") {
-			urlRange := strings.Split(url[urlLen-1], "-")
+		if strings.Contains(i, "^") {
+			url := strings.Split(i, "^")
+			urlRange := strings.Split(url[1], "-")
 			s, _ := strconv.Atoi(urlRange[0])
 			e, _ := strconv.Atoi(urlRange[1])
 			for s <= e {
-				liveUrl = append(liveUrl, strings.Join(url[:urlLen-1], "/")+"/"+strconv.Itoa(s))
+				liveUrl = append(liveUrl, url[0]+strconv.Itoa(s)+url[2])
 				s += 1
 			}
 		} else {
