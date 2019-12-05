@@ -15,16 +15,14 @@ if __name__=='__main__':
     detector.setModelTypeAsRetinaNet()  # 模型的类型设置为 RetinaNet
     detector.setModelPath(path)  # 将模型路径设置为 RetinaNet 模型的路径
     detector.loadModel()  # 模型加载到的目标检测类
-    cap = cv2.VideoCapture("rtmp://10.10.82.66:11936/live/5021")
+    cap = cv2.VideoCapture(0)
     count = 0
     while (True):  # 逐帧显示
-        ret, img = cap.read() # 强调img是ndarray类型的。
+        ret, img = cap.read()
         count += 1
-        if count % 25 != 0:
+        if count % 100 != 0:
             continue
-        imgData = detector.detectObjectsFromImage(input_image=img,
-                                                 input_type='array',output_type='array')
-        #imgData=targetDetection(img,model_path)
+        imgData = detector.detectObjectsFromImage(input_image=img, input_type='array',output_type='array')
         cv2.imshow('image',imgData[0])
         if cv2.waitKey(1) & 0xFF == ord(' '):
             break
