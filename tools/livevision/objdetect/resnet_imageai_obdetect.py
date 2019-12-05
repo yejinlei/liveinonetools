@@ -14,7 +14,7 @@ if __name__=='__main__':
     detector = ObjectDetection()  # 定义了目标检测类
     detector.setModelTypeAsRetinaNet()  # 模型的类型设置为 RetinaNet
     detector.setModelPath(path)  # 将模型路径设置为 RetinaNet 模型的路径
-    detector.loadModel()  # 模型加载到的目标检测类
+    detector.loadModel("fastest")  # 模型加载到的目标检测类
     cap = cv2.VideoCapture(0)
     count = 0
     while (True):  # 逐帧显示
@@ -22,7 +22,8 @@ if __name__=='__main__':
         count += 1
         if count % 100 != 0:
             continue
-        imgData = detector.detectObjectsFromImage(input_image=img, input_type='array',output_type='array')
+        custom_objects = detector.CustomObjects(person=True, motorcycle=True)
+        imgData = detector.detectCustomObjectsFromImage(custom_objects=custom_objects, input_image=img, input_type='array',output_type='array')
         cv2.imshow('image',imgData[0])
         if cv2.waitKey(1) & 0xFF == ord(' '):
             break
