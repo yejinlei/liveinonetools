@@ -1,0 +1,9 @@
+mxnet-cu100
+gluoncv
+matplotlib
+numpy
+opencv-contrib-python==4.1.2.30
+opencv-python==4.1.2.30
+Pillow
+scipy
+jupyter
