@@ -1,0 +1,45 @@
+version: '3.3'
+
+services:
+  live_ingest:
+    image: yejinlei/live_ingest.go:0.9
+    privileged: true
+    networks:
+      - srs-network
+    volumes:
+      - ./camera.conf:/camera.conf
+      - ./argv.conf:/argv.conf
+      - /dev/video0:/dev/video0
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      TASK_SLOT: 1
+      SERVICE_NAME: 1
+      NODE_HOSTNAME: 1
+    command: ./ingest
+
+  live_srs:
+    image: yejinlei/srsv2.0-r6_centos7.6:1.2
+    hostname: live_srs
+    ports:
+      - "11936:1936"
+      - "11938:8180"
+    volumes:
+      - ./srs.conf:/usr/local/srs/conf/srs.conf
+      - ./server.py:/usr/local/srs/server.py
+    networks:
+      - srs-network
+    deploy:
+      mode: replicated
+      replicas: 1 
+    command:  
+      - /bin/sh
+      - -c
+      - |
+        objs/srs -c conf/srs.conf
+        python server.py 8085
+
+networks:
+  srs-network:
+    driver: bridge
