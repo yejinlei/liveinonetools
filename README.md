@@ -25,6 +25,11 @@
 - pub_rtsp.sh，推送rtsp流
 - player，播放器
 ### livevision，多媒体视觉
+- env_mxnet.sh，mxnet cpu环境
+- env_mxnet_gpu.sh，mxnet gpu环境
+- env_imageai_sh，imageai计算机视觉库环境
+- env_imageai_gpu.sh，imageai gpu计算机视觉库环境
+- obdetect，目标检测代码
 ### liveserver，多媒体服务器
 - srstools，srs直播工具相关工具
   - living
