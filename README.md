@@ -3,14 +3,6 @@
 
 ## 工具集（tools）
 ### capture，截图工具
-### srstools，srs相关
-- clangtools，各种clang分析工具及脚本
-- gperf，google性能分析工具及脚本
-- valgrind，valgrind分析脚本
-- build_srs.sh，srs构建脚本
-- build_srs_gprof.sh，srs gprof编译脚本
-- pull_srs.sh，拉取srs代码
-- centos6.5_dev.sh，srs centos6.5的容器开发环境
 ### liveanalysis，多媒体协议分析
 ### livesniff, 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
