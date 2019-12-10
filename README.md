@@ -12,7 +12,6 @@ rtmps | | | |
 rtmpt | | | |
 rtmpts | | | |
 hls | | | |
-_ | | | | |
 _ |rtsp |    | | |
 _ |flv(Flash Video) |    | | |
 _ |mp4(MPEG-4 part 14) |    | | |
@@ -58,7 +57,7 @@ _ |_ |hevc(H.265 / HEVC (High Efficiency Video Coding))    | | |
   - centos6.5_dev.sh，容器开发环境，已经集成了gcc、gdb等工具
   - gperf，google性能工具相关脚本
   - clangtools，Apple clang/llvm相关工具
-  - valgrind，linux下algring内存、cpu分析工具
+  - valgrind，linux下valgring内存、cpu分析工具
 - run_livego，纯go实现的支持rtmp、hls、httpflv协议的轻量级直播服务器
 - run_easydarwin，纯go实现的支持rtsp的直播服务器
 - run_live555.sh，c++实现的流媒体项目
