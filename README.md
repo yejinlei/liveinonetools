@@ -4,6 +4,30 @@
 ## 工具集（tools）
 ### capture，截图工具
 ### liveanalysis，多媒体协议分析
+
+protocols（流及协议） | formats(封装容器) | codecs（音视频编解码） | doc | tools
+---|---|---|---|---
+rtmp | | | |
+rtmps | | | |
+rtmpt | | | |
+rtmpts | | | |
+hls | | | |
+_ |rtsp |    | | |
+_ |flv(Flash Video) |    | | |
+_ |mp4(MPEG-4 part 14) |    | | |
+_ |dash(DASH Muxer)
+_ |webm |    | | |
+_ |rtsp |    | | |
+_ |hls(Apple HTTP Live Streaming)
+_ |hds(HDS Muxer) |    | | |
+_ |rtp |    | | |
+_ |mpegts(MPEG-2 Transport Stream)
+_ |aac(Advanced Audio Coding)
+_ |adts(ADTS AAC)
+_ |_ |mpeg4(MPEG-4 part 2)    | | |
+_ |_ |h264(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | |
+_ |_ |hevc(H.265 / HEVC (High Efficiency Video Coding))    | | |
+
 ### livesniff, 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
 ### liveaccels，多媒体加速
@@ -33,7 +57,7 @@
   - centos6.5_dev.sh，容器开发环境，已经集成了gcc、gdb等工具
   - gperf，google性能工具相关脚本
   - clangtools，Apple clang/llvm相关工具
-  - valgrind，linux下algring内存、cpu分析工具
+  - valgrind，linux下valgring内存、cpu分析工具
 - run_livego，纯go实现的支持rtmp、hls、httpflv协议的轻量级直播服务器
 - run_easydarwin，纯go实现的支持rtsp的直播服务器
 - run_live555.sh，c++实现的流媒体项目
