@@ -26,6 +26,7 @@ _ |aac(Advanced Audio Coding)
 _ |adts(ADTS AAC)
 _ |_ |mpeg4(MPEG-4 part 2)    | | |
 _ |_ |h264(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | |
+_ |_ |avc1(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | |
 _ |_ |hevc(H.265 / HEVC (High Efficiency Video Coding))    | | |
 
 ### livesniff, 多媒体嗅探、压测
@@ -50,7 +51,7 @@ _ |_ |hevc(H.265 / HEVC (High Efficiency Video Coding))    | | |
 - srstools，srs直播工具相关工具
   - living
     - start_srs.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
-    - stop_srs.sh，停止脚本
+    - start_srs_stack.sh，SRS Forward模式集群docker swarm/stack编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
   - pull_srs.sh，拉取srs版本库脚本
   - build_srs，编译srs release脚本，需放入srs版本库中
   - build_srs_gprof.sh，编译加入gprof性能工具
@@ -62,3 +63,6 @@ _ |_ |hevc(H.265 / HEVC (High Efficiency Video Coding))    | | |
 - run_easydarwin，纯go实现的支持rtsp的直播服务器
 - run_live555.sh，c++实现的流媒体项目
 - ipc_sipserver，sip服务器
+
+### 测试地址
+- BSTV rtmp://202.69.69.180:443/webcast/bshdlive-pc
