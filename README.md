@@ -44,7 +44,7 @@ _ |_ |_|qsv | |
   - Quick Sync Video(介绍：http://www.elecfans.com/d/789787.html)
     - lsmod|grep 'i915'
     - vainfo
-    - http://trac.ffmpeg.org/wiki/Hardware/QuickSyn c
+    - http://trac.ffmpeg.org/wiki/Hardware/QuickSync
   - MMX/SSE/SSE2/SSE3/SSE4
   - GPU/CUDA
 ### liveplayer，多媒体播放
