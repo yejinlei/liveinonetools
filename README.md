@@ -5,8 +5,8 @@
 ### capture，截图工具
 ### liveanalysis，多媒体协议分析
 
-protocols（流及协议） | formats(封装容器) | codecs（音视频编解码） | doc | tools
----|---|---|---|---
+protocols（流及协议） | formats(封装容器) | codecs（音视频编解码） | hwaccels（硬件加速） | doc | tools
+---|---|---|---|---|---
 rtmp | | | |
 rtmps | | | |
 rtmpt | | | |
@@ -21,20 +21,32 @@ _ |rtsp |    | | |
 _ |hls(Apple HTTP Live Streaming)
 _ |hds(HDS Muxer) |    | | |
 _ |rtp |    | | |
+_ |mpeg1video(raw MPEG-1 video)
+_ |mpeg2video(raw MPEG-2 video)
 _ |mpegts(MPEG-2 Transport Stream)
 _ |aac(Advanced Audio Coding)
 _ |adts(ADTS AAC)
+_ |_ |mpeg1video(MPEG-1 video)    | | |
+_ |_ |mpeg2video(MPEG-2 video)    | | |
 _ |_ |mpeg4(MPEG-4 part 2)    | | |
 _ |_ |h264(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | |
 _ |_ |avc1(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | |
 _ |_ |hevc(H.265 / HEVC (High Efficiency Video Coding))    | | |
+_ |_ |_|qsv | |
 
 ### livesniff, 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
 ### liveaccels，多媒体加速
 - wasm，各种webassembly播放器、服务器等
-    - install_emsdk.sh，emsdk安装脚本
     - livegowasm，livego wasm形式服务器
+- 硬件编码
+  - NVENC
+  - Quick Sync Video(介绍：http://www.elecfans.com/d/789787.html)
+    - lsmod|grep 'i915'
+    - vainfo
+    - http://trac.ffmpeg.org/wiki/Hardware/QuickSyn c
+  - MMX/SSE/SSE2/SSE3/SSE4
+  - GPU/CUDA
 ### liveplayer，多媒体播放
 - call_run_nginx.sh，nginx启动脚本，会拷贝player到/
 - call_run_livego.sh，livego启动脚本
