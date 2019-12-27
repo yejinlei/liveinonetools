@@ -2,7 +2,6 @@
 音视频工具集
 
 ## 工具集（tools）
-### capture，截图工具
 ### liveanalysis，多媒体协议分析
 
 protocols（流及协议） | formats(封装容器) | codecs（音视频编解码） | hwaccels（硬件加速） | doc | tools
