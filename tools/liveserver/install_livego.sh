@@ -13,4 +13,3 @@ echo '      "hlson": "on"' >> .livego.json
 echo '    }' >> .livego.json
 echo '  ]' >> .livego.json
 echo '}' >> .livego.json
-./livego
