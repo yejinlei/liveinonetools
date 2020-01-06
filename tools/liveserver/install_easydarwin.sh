@@ -3,4 +3,3 @@ cd easydarwin_rep
 go build -mod=vendor
 cp EasyDarwin ../
 cd ..
-./EasyDarwin
