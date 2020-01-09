@@ -11,11 +11,11 @@ rtmps | | | |
 rtmpt | | | |
 rtmpts | | | |
 hls(Apple HTTP Live Streaming) | m3u8+mpegts部分 |||1. 协议 - [HTTP Live Streaming draft-pantos-http-live-streaming-12](https://tools.ietf.org/html/draft-pantos-http-live-streaming-12)|
+dash(Dynamic adaptive streaming over HTTP) | mpd+| | | | 1. [video.js dash插件](https://github.com/videojs/videojs-contrib-dash.git)<br>2. [dash测试页](http://reference.dashif.org/dash.js/nightly/samples/dash-if-reference-player/index.html)
 _ |rtsp | | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt) |
 _ |rtp(rtp_mepg_ts) | | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551) | 开源协议栈：jrtplib
 _ |flv(Flash Video) |    | | | [flv工具](https://share.weiyun.com/5h54Qqp)
 _ |mp4(MPEG-4 part 14) |    | | | [mp4工具](https://share.weiyun.com/5pM2dwF)
-_ |dash(DASH Muxer) | | | | 1. [video.js dash插件](https://github.com/videojs/videojs-contrib-dash.git)<br>2. [dash测试页](http://reference.dashif.org/dash.js/nightly/samples/dash-if-reference-player/index.html)
 _ |webm | | | |
 _ |hds(HDS Muxer) |    | | |
 _ |mpeg1video(raw MPEG-1 video)
