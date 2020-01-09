@@ -11,11 +11,11 @@ protocols（流协议及其他） | formats(封装容器) | codecs（音视频�
 **rtmpt** | | | |
 **rtmpts** | | | |
 **hls**(Apple HTTP Live Streaming) | m3u8+mpegts部分 |||1. 协议 - [HTTP Live Streaming draft-pantos-http-live-streaming-12](https://tools.ietf.org/html/draft-pantos-http-live-streaming-12)|
-**dash**(Dynamic adaptive streaming over HTTP) | mpd+m4v/m4a\|webm | | | | 1. [video.js dash插件](https://github.com/videojs/videojs-contrib-dash.git)<br>2. [dash测试页](http://reference.dashif.org/dash.js/nightly/samples/dash-if-reference-player/index.html)
+**dash**(Dynamic adaptive streaming over HTTP) | mpd+m4v/m4a\|webm | | | | 1. [video.js dash插件](https://github.com/videojs/videojs-contrib-dash.git)<br>2. [dash测试页](http://reference.dashif.org/dash.js/nightly/samples/dash-if-reference-player/index.html)<br>3. [Bento4's github](https://github.com/axiomatic-systems/Bento4)<br>4. [Bento4's Bin](https://share.weiyun.com/5w4fPrC)<br>5. [DASHEncoder2's github](https://github.com/zhanghuicuc/DASHEncoder2/tree/dev-v2)<br>6. [DASH website demo's github（类似bitcodin网站）](https://github.com/zhanghuicuc/dash_website_demo)
 _ |**rtsp** | | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt) |
 _ |**rtp**(rtp_mepg_ts) | | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551) | 开源协议栈：jrtplib
 _ |**flv**(Flash Video) |    | | | [flv工具](https://share.weiyun.com/5h54Qqp)
-_ |**mp4**(MPEG-4 part 14) |    | | | [mp4工具](https://share.weiyun.com/5pM2dwF)
+_ |**mp4**(MPEG-4 part 14) |    | | | 1. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>2. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
 _ |**m4v**(raw MPEG-4 video) |    | | |
 _ |**webm** | | | |
 _ |**hds**(HDS Muxer) |    | | |
@@ -27,7 +27,7 @@ _ |**adts**(ADTS AAC)
 _ |_ |**mpeg1video**(MPEG-1 video)    | | |
 _ |_ |**mpeg2video**(MPEG-2 video)    | | |
 _ |_ |**mpeg4**(MPEG-4 part 2)    | | |
-_ |_ |**h264**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | | [雷霄骅 / H264_Analysis](https://gitee.com/leixiaohua/H264_Analysis)
+_ |_ |**h264**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | | 1. [x264's github](https://code.videolan.org/videolan/x264.git)<br>2. [雷霄骅 / H264_Analysis](https://gitee.com/leixiaohua/H264_Analysis)
 _ |_ |**avc1**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | |
 _ |_ |**hevc**(H.265 / HEVC (High Efficiency Video Coding))    | | |
 _ |_ |_|**qsv** | |
