@@ -76,6 +76,17 @@ sip | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/
 - run_easydarwin，纯go实现的支持rtsp的直播服务器
 - run_live555.sh，c++实现的流媒体项目
 - ipc_sipserver，sip服务器
+### livenv, 环境安装
+- k8环境及工具
+  - install_minikube.sh
+  - install_kubeadm.sh
+  - install_kubectl.sh
+  - install_minikube.sh
+- web assembly工具链
+  - install_emscripten.sh
+  - install_emsdk.sh
+- X11 GUI in Docker
+  - start_docker_ubuntu-desktop.sh
 
 ### 测试地址
 - BSTV rtmp://202.69.69.180:443/webcast/bshdlive-pc
