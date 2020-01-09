@@ -63,7 +63,7 @@ sip | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/
 ### liveserver，多媒体服务器
 - srstools，srs直播工具相关工具
   - living
-    - start_srs.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
+    - start_srs_compose.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
     - start_srs_stack.sh，SRS Forward模式集群docker swarm/stack编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
   - pull_srs.sh，拉取srs版本库脚本
   - build_srs，编译srs release脚本，需放入srs版本库中
@@ -72,9 +72,9 @@ sip | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/
   - gperf，google性能工具相关脚本
   - clangtools，Apple clang/llvm相关工具
   - valgrind，linux下valgring内存、cpu分析工具
-- run_livego，纯go实现的支持rtmp、hls、httpflv协议的轻量级直播服务器
-- run_easydarwin，纯go实现的支持rtsp的直播服务器
-- run_live555.sh，c++实现的流媒体项目
+- install_livego.sh，纯go实现的支持rtmp、hls、httpflv协议的轻量级直播服务器
+- install_easydarwin，纯go实现的支持rtsp的直播服务器
+- install_live555.sh，c++实现的流媒体项目
 - ipc_sipserver，sip服务器
 ### livenv, 环境安装
 - k8环境及工具
