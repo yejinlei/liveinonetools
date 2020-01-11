@@ -12,7 +12,7 @@
   **rtmps** | | | |
   **rtmpt** | | | |
   **rtmpts** | | | |
-  **hls**(Apple HTTP Live Streaming) | m3u8+mpegts部分 | | 1. H5 video标签原生支持<br>2. 协议 - [HTTP Live Streaming draft-pantos-http-live-streaming-12](https://tools.ietf.org/html/draft-pantos-http-live-streaming-12) |
+  **hls**(Apple HTTP Live Streaming) | m3u8+mpegts部分 | | | 1. H5 video标签原生支持<br>2. 协议 - [HTTP Live Streaming draft-pantos-http-live-streaming-12](https://tools.ietf.org/html/draft-pantos-http-live-streaming-12) |
   **dash**(Dynamic adaptive streaming over HTTP) | mpd+m4v/m4a\|webm\|3gp | | | | 1. [video.js dash插件](https://github.com/videojs/videojs-contrib-dash.git)<br>2. [dash测试页](http://reference.dashif.org/dash.js/nightly/samples/dash-if-reference-player/index.html)<br>3. [Bento4's github](https://github.com/axiomatic-systems/Bento4)<br>4. [Bento4's Bin](https://share.weiyun.com/5w4fPrC)<br>5. [DASHEncoder2's github](https://github.com/zhanghuicuc/DASHEncoder2/tree/dev-v2)<br>6. [DASH website demo's github（类似bitcodin网站）](https://github.com/zhanghuicuc/dash_website_demo)
   **http-flv** | | | | H5 MSE扩展
   **http-fmp4** | | | | H5 MSE扩展
