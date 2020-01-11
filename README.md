@@ -3,6 +3,7 @@
 
 ## 工具集（tools）
 ### liveanalysis，多媒体协议分析
+<details><summary>多媒体协议视图</summary>
 
 protocols（流协议及其他） | formats(封装容器) | codecs（音视频编解码） | hwaccels（硬件加速） | 协议/文档 | 工具/库
 ---|---|---|---|---|---
@@ -10,15 +11,16 @@ protocols（流协议及其他） | formats(封装容器) | codecs（音视频�
 **rtmps** | | | |
 **rtmpt** | | | |
 **rtmpts** | | | |
-**hls**(Apple HTTP Live Streaming) | m3u8+mpegts部分 |||1. 协议 - [HTTP Live Streaming draft-pantos-http-live-streaming-12](https://tools.ietf.org/html/draft-pantos-http-live-streaming-12)|
+**hls**(Apple HTTP Live Streaming) | m3u8+mpegts部分 |||1. 协议 - [HTTP Live Streaming draft-pantos-http-live-streaming-12](https://tools.ietf.org/html/draft-pantos-http-live-streaming-12)| H5 video标签原生支持
 **dash**(Dynamic adaptive streaming over HTTP) | mpd+m4v/m4a\|webm\|3gp | | | | 1. [video.js dash插件](https://github.com/videojs/videojs-contrib-dash.git)<br>2. [dash测试页](http://reference.dashif.org/dash.js/nightly/samples/dash-if-reference-player/index.html)<br>3. [Bento4's github](https://github.com/axiomatic-systems/Bento4)<br>4. [Bento4's Bin](https://share.weiyun.com/5w4fPrC)<br>5. [DASHEncoder2's github](https://github.com/zhanghuicuc/DASHEncoder2/tree/dev-v2)<br>6. [DASH website demo's github（类似bitcodin网站）](https://github.com/zhanghuicuc/dash_website_demo)
 _ |**rtsp** | | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt) | 1. [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
 _ |**rtp**(rtp_mepg_ts) | | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551) | 开源协议栈：jrtplib
 _ |**flv**(Flash Video) |    | | | [flv工具](https://share.weiyun.com/5h54Qqp)
-_ |**mp4**(MPEG-4 part 14) | h264视频编码+aac音频编码 | | | 1. H5 video标签支持<br>2. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>3. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
+_ |**mp4**(MPEG-4 part 14) | h264视频编码+aac音频编码 | | | 1. H5 video标签原生支持<br>2. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>3. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
+_ |**fragment mp4** | h264视频编码+aac音频编码 | | | 
 _ |**m4v**(raw MPEG-4 video) | | | |
-_ |**webm** | vp8视频编码+vorbis音频编码 | | | H5 video标签支持
-_ |**ogg** | theora视频编码+vorbis音频编码 | | | H5 video标签支持
+_ |**webm** | vp8视频编码+vorbis音频编码 | | | H5 video标签原生支持
+_ |**ogg** | theora视频编码+vorbis音频编码 | | | H5 video标签原生支持
 _ |**hds**(HDS Muxer) |    | | |
 _ |**mpeg1video**(raw MPEG-1 video)
 _ |**mpeg2video**(raw MPEG-2 video)
@@ -39,6 +41,8 @@ _ |_ |_|**qsv** | |
 **rtcp** | | | | 1. 协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550)|
 **sip** | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt) | 开源协议栈：libosip2、libeXosip2
 
+</details>
+
 ### livesniff, 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
 ### liveaccels，多媒体加速
@@ -53,6 +57,19 @@ _ |_ |_|**qsv** | |
   - MMX/SSE/SSE2/SSE3/SSE4
   - GPU/CUDA
 ### liveplayer，多媒体播放
+<details><summary>播放器项目汇总</summary>
+
+播放器项目 | 源码及文档 | 分析及使用 
+--- | --- | ----
+video.js | |
+playease.js | |
+jwplayer6 | | 
+ckplayer | |
+CyberPlayer | | 基于jwplayer二次开发的flash播放器，支持rtmp、flv、hls
+
+
+</details>
+
 - call_run_nginx.sh，nginx启动脚本，会拷贝player到/
 - call_run_livego.sh，livego启动脚本
 - pub_rtmp.sh，推送rtmp流
@@ -65,6 +82,7 @@ _ |_ |_|**qsv** | |
 - env_imageai_gpu.sh，imageai gpu计算机视觉库环境
 - obdetect，目标检测代码
 ### liveserver，多媒体服务器
+<details><summary>服务器汇总</summary>
 
 项目 | 源码 |  分析
 --- | --- | --- |
@@ -74,6 +92,7 @@ live555 | |
 easydarwin | |
 livego | |
 
+</details>
 
 - srstools，srs直播工具相关工具
   - living
