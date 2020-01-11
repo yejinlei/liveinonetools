@@ -3,7 +3,7 @@
 
 ## 工具集（tools）
 ### liveanalysis，多媒体协议分析
-<details><summary>多媒体协议视图</summary>
+- <details><summary>多媒体协议视图</summary>
 
 protocols（流协议及其他） | formats(封装容器) | codecs（音视频编解码） | hwaccels（硬件加速） | 协议/文档 | 工具/库
 ---|---|---|---|---|---
@@ -57,7 +57,7 @@ _ |_ |_|**qsv** | |
   - MMX/SSE/SSE2/SSE3/SSE4
   - GPU/CUDA
 ### liveplayer，多媒体播放
-<details><summary>播放器项目汇总</summary>
+- <details><summary>播放器项目汇总</summary>
 
 播放器项目 | 源码及文档 | 分析及使用 
 --- | --- | ----
@@ -82,7 +82,7 @@ CyberPlayer | | 基于jwplayer二次开发的flash播放器，支持rtmp、flv�
 - env_imageai_gpu.sh，imageai gpu计算机视觉库环境
 - obdetect，目标检测代码
 ### liveserver，多媒体服务器
-<details><summary>服务器汇总</summary>
+- <details><summary>服务器汇总</summary>
 
 项目 | 源码 |  分析
 --- | --- | --- |
