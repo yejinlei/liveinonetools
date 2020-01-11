@@ -15,8 +15,8 @@ protocols（流协议及其他） | formats(封装容器) | codecs（音视频�
 _ |**rtsp** | | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt) | 1. [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
 _ |**rtp**(rtp_mepg_ts) | | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551) | 开源协议栈：jrtplib
 _ |**flv**(Flash Video) |    | | | [flv工具](https://share.weiyun.com/5h54Qqp)
-_ |**mp4**(MPEG-4 part 14) |    | | | 1. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>2. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
-_ |**m4v**(raw MPEG-4 video) | h264视频编码+aac音频编码 | | | H5 video标签支持
+_ |**mp4**(MPEG-4 part 14) | h264视频编码+aac音频编码 | | | 1. H5 video标签支持<br>2. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>3. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
+_ |**m4v**(raw MPEG-4 video) | | | |
 _ |**webm** | vp8视频编码+vorbis音频编码 | | | H5 video标签支持
 _ |**ogg** | theora视频编码+vorbis音频编码 | | | H5 video标签支持
 _ |**hds**(HDS Muxer) |    | | |
@@ -31,6 +31,9 @@ _ |_ |**mpeg4**(MPEG-4 part 2)    | | |
 _ |_ |**h264**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | | 1. [x264's github](https://code.videolan.org/videolan/x264.git)<br>2. [雷霄骅 / H264_Analysis](https://gitee.com/leixiaohua/H264_Analysis)
 _ |_ |**avc1**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | |
 _ |_ |**hevc**(H.265 / HEVC (High Efficiency Video Coding))    | | |
+_ |_ |**theora** | | |
+_ |_ |**vp8**(On2 VP8)) | | |
+_ |_ |**vorbis** | | |
 _ |_ |_|**qsv** | |
  | | | |
 **rtcp** | | | | 1. 协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550)|
