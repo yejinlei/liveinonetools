@@ -16,8 +16,9 @@ _ |**rtsp** | | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ie
 _ |**rtp**(rtp_mepg_ts) | | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551) | 开源协议栈：jrtplib
 _ |**flv**(Flash Video) |    | | | [flv工具](https://share.weiyun.com/5h54Qqp)
 _ |**mp4**(MPEG-4 part 14) |    | | | 1. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>2. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
-_ |**m4v**(raw MPEG-4 video) |    | | |
-_ |**webm** | | | |
+_ |**m4v**(raw MPEG-4 video) | h264视频编码+aac音频编码 | | | H5 video标签支持
+_ |**webm** | vp8视频编码+vorbis音频编码 | | | H5 video标签支持
+_ |**ogg** | theora视频编码+vorbis音频编码 | | | H5 video标签支持
 _ |**hds**(HDS Muxer) |    | | |
 _ |**mpeg1video**(raw MPEG-1 video)
 _ |**mpeg2video**(raw MPEG-2 video)
