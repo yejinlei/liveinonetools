@@ -48,6 +48,9 @@
 
 </details>
 
+- [H5音视频兼容性测试页](http://ossrs.net/mse/html5.html)
+- [H5 MSE测试页](http://ossrs.net/mse/mse.html)
+
 ### livesniff, 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
 ### liveaccels，多媒体加速
@@ -66,8 +69,9 @@
 
   播放器/库 | 源码及文档 | 分析及使用 
   --- | --- | ----
-  video.js | | 包含了大量扩展插件，[github](https://github.com/videojs)
-  mister-ben/videojs-flvjs | | [测试页](https://mister-ben.github.io/videojs-flvjs/),[github](https://github.com/mister-ben/videojs-flvjs)
+  video.js | | 包含了大量扩展插件，[github](https://github.com/videojs)<br>1. [videojs/videojs-flash](https://github.com/videojs/videojs-flash)，支持rtmp<br>2. [videojs/http-streaming](https://github.com/videojs/http-streaming)，支持hls、dash等over http流协议
+  mister-ben/videojs-flvjs | | Video.js tech to use flv.js for FLV playback using MSE instead of Flash.[测试页](https://mister-ben.github.io/videojs-flvjs/),[github](https://github.com/mister-ben/videojs-flvjs)
+  winlinvip/videojs-flow | | [github](https://github.com/winlinvip/videojs-flow)，支持websocket-flv
   playease.js | | 支持http/websocket-flv、http/websocket-fmp4、dash、rtmp、hls、Original HTML5 Media Resources (eg. Ogg, Mpeg4, WebM), [github](https://github.com/studease/playease/blob/master/test/index.html)
   video-dev/hls.js | | [测试页](https://hls-js.netlify.com/demo/),[github](https://github.com/video-dev/hls.js/)
   bilibili/flv.js | | 
