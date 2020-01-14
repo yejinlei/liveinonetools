@@ -48,8 +48,11 @@
 
 </details>
 
-- [H5音视频兼容性测试页](http://ossrs.net/mse/html5.html)
-- [H5 MSE测试页](http://ossrs.net/mse/mse.html)
+- H5音视频
+  - [各浏览器MSE情况](https://caniuse.com/#feat=mediasource)
+  - [各浏览器对dash、hls、smooth支持情况](https://bitmovin.com/docs/player/articles/device-and-cross-browser-support)
+  - [H5音视频兼容性测试页](http://ossrs.net/mse/html5.html)
+  - [H5 MSE测试页](http://ossrs.net/mse/mse.html)
 
 ### livesniff, 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
