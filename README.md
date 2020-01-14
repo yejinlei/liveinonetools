@@ -8,7 +8,7 @@
 
   protocols（流协议及其他） | formats(封装容器) | codecs（音视频编解码） | hwaccels（硬件加速） | 协议/文档 | 工具/库
   ---|---|---|---|---|---
-  **直播↷** | 
+  **直播↷** | **----** | **---** | **---** | **---**
   **rtmp** | flv tag | | | | 1. [librtmp's github](https://github.com/yixia/librtmp/tree/master/librtmp)<br>2. [nginx-rtmp-module(支持h265)代码](https://github.com/adwpc/nginx-rtmp-module)
   **rtmps** | | | |
   **rtmpt** | | | |
@@ -41,13 +41,13 @@
   _ |_ |**vp8**(On2 VP8)) | | |
   _ |_ |**vorbis** | | |
   _ |_ |_|**qsv** | |
-  **GB28181↷** | | | |
+  **GB28181↷** | **---** | **---** | **---** | **---**
   **rtcp** | | | | 1. 协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550)|
   _ |**rtsp** | | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt) | 1. [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
   _ |**rtp**(rtp_mepg_ts) | | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551) | 开源协议栈：jrtplib
-  **视频会议↷** | | | |
+  **视频会议↷** | **---** | **----** | **----** | **---**
   **webrtc** | | | |
-  **信令协议↷** | | | |
+  **信令协议↷** | **---** | **---** | **---** | **---**
   **h.323** | | | |
   **sip** | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt) | 开源协议栈：libosip2、libeXosip2
   **Verto** | | | |
