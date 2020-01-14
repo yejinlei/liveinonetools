@@ -42,13 +42,15 @@
   _ |_ |**vorbis** | | |
   _ |_ |_|**qsv** | |
   **GB28181↷** | | | |
-  **h323** | | | |
-  **sip** | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt) | 开源协议栈：libosip2、libeXosip2
   **rtcp** | | | | 1. 协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550)|
   _ |**rtsp** | | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt) | 1. [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
   _ |**rtp**(rtp_mepg_ts) | | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551) | 开源协议栈：jrtplib
-  **视频会议*↷** | | | |
+  **视频会议↷** | | | |
   **webrtc** | | | |
+  **信令协议↷** | | | |
+  **h.323** | | | |
+  **sip** | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt) | 开源协议栈：libosip2、libeXosip2
+  **Verto** | | | |
 
 - H5音视频
   - [各浏览器MSE情况](https://caniuse.com/#feat=mediasource)
@@ -116,6 +118,7 @@
   **WebRTC↷**|**---** |**---**
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
+  freeswitch | [github](https://github.com/signalwire/freeswitch) |
   coturn | [github](https://github.com/coturn/coturn) | 开源sturn/turn穿透服务器
 
 - srstools，srs直播工具相关工具
