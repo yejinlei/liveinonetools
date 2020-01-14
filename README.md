@@ -48,7 +48,7 @@ Media as a Service
   _ |**rtp**(rtp_mepg_ts) | | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551) | 开源协议栈：jrtplib
   **WebRTC↷** | **---** | **---** | **---** | **---**
   **MCU/SFU信令↷** | **---** | **---** | **---** | **---**
-  **h.323** | | | 1. [H.323 Version 6 - Overview](https://www.packetizer.com/ipmc/h323/whatsnew_v6.html) | 1. [h323plus's github](https://github.com/willamowius/h323plus)
+  **h.323** | | | | 1. [H.323 Version 6 - Overview](https://www.packetizer.com/ipmc/h323/whatsnew_v6.html)<br>2. [h323's wiki](https://wiki.wireshark.org/H323) | 1. [h323plus's github](https://github.com/willamowius/h323plus)
   **sip** | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt) | 开源协议栈：libosip2、libeXosip2
 
 - H5音视频
@@ -56,6 +56,13 @@ Media as a Service
   - [各浏览器对dash、hls、smooth支持情况](https://bitmovin.com/docs/player/articles/device-and-cross-browser-support)
   - [H5音视频兼容性测试页](http://ossrs.net/mse/html5.html)
   - [H5 MSE测试页](http://ossrs.net/mse/mse.html)
+
+- VOIP
+  - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
+- WebRTC
+- MCU/SFU
+  - SIP
+  - H323 
 
 ### livesniff， 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
@@ -70,12 +77,12 @@ Media as a Service
     - http://trac.ffmpeg.org/wiki/Hardware/QuickSync
   - MMX/SSE/SSE2/SSE3/SSE4
   - GPU/CUDA
-### liveplayer，多媒体播放
+### liveplayer，Web及移动端
 - ❀播放器项目汇总❀
 
   播放器/库 | 源码及文档 | 分析及使用 
   --- | --- | ----
-  **直播↷** | **---** | **---**
+  **WEB端直播↷** | **---** | **---**
   video.js | 包含了大量扩展插件，[github](https://github.com/videojs)<br>1. [videojs/videojs-flash](https://github.com/videojs/videojs-flash)，支持rtmp<br>2. [videojs/http-streaming](https://github.com/videojs/http-streaming)，支持hls、dash等over http流协议 |
   mister-ben/videojs-flvjs | Video.js tech to use flv.js for FLV playback using MSE instead of Flash.[测试页](https://mister-ben.github.io/videojs-flvjs/)，[github](https://github.com/mister-ben/videojs-flvjs) |
   winlinvip/videojs-flow | [github](https://github.com/winlinvip/videojs-flow)，支持websocket-flv |
@@ -86,6 +93,8 @@ Media as a Service
   ckplayer | flash播放器 |
   CyberPlayer | 基于jwplayer二次开发的flash播放器，支持rtmp、flv、hls，[source](https://share.weiyun.com/5rVCKPD) |
   rx-player | 支持dash、smooth，[测试页](https://developers.canal-plus.com/rx-player/)，[github](https://github.com/canalplus/rx-player) |
+  **SIP客户端↷** | **---** | **---**
+  linephone | [官网](http://www.linphone.org/technical-corner/linphone?qt-technical_corner=0) | |
 
 - call_run_nginx.sh，nginx启动脚本，会拷贝player到/
 - call_run_livego.sh，livego启动脚本
@@ -118,6 +127,9 @@ Media as a Service
   **WebRTC服务器及组件↷**|**---** |**---**
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
+  licode | [github](https://github.com/lynckia/licode) | 基于WebRTC开源MCU框架
+  kurento | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento架构图.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, et
+  jitsi | [github](https://github.com/jitsi) | 基于WebRTC开源MCU框架
   **MCU/SFU信令服务器及组件↷**|**---** |**---**
   openmcu | [github](https://github.com/muggot/openmcu) | 全功能的H.323，SIP和RTSP的开源多点控制单元，具有以下特性：支持通过端口1420(http://localhost:1420)上的Web界面进行配置和控制;支持多国语言;支持的协议:H.323，SIP;支持的视频编解码器：H.261，H.263，H.263 +，H.264，VP8;支持的音频编解码器:G.711，G.722，G723.1，G.726，G.729，iLBC，Speex，SILK，OPUS;支持多个不同的会议可以同时进行，使用不同的“房间”;支持实时显示呼叫统计;支持从MCU发起呼叫到远程终端;支持会议翻译为网络流。
   freeswitch | [github](https://github.com/signalwire/freeswitch) |
