@@ -119,7 +119,7 @@
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
   freeswitch | [github](https://github.com/signalwire/freeswitch) |
-  coturn | [github](https://github.com/coturn/coturn) | 开源sturn/turn穿透服务器
+  coturn | [github](https://github.com/coturn/coturn) | 开源stun/turn穿透服务器
 
 - srstools，srs直播工具相关工具
   - living
