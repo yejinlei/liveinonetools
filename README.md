@@ -4,7 +4,7 @@
 ## 工具集（tools）
 ### liveanalysis，多媒体协议分析
 
-- <details><summary>❀多媒体协议视图❀</summary>
+- ❀多媒体协议视图❀
 
   protocols（流协议及其他） | formats(封装容器) | codecs（音视频编解码） | hwaccels（硬件加速） | 协议/文档 | 工具/库
   ---|---|---|---|---|---
@@ -46,15 +46,13 @@
   **rtcp** | | | | 1. 协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550)|
   **sip** | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt) | 开源协议栈：libosip2、libeXosip2
 
-</details>
-
 - H5音视频
   - [各浏览器MSE情况](https://caniuse.com/#feat=mediasource)
   - [各浏览器对dash、hls、smooth支持情况](https://bitmovin.com/docs/player/articles/device-and-cross-browser-support)
   - [H5音视频兼容性测试页](http://ossrs.net/mse/html5.html)
   - [H5 MSE测试页](http://ossrs.net/mse/mse.html)
 
-### livesniff, 多媒体嗅探、压测
+### livesniff， 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
 ### liveaccels，多媒体加速
 - wasm，各种webassembly播放器、服务器等
@@ -68,22 +66,20 @@
   - MMX/SSE/SSE2/SSE3/SSE4
   - GPU/CUDA
 ### liveplayer，多媒体播放
-- <details><summary>❀播放器项目汇总❀</summary>
+- ❀播放器项目汇总❀
 
   播放器/库 | 源码及文档 | 分析及使用 
   --- | --- | ----
-  video.js | | 包含了大量扩展插件，[github](https://github.com/videojs)<br>1. [videojs/videojs-flash](https://github.com/videojs/videojs-flash)，支持rtmp<br>2. [videojs/http-streaming](https://github.com/videojs/http-streaming)，支持hls、dash等over http流协议
-  mister-ben/videojs-flvjs | | Video.js tech to use flv.js for FLV playback using MSE instead of Flash.[测试页](https://mister-ben.github.io/videojs-flvjs/),[github](https://github.com/mister-ben/videojs-flvjs)
-  winlinvip/videojs-flow | | [github](https://github.com/winlinvip/videojs-flow)，支持websocket-flv
-  playease.js | | 支持http/websocket-flv、http/websocket-fmp4、dash、rtmp、hls、Original HTML5 Media Resources (eg. Ogg, Mpeg4, WebM), [github](https://github.com/studease/playease/blob/master/test/index.html)
-  video-dev/hls.js | | [测试页](https://hls-js.netlify.com/demo/),[github](https://github.com/video-dev/hls.js/)
-  bilibili/flv.js | | 
-  jwplayer6 | | flash播放器
-  ckplayer | | flash播放器
-  CyberPlayer | | 基于jwplayer二次开发的flash播放器，支持rtmp、flv、hls,[source](https://share.weiyun.com/5rVCKPD)
-  rx-player | | 支持dash、smooth,[测试页](https://developers.canal-plus.com/rx-player/),[github](https://github.com/canalplus/rx-player)
-
-</details>
+  video.js | 包含了大量扩展插件，[github](https://github.com/videojs)<br>1. [videojs/videojs-flash](https://github.com/videojs/videojs-flash)，支持rtmp<br>2. [videojs/http-streaming](https://github.com/videojs/http-streaming)，支持hls、dash等over http流协议 |
+  mister-ben/videojs-flvjs | Video.js tech to use flv.js for FLV playback using MSE instead of Flash.[测试页](https://mister-ben.github.io/videojs-flvjs/)，[github](https://github.com/mister-ben/videojs-flvjs) |
+  winlinvip/videojs-flow | [github](https://github.com/winlinvip/videojs-flow)，支持websocket-flv |
+  playease.js | 支持http/websocket-flv、http/websocket-fmp4、dash、rtmp、hls、Original HTML5 Media Resources (eg. Ogg， Mpeg4， WebM)， [github](https://github.com/studease/playease/blob/master/test/index.html) |
+  video-dev/hls.js | [测试页](https://hls-js.netlify.com/demo/)，[github](https://github.com/video-dev/hls.js/) |
+  bilibili/flv.js | 开源h5 flv前端播放库，[github](https://github.com/bilibili/flv.js) | 
+  jwplayer6 | flash播放器 |
+  ckplayer | flash播放器 |
+  CyberPlayer | 基于jwplayer二次开发的flash播放器，支持rtmp、flv、hls，[source](https://share.weiyun.com/5rVCKPD) |
+  rx-player | 支持dash、smooth，[测试页](https://developers.canal-plus.com/rx-player/)，[github](https://github.com/canalplus/rx-player) |
 
 - call_run_nginx.sh，nginx启动脚本，会拷贝player到/
 - call_run_livego.sh，livego启动脚本
@@ -97,18 +93,18 @@
 - env_imageai_gpu.sh，imageai gpu计算机视觉库环境
 - obdetect，目标检测代码
 ### liveserver，多媒体服务器
-- <details><summary>❀服务器汇总❀</summary>
+- ❀服务器汇总❀
 
   项目 | 源码 |  分析
   --- | --- | --- |
   **直播↷** | **---** | **---**
-  red5 | [github](https://github.com/Red5/red5-server) | java版，支持rtmp, rtmpt, rtmps, rtmpe
+  red5 | [github](https://github.com/Red5/red5-server) | java版，支持rtmp， rtmpt， rtmps， rtmpe
   srs | [github](https://github.com/ossrs/srs) |
   nginx-rtmp-module | [github](https://github.com/arut/nginx-rtmp-module) |
   nginx-http-flv-module | [github](https://github.com/winshining/nginx-http-flv-module) | 支持http-flv/hls/dash
   nginx-rtmp-win32(windows版支持h265)| [github](https://github.com/illuspas/nginx-rtmp-win32) | [librtmp h265](https://blog.csdn.net/qq_33795447/article/details/89457581)
   im-pingo/nginx-rtmp-module | [github](https://github.com/im-pingo/nginx-rtmp-module) | 支持hls/http-ts/http-flv/rtmp/hls/dash/h265/h264/aac/mp3/notify/pull/push 
-  im-pingo/CDN-Union_H265 | [github](https://github.com/im-pingo/CDN-Union_H265) |金山云FFmpeg扩展,支持h265
+  im-pingo/CDN-Union_H265 | [github](https://github.com/im-pingo/CDN-Union_H265) |金山云FFmpeg扩展，支持h265
   **GB281818/RTSP/SIP↷** |**---** |**---**
   live555 | [github](https://github.com/cmberryau/live555) |
   easydarwin | [github](https://github.com/EasyDarwin/EasyDarwin) |
@@ -116,8 +112,6 @@
   **WebRTC↷**|**---** |**---**
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
-
-</details>
 
 - srstools，srs直播工具相关工具
   - living
@@ -137,7 +131,7 @@
 
 ### livesafe，多媒体安全
 
-### livenv, 环境安装
+### livenv， 环境安装
 - k8环境及工具
   - install_minikube.sh
   - install_kubeadm.sh
