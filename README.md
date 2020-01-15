@@ -121,6 +121,7 @@ Media as a Service
   easydarwin | [github](https://github.com/EasyDarwin/EasyDarwin) | 开源rtsp多媒体服务器
   livego | [github](https://github.com/gwuhaolin/livego) | 开源rtsp多媒体服务器
   **SIP/H323/WebRTC/MCU&SFU服务器及组件↷**|**---** |**---**
+  Medooze | | ![](tools/liveserver/doc/Medooze.png)
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
   kurento | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, et
