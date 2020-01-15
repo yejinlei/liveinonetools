@@ -154,19 +154,19 @@ Media as a Service, from codec to server architecture...✍
   - living
     - start_srs_compose.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
     - start_srs_stack.sh，SRS Forward模式集群docker swarm/stack编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
-  - WebRTC生态
-    - [WebRTC-Developer-Tools-Landscape](https://bloggeek.me/download/11768/)
-    - [Comparative study of WebRTC SFUs for Video Conferencing](https://uploads-ssl.webflow.com/5c6853c495409838d874a0d2/5cbed66cae2b88609106befa_IPTComm_2018_LoadTesting-12%5B23229%5D.pdf)
-    - 媒体服务器
-      - 媒体中转架构
-      ![](tools/liveserver/doc/Mesh-MCU-SFU.png)
-  - pull_srs.sh，拉取srs版本库脚本
-  - build_srs，编译srs release脚本，需放入srs版本库中
-  - build_srs_gprof.sh，编译加入gprof性能工具
-  - centos6.5_dev.sh，容器开发环境，已经集成了gcc、gdb等工具
-  - gperf，google性能工具相关脚本
-  - clangtools，Apple clang/llvm相关工具
-  - valgrind，linux下valgring内存、cpu分析工具
+- WebRTC生态
+   - [WebRTC-Developer-Tools-Landscape](https://bloggeek.me/download/11768/)
+   - [Comparative study of WebRTC SFUs for Video Conferencing](https://uploads-ssl.webflow.com/5c6853c495409838d874a0d2/5cbed66cae2b88609106befa_IPTComm_2018_LoadTesting-12%5B23229%5D.pdf)
+   - 媒体服务器
+     - 媒体中转架构
+     ![](tools/liveserver/doc/Mesh-MCU-SFU.png)
+- pull_srs.sh，拉取srs版本库脚本
+- build_srs，编译srs release脚本，需放入srs版本库中
+- build_srs_gprof.sh，编译加入gprof性能工具
+- centos6.5_dev.sh，容器开发环境，已经集成了gcc、gdb等工具
+- gperf，google性能工具相关脚本
+- clangtools，Apple clang/llvm相关工具
+- valgrind，linux下valgring内存、cpu分析工具
 - install_livego.sh，纯go实现的支持rtmp、hls、httpflv协议的轻量级直播服务器
 - install_easydarwin，纯go实现的支持rtsp的直播服务器
 - install_live555.sh，c++实现的流媒体项目
