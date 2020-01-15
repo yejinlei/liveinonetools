@@ -59,10 +59,6 @@ Media as a Service
 
 - VOIP
   - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
-- WebRTC
-- MCU/SFU
-  - SIP
-  - H323 
 
 ### livesniff， 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
@@ -146,6 +142,9 @@ Media as a Service
   - living
     - start_srs_compose.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
     - start_srs_stack.sh，SRS Forward模式集群docker swarm/stack编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
+  - 媒体服务器
+    - 媒体中转架构
+    ![](tools/liveserver/doc/Mesh-MCU-SFU.png)
   - pull_srs.sh，拉取srs版本库脚本
   - build_srs，编译srs release脚本，需放入srs版本库中
   - build_srs_gprof.sh，编译加入gprof性能工具
