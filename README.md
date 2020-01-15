@@ -46,8 +46,7 @@ Media as a Service, from codec to server architecture...✍
   **rtcp** | | | | 1. 协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550)|
   _ |**rtsp** | | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt) | 1. [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
   _ |**rtp**(rtp_mepg_ts) | | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551) | 开源协议栈：jrtplib
-  **WebRTC↷** | **---** | **---** | **---** | **---**
-  **MCU/SFU信令↷** | **---** | **---** | **---** | **---**
+  **信令协议↷** | **---** | **---** | **---** | **---**
   **h.323** | | | | 1. [H.323 Version 6 - Overview](https://www.packetizer.com/ipmc/h323/whatsnew_v6.html)<br>2. [h323's wiki](https://wiki.wireshark.org/H323) | 1. [h323plus's github](https://github.com/willamowius/h323plus)
   **sip** | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt) | 开源协议栈：libosip2、libeXosip2
 
@@ -59,6 +58,8 @@ Media as a Service, from codec to server architecture...✍
 
 - VOIP
   - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
+
+- WebRTC
 
 ### livesniff， 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
@@ -120,32 +121,42 @@ Media as a Service, from codec to server architecture...✍
   live555 | [github](https://github.com/cmberryau/live555) | 开源rtsp多媒体服务器
   easydarwin | [github](https://github.com/EasyDarwin/EasyDarwin) | 开源rtsp多媒体服务器
   livego | [github](https://github.com/gwuhaolin/livego) | 开源rtsp多媒体服务器
-  **SIP/H323/WebRTC/MCU&SFU服务器及组件↷**|**---** |**---**
-  Medooze | | ![](tools/liveserver/doc/Medooze.png)
-  OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
-  EasyRTC | [github](https://github.com/priologic/easyrtc) |
-  kurento | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, et
-  jitsi | [github](https://github.com/jitsi) | 基于WebRTC开源MCU框架
-  kamailio | [官网](https://www.kamailio.org) | 开源sip代理服务器<br>![](tools/liveserver/doc/kamailio-sip-ucp.png)
-  opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
-  gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
-  Kurento | | 支持SFU/MCU
-  Janus | | 支持SFU/MCU
-  licode | [github](https://github.com/lynckia/licode) | 支持SFU/MCU
-  MediaSoup | | 支持SFU
+  **WebRTC生态↷**|**---** |**---**
+  - | ***Voip*** | -
   openmcu | [github](https://github.com/muggot/openmcu) | 全功能的H.323，SIP和RTSP的开源多点控制单元，具有以下特性：支持通过端口1420(http://localhost:1420)上的Web界面进行配置和控制;支持多国语言;支持的协议:H.323，SIP;支持的视频编解码器：H.261，H.263，H.263 +，H.264，VP8;支持的音频编解码器:G.711，G.722，G723.1，G.726，G.729，iLBC，Speex，SILK，OPUS;支持多个不同的会议可以同时进行，使用不同的“房间”;支持实时显示呼叫统计;支持从MCU发起呼叫到远程终端;支持会议翻译为网络流。
   asterisk | [github](https://github.com/asterisk/asterisk) |
   freeswitch | [github](https://github.com/signalwire/freeswitch) |
-  | |
+  kamailio | [官网](https://www.kamailio.org) | 开源sip代理服务器<br>![](tools/liveserver/doc/kamailio-sip-ucp.png)
+  - | ***Signaling*** | -
+  opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
+  gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
+  - | ***Media Servers*** | -
+  Medooze | | ![](tools/liveserver/doc/Medooze.png)
+  SimpleWebRTC | [github](https://github.com/simplewebrtc/SimpleWebRTC) | 
+  EasyRTC | [github](https://github.com/priologic/easyrtc) |
+  OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
+  Janus | |
+  MediaSoup | |
+  licode | [github](https://github.com/lynckia/licode) |
+  jitsi | [github](https://github.com/jitsi) | Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
+  kurento | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, etc
+  - | ***NAT traversal*** | -
   coturn | [github](https://github.com/coturn/coturn) | 开源stun/turn穿透服务器
+  Restund | |
+  TurnServer | |
+  reTurnServer | |
+  - | ***Plugins and SDKs*** |
+  Pion | [github](https://github.com/pion/webrtc) | go实现的WebRTC API，包罗万象 
+  Temasys | [github](https://github.com/Temasys) | 
 
 - srstools，srs直播工具相关工具
   - living
     - start_srs_compose.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
     - start_srs_stack.sh，SRS Forward模式集群docker swarm/stack编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
-  - 媒体服务器
-    - 媒体中转架构
-    ![](tools/liveserver/doc/Mesh-MCU-SFU.png)
+  - WebRTC生态
+    - 媒体服务器
+      - 媒体中转架构
+      ![](tools/liveserver/doc/Mesh-MCU-SFU.png)
   - pull_srs.sh，拉取srs版本库脚本
   - build_srs，编译srs release脚本，需放入srs版本库中
   - build_srs_gprof.sh，编译加入gprof性能工具
