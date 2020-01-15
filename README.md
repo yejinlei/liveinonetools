@@ -124,15 +124,22 @@ Media as a Service
   live555 | [github](https://github.com/cmberryau/live555) | 开源rtsp多媒体服务器
   easydarwin | [github](https://github.com/EasyDarwin/EasyDarwin) | 开源rtsp多媒体服务器
   livego | [github](https://github.com/gwuhaolin/livego) | 开源rtsp多媒体服务器
-  **WebRTC服务器及组件↷**|**---** |**---**
+  **SIP/H323/WebRTC/MCU&SFU服务器及组件↷**|**---** |**---**
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
-  licode | [github](https://github.com/lynckia/licode) | 基于WebRTC开源MCU框架
   kurento | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, et
   jitsi | [github](https://github.com/jitsi) | 基于WebRTC开源MCU框架
-  **MCU/SFU信令服务器及组件↷**|**---** |**---**
+  kamailio | [官网](https://www.kamailio.org) | 开源sip代理服务器<br>![](tools/liveserver/doc/kamailio-sip-ucp.png)
+  opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
+  gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
+  Kurento | | 支持SFU/MCU
+  Janus | | 支持SFU/MCU
+  licode | [github](https://github.com/lynckia/licode) | 支持SFU/MCU
+  MediaSoup | | 支持SFU
   openmcu | [github](https://github.com/muggot/openmcu) | 全功能的H.323，SIP和RTSP的开源多点控制单元，具有以下特性：支持通过端口1420(http://localhost:1420)上的Web界面进行配置和控制;支持多国语言;支持的协议:H.323，SIP;支持的视频编解码器：H.261，H.263，H.263 +，H.264，VP8;支持的音频编解码器:G.711，G.722，G723.1，G.726，G.729，iLBC，Speex，SILK，OPUS;支持多个不同的会议可以同时进行，使用不同的“房间”;支持实时显示呼叫统计;支持从MCU发起呼叫到远程终端;支持会议翻译为网络流。
+  asterisk | [github](https://github.com/asterisk/asterisk) |
   freeswitch | [github](https://github.com/signalwire/freeswitch) |
+  | |
   coturn | [github](https://github.com/coturn/coturn) | 开源stun/turn穿透服务器
 
 - srstools，srs直播工具相关工具
