@@ -70,7 +70,10 @@ Media as a Service, from codec to server architecture...✍
 - WebRTC
 - VOIP
   - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
-- GB28181协议
+- GB28181
+    - [《GBT 28181-2011 安全防范视频监控联网系统信息传输、交换、控制技术要求》](https://share.weiyun.com/5FGvp0D)
+    - [《GB/T 35114-2017 公共安全视频监控联网信息安全技术要求》](https://share.weiyun.com/59txAC8)
+    - [《GB/T 25724 公共安全视频监控数字视音频编解码技术要求》](https://share.weiyun.com/5xVEjAl)
 	- RFC 2030 简单网络时间协议（SNTP）第四版
 	- RFC 2326 RTSP：实时流协议
 	- RFC 3261 SIP: 会话初始协议
@@ -86,7 +89,7 @@ Media as a Service, from codec to server architecture...✍
 	- ITU-T Rec. H.264-2005 H 系列：音视频和多媒体系统，音视频服务基础－活动视频编码：通用音视频服务的先进视频编码
 	- ITU-T Rec. H.264.1-2005 H 系列：音视频和多媒体系统，音视频服务基础－活动视频编码：H.264先进视频编码的一致性说明
 	- GB/T GB/T 25724-2010 安全防范监控数字视音频编解码技术要求
-- ONVIF协议
+- ONVIF
 	- ONVIF 架构[ONVIF 架构]
 	- ONVIF 分析服务WSDL [ONVIF 分析服务WSDL]
 	- ONVIF 解析设备服务[ONVIF 解析设备服务WSDL]
@@ -126,6 +129,7 @@ Media as a Service, from codec to server architecture...✍
   mister-ben/videojs-flvjs | Video.js tech to use flv.js for FLV playback using MSE instead of Flash.[测试页](https://mister-ben.github.io/videojs-flvjs/)，[github](https://github.com/mister-ben/videojs-flvjs) |
   winlinvip/videojs-flow | [github](https://github.com/winlinvip/videojs-flow)，支持websocket-flv |
   playease.js | 支持http/websocket-flv、http/websocket-fmp4、dash、rtmp、hls、Original HTML5 Media Resources (eg. Ogg， Mpeg4， WebM)， [github](https://github.com/studease/playease/blob/master/test/index.html) |
+  LivePlayer | [npmjs](https://www.npmjs.com/package/@liveqing/liveplayer)，[介绍文档](https://www.liveqing.com/docs/download/LivePlayer.html#%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D) |
   video-dev/hls.js | [测试页](https://hls-js.netlify.com/demo/)，[github](https://github.com/video-dev/hls.js/) |
   bilibili/flv.js | 开源h5 flv前端播放库，[github](https://github.com/bilibili/flv.js) | 
   jwplayer6 | flash播放器 |
