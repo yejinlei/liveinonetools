@@ -45,20 +45,20 @@ Media as a Service, from codec to server architecture...✍
   
 - ❀GB28181协议栈❀
 
-  / | / |  /
+  _ | _ |  _
   ---|---|---
   **rtcp** | | 1. 协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550)，RTP控制协议
-  _ |**rtsp** | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt)，实时流传输协议<br>2. [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
-  _ |**rtp**(rtp_mepg_ts) | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551)，实时传输协议，开源协议栈：jrtplib
+  **rtsp** | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt)，实时流传输协议<br>2. [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
+  **rtp**(rtp_mepg_ts) | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551)，实时传输协议，开源协议栈：jrtplib
  
 - ❀信令控制、IM消息协议❀
   
-  / | / | /
+  _ | _ | _
   ---|---|---
   **h.323** | | 1. [H.323 Version 6 - Overview](https://www.packetizer.com/ipmc/h323/whatsnew_v6.html)<br>2. [h323's wiki](https://wiki.wireshark.org/H323)<br>3. [h323plus's github](https://github.com/willamowius/h323plus)
   **sip/simple** | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt)<br>2. 开源协议栈：libosip2、libeXosip2
   **xmpp/jingle** | |
-  **webrtc** | |
+  **webrtc** | | [mozilla's webrtc api](https://developer.mozilla.org/zh-CN/docs/Web/API)
 
 - H5音视频
   - [各浏览器MSE情况](https://caniuse.com/#feat=mediasource)
