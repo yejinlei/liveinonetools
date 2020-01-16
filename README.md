@@ -5,7 +5,7 @@ Media as a Service, from codec to server architecture...✍
 
 ### liveanalysis，多媒体协议
 
-- ❀多媒体协议视图❀
+- ❀多媒体及相关协议视图❀
 
   protocols（流协议及其他） | formats(封装容器) | codecs（音视频编解码） | hwaccels（硬件加速） | 协议/文档 | 工具/库
   ---|---|---|---|---|---
@@ -35,20 +35,30 @@ Media as a Service, from codec to server architecture...✍
   _ |_ |**mpeg1video**(MPEG-1 video)    | | |
   _ |_ |**mpeg2video**(MPEG-2 video)    | | |
   _ |_ |**mpeg4**(MPEG-4 part 2)    | | |
-  _ |_ |**h264**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | | 1. [x264's github](https://code.videolan.org/videolan/x264.git)<br>2. [雷霄骅 / H264_Analysis](https://gitee.com/leixiaohua/H264_Analysis)
+  _ |_ |**h264**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | | 1. [x264 github](https://code.videolan.org/videolan/x264.git)<br>2. [openh264 github](https://github.com/cisco/openh264)<br>3. [雷霄骅 / H264_Analysis](https://gitee.com/leixiaohua/H264_Analysis)
   _ |_ |**avc1**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | |
   _ |_ |**hevc**(H.265 / HEVC (High Efficiency Video Coding))    | | | 
   _ |_ |**theora** | | |
   _ |_ |**vp8**(On2 VP8)) | | |
   _ |_ |**vorbis** | | |
   _ |_ |_|**qsv** | |
-  **GB28181↷** | **---** | **---** | **---** | **---**
-  **rtcp** | | | | 1. 协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550)|
-  _ |**rtsp** | | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt) | 1. [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
-  _ |**rtp**(rtp_mepg_ts) | | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551) | 开源协议栈：jrtplib
-  **信令协议↷** | **---** | **---** | **---** | **---**
+  
+  ---
+
+  **GB28181协议栈** | **---** | **---** 
+  ---|---|---
+  **rtcp** | | 1. 协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550)，RTP控制协议
+  _ |**rtsp** | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt)，实时流传输协议<br>2. [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
+  _ |**rtp**(rtp_mepg_ts) | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551)，实时传输协议，开源协议栈：jrtplib
+ 
+  --- 
+  
+  **信令服务、IM消息协议** | **---** | **---** | **---** | **---**
+  ---|---|---|---|---|---
   **h.323** | | | | 1. [H.323 Version 6 - Overview](https://www.packetizer.com/ipmc/h323/whatsnew_v6.html)<br>2. [h323's wiki](https://wiki.wireshark.org/H323) | 1. [h323plus's github](https://github.com/willamowius/h323plus)
-  **sip** | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt) | 开源协议栈：libosip2、libeXosip2
+  **sip/simple** | | | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt) | 开源协议栈：libosip2、libeXosip2
+  **xmpp/jingle** | | | |
+  **webrtc** | | | |
 
 - H5音视频
   - [各浏览器MSE情况](https://caniuse.com/#feat=mediasource)
@@ -56,10 +66,12 @@ Media as a Service, from codec to server architecture...✍
   - [H5音视频兼容性测试页](http://ossrs.net/mse/html5.html)
   - [H5 MSE测试页](http://ossrs.net/mse/mse.html)
 
+- WebSocket
+- WebRTC
 - VOIP
   - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
-
-- WebRTC
+- GB28181协议
+- ONVIF协议
 
 ### livesniff， 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
@@ -74,7 +86,7 @@ Media as a Service, from codec to server architecture...✍
     - http://trac.ffmpeg.org/wiki/Hardware/QuickSync
   - MMX/SSE/SSE2/SSE3/SSE4
   - GPU/CUDA
-### liveplayer，Web及移动端
+### liveplayer，客户端（web、移动、pc）
 - ❀播放器项目汇总❀
 
   播放器/库 | 源码及文档 | 分析及使用 
@@ -90,8 +102,10 @@ Media as a Service, from codec to server architecture...✍
   ckplayer | flash播放器 |
   CyberPlayer | 基于jwplayer二次开发的flash播放器，支持rtmp、flv、hls，[source](https://share.weiyun.com/5rVCKPD) |
   rx-player | 支持dash、smooth，[测试页](https://developers.canal-plus.com/rx-player/)，[github](https://github.com/canalplus/rx-player) |
-  **SIP客户端↷** | **---** | **---**
+  **WebRTC生态↷**|**---** |**---**
   linephone | [官网](http://www.linphone.org/technical-corner/linphone?qt-technical_corner=0) | |
+  jsSip | | 支持sip(over websocket)和WebRTC的简易javascript库
+  sipjs | |
 
 - call_run_nginx.sh，nginx启动脚本，会拷贝player到/
 - call_run_livego.sh，livego启动脚本
@@ -125,8 +139,10 @@ Media as a Service, from codec to server architecture...✍
   / | ***Voip*** | /
   openmcu | [github](https://github.com/muggot/openmcu) | 全功能的H.323，SIP和RTSP的开源多点控制单元，具有以下特性：支持通过端口1420(http://localhost:1420)上的Web界面进行配置和控制;支持多国语言;支持的协议:H.323，SIP;支持的视频编解码器：H.261，H.263，H.263 +，H.264，VP8;支持的音频编解码器:G.711，G.722，G723.1，G.726，G.729，iLBC，Speex，SILK，OPUS;支持多个不同的会议可以同时进行，使用不同的“房间”;支持实时显示呼叫统计;支持从MCU发起呼叫到远程终端;支持会议翻译为网络流。
   asterisk | [github](https://github.com/asterisk/asterisk) |
+  asterisk-freepbx | [github](https://github.com/Brownster/asterisk-freepbx) |
   freeswitch | [github](https://github.com/signalwire/freeswitch) |
   kamailio | [官网](https://www.kamailio.org) | 开源sip代理服务器<br>![](tools/liveserver/doc/kamailio-sip-ucp.png)
+  oversip | [github](https://github.com/versatica/OverSIP) | 目前不再维护
   / | ***Signaling*** | /
   opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
   gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
@@ -141,6 +157,8 @@ Media as a Service, from codec to server architecture...✍
   licode | [github](https://github.com/lynckia/licode) |
   jitsi | [github](https://github.com/jitsi) | Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
   kurento | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, etc
+  / | ***Gateways*** | /
+  janus-gateway | [github](https://github.com/meetecho/janus-gateway) |
   / | ***NAT traversal*** | /
   coturn | [github](https://github.com/coturn/coturn) | 开源stun/turn穿透服务器
   Restund | |
