@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>liveplayer</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    </head>
+    <body>
+	<div id="liveplayers"></div>
+    <script type="text/javascript" src="liveplayer-element.min.js"></script>
+	<script type="text/javascript">
+		var players =[
+		"rtmp://127.0.0.1:11936/live/1",
+		"http://127.0.0.1:11937/live/1.m3u8",
+		"http://127.0.0.1:11938/live/1.flv",
+		]
+		var liveplayers = document.getElementById("liveplayers");
+
+		for (var i=0;i<players.length;i++) {
+			var div = document.createElement("div");
+			div.id = "liveplayer_"+i;
+			div.innerHTML = "<live-player video-url='"+players[i]+"' live='false' aspect='16:9'></live-player>";
+			liveplayers.appendChild(div);
+		}
+	</script>
+	</body>
+</html>
