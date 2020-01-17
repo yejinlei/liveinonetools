@@ -1,2 +1,1 @@
-cp -r player /
-nginx -c $(pwd)/nginx.conf
+nginx -p $(pwd) -c $(pwd)/nginx.conf
