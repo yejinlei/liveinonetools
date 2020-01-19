@@ -236,6 +236,26 @@ Media as a Service, from codec to server architecture...✍
 
 ### livesafe，多媒体安全
 
+- ❀全方位保护❀
+
+层级|方案|实战
+---|---|---
+协议级|信息安全: 防盗链|
+协议级|信息安全: 软件授权机制|
+协议级|软件保护：定制协议|
+协议级|软件保护：嵌入水印|
+协议级|软件保护：隐写术|
+二进制级|软件保护：二进制混淆|
+二进制级|软件保护：二进制加密|
+二进制级|软件保护：反调试|
+二进制级|软件保护：基于虚拟机运行时|
+代码级|软件保护：软件授权协议<br>*开源软件协议*![](tools/doc/how-choice-license-1.png)<br>*如何选择license？*<br>![](tools/livesafe/doc/how-choice-license-2.png)<br>*开源许可证和一般著作权的区别*<br>![](tools/livesafe/doc/how-choice-license-3.png)|
+容器级|防止攻击：容器加固|
+操作系统级|防止攻击：防ddos攻击|
+硬件级|软件保护：加密狗和锁|
+硬件级|软件保护：可信启动|
+硬件级|软件保护：定制硬件|
+
 ### livenv， 环境安装
 - k8环境及工具
   - install_minikube.sh
