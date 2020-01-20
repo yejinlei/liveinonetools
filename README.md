@@ -44,6 +44,7 @@ Media as a Service, from codec to server architecture...✍
   _ |_ |_|**qsv** | |
   
 - ❀ONVIF❀
+  
   _ | _ |  _
   ---|---|---
 
