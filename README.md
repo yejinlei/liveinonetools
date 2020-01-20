@@ -146,6 +146,7 @@ Media as a Service, from codec to server architecture...✍
   ckplayer | flash播放器 |
   CyberPlayer | 基于jwplayer二次开发的flash播放器，支持rtmp、flv、hls，[source](https://share.weiyun.com/5rVCKPD) |
   rx-player | 支持dash、smooth，[测试页](https://developers.canal-plus.com/rx-player/)，[github](https://github.com/canalplus/rx-player) |
+  libde265 & libde265.js| 开源h265解码库，js库用到了wasm，[libde265.js's github](https://github.com/strukturag/libde265.js), [libde265's github](https://github.com/strukturag/libde265) |
   **WebRTC生态↷**|**---** |**---**
   linephone | [官网](http://www.linphone.org/technical-corner/linphone?qt-technical_corner=0) | |
   jsSip | | 支持sip(over websocket)和WebRTC的简易javascript库
@@ -213,6 +214,23 @@ Media as a Service, from codec to server architecture...✍
   Temasys | [github](https://github.com/Temasys) | 
 
 - srstools，srs直播工具相关工具
+  - doc
+    - 官方文档
+      - [分发RTMP流](https://github.com/ossrs/srs/wiki/v1_CN_DeliveryRTMP)
+      - [分发HLS（m3u8）2.0](https://github.com/ossrs/srs/wiki/v2_CN_DeliveryHLS)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_DeliveryHLS)
+      - [分发HLS（只有音频）](https://github.com/ossrs/srs/wiki/v2_CN_DeliveryHLS#hlsaudioonly)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_DeliveryHLS#hlsaudioonly)
+      - [不中断配置重载](https://github.com/ossrs/srs/wiki/v1_CN_Reload)
+      - [Gop缓存 2.0](https://github.com/ossrs/srs/wiki/v2_CN_LowLatency#gop-cache)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_LowLatency#gop-cache)
+      - [Forward模式 2.0](https://github.com/ossrs/srs/wiki/v1_CN_Forward)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_Forward)
+      - [对推到SRS中的RTMP进行转码（via FFmpeg）2.0](https://github.com/ossrs/srs/wiki/v2_CN_FFMPEG)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_FFMPEG)
+      - [HTTP回调 2.0](https://github.com/ossrs/srs/wiki/v2_CN_HTTPCallback)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_HTTPCallback)
+      - [带宽测试](https://github.com/ossrs/srs/wiki/v1_CN_BandwidthTestTool)
+      - [HTTP API 2.0](https://github.com/ossrs/srs/wiki/v2_CN_HTTPApi)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_HTTPApi)
+      - [采集并推流（via FFmpeg）](https://github.com/ossrs/srs/wiki/v1_CN_Ingest)
+      - [DVR功能（SRS支持将RTMP流录制成flv文件）2.0](https://github.com/ossrs/srs/wiki/v2_CN_DVR)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_DVR)
+      - [SRS日志功能（输出到控制台或文件）](https://github.com/ossrs/srs/wiki/v1_CN_SrsLog)
+      - [内嵌HTTP服务器 2.0](https://github.com/ossrs/srs/wiki/v2_CN_SampleHTTP)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_SampleHTTP)
+      - [SRS支持点播FLV流](https://github.com/ossrs/srs/wiki/v2_CN_FlvVodStream)
   - living
     - start_srs_compose.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
     - start_srs_stack.sh，SRS Forward模式集群docker swarm/stack编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
@@ -238,23 +256,25 @@ Media as a Service, from codec to server architecture...✍
 
 - ❀全方位保护❀
 
-层级|方案|实战
----|---|---
-协议级|信息安全: 防盗链|
-协议级|信息安全: 软件授权机制|
-协议级|软件保护：定制协议|
-协议级|软件保护：嵌入水印|
-协议级|软件保护：隐写术|
-二进制级|软件保护：二进制混淆|
-二进制级|软件保护：二进制加密|
-二进制级|软件保护：反调试|
-二进制级|软件保护：基于虚拟机运行时|
-代码级|软件保护：软件授权协议<br>*开源软件协议*![](tools/doc/how-choice-license-1.png)<br>*如何选择license？*<br>![](tools/livesafe/doc/how-choice-license-2.png)<br>*开源许可证和一般著作权的区别*<br>![](tools/livesafe/doc/how-choice-license-3.png)|
-容器级|防止攻击：容器加固|
-操作系统级|防止攻击：防ddos攻击|
-硬件级|软件保护：加密狗和锁|
-硬件级|软件保护：可信启动|
-硬件级|软件保护：定制硬件|
+  层级|方案|实战
+  ---|---|---
+  协议级|信息安全: 防盗链|
+  协议级|信息安全: 软件授权机制|
+  协议级|软件保护：定制协议|
+  协议级|软件保护：嵌入水印|
+  协议级|软件保护：隐写术|
+  二进制级|软件保护：二进制乱序、混淆|
+  二进制级|软件保护：二进制加密|
+  二进制级|软件保护：反调试|
+  二进制级|软件保护：基于虚拟机运行时|
+  代码级|软件保护：软件授权协议<br>*开源软件协议*![](tools/livesafe/doc/how-choice-license-1.png)<br>*如何选择license？*<br>![](tools/livesafe/doc/how-choice-license-2.png)<br>*开源许可证和一般著作权的区别*<br>![](tools/livesafe/doc/how-choice-license-3.png)|
+  容器级|防止攻击：容器加固|
+  操作系统级|防止攻击：防ddos攻击|
+  硬件级|软件保护：加密狗和锁|
+  硬件级|软件保护：可信启动|
+  硬件级|软件保护：定制硬件|
+
+- [开源软件协议介绍](https://gitee.com/oschina/git-osc/wikis/License)
 
 ### livenv， 环境安装
 - k8环境及工具
