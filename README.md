@@ -66,12 +66,14 @@ Media as a Service, from codec to server architecture...✍
   **webrtc** | | [mozilla's webrtc api](https://developer.mozilla.org/zh-CN/docs/Web/API)
 
 - ❀NAT/ICE/STUN/TURN（中转）❀
-  NAT/ICE/STUN/TURN | 协议/标准 | 参考实现
+
+  NAT/ICE/STUN/TURN | 协议、标准 | 参考实现
   ---|---|---
   _ | [RFC 5389: STUN](https://tools.ietf.org/html/rfc5389)<br>[RFC 5780: NAT Behavior Discovery Using STUN](https://tools.ietf.org/html/rfc5780)<br>[RFC 7064: URI Scheme for STUN](https://tools.ietf.org/html/rfc7064)<br>[RFC 5766: TURN: Relay Extensions to STUN](https://tools.ietf.org/html/rfc5766)<br>[RFC 5245: ICE: A Protocol for NAT for Offer/Answer Protocols](https://tools.ietf.org/html/rfc5245)<br>[RFC 6062: TURN Extensions for TCP Allocations](https://tools.ietf.org/html/rfc6062)<br>[RFC 7065: TURN URI](https://tools.ietf.org/html/rfc7065)<br>[RFC 6544: TCP Candidates with ICE](https://tools.ietf.org/html/rfc6544)|
 
 - ❀协议转换/网关❀
-  协议 | 源码/项目 | 例子
+
+  协议 | 源码、项目 | 例子
   ---|---|---
   webrtc2sip | [github](https://github.com/DoubangoTelecom/webrtc2sip) | webrtc sip proxy
   OverSIP | | sip over websocket 
@@ -89,7 +91,6 @@ Media as a Service, from codec to server architecture...✍
 
 - WebSocket
 - WebRTC
-
   - **WebRTC技术**
   *WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。WebRTC包含了若干相互关联的API和协议以达到这个目标。*
   - **对等媒体之应用**
