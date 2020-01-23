@@ -10,3 +10,4 @@ cp k8s.conf /etc/sysctl.d/
 sysctl --system
 cp daemon.json /etc/docker/
 systemctl restart docker
+#hostnamectl set-hostname master

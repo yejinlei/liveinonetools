@@ -124,7 +124,8 @@ func PipeCommand() {
 	shellType := map[string][]string{"linux": []string{"sh", "-c"},
 		"windows": []string{"cmd", "/C"}}
 	shell_args := shellType[sysType]
-	ffmpeg_args := "ffmpeg -i rtmp://10.10.82.66:11936/live/5021 -i rtmp://10.10.82.66:11936/live/6058 -filter_complex 'nullsrc=size=1024x768[base]; [0:v]setpts=PTS-STARTPTS,scale=517x384[l1]; [1:v]setpts=PTS-STARTPTS,scale=517x384[l2]; [base][l1]overlay=x=0:y=0[tmp1]; [tmp1][l2]overlay=x=0:y=384' -f flv -"
+	//ffmpeg_args := "ffmpeg -i rtmp://10.10.82.66:11936/live/5021 -i rtmp://10.10.82.66:11936/live/6058 -filter_complex 'nullsrc=size=1024x768[base]; [0:v]setpts=PTS-STARTPTS,scale=517x384[l1]; [1:v]setpts=PTS-STARTPTS,scale=517x384[l2]; [base][l1]overlay=x=0:y=0[tmp1]; [tmp1][l2]overlay=x=0:y=384' -f flv -"
+	ffmpeg_args := "ffmpeg -i rtmp://10.10.82.66:11936/live/5021 -i rtmp://10.10.82.66:11936/live/6058 -vcodec copy -f flv -"
 	ffplay_args := "ffplay -i -"
 	commands = append(commands, exec.Command(shell_args[0], shell_args[1], ffmpeg_args))
 	commands = append(commands, exec.Command(shell_args[0], shell_args[1], ffplay_args))

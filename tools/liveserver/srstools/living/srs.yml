@@ -87,6 +87,7 @@ services:
     volumes:
       - ./rtmp2hls.conf:/usr/local/srs/conf/srs.conf
       - ./server.py:/usr/local/srs/server.py
+      - ./crossdomain.xml:/usr/local/srs/hls/crossdomain.xml
     networks:
       - srs-network
     deploy:
@@ -163,11 +164,15 @@ services:
   live_srs_rtmp2dvr:
     image: yejinlei/srsv2.0-r6_centos7.6:1.2
     hostname: live_srs_rtmp2dvr
+    privileged: true
     ports:
-      - "11950:1935"
+      - "11941:8180"
     volumes:
+      - ./tmp:/data
       - ./rtmp2dvr.conf:/usr/local/srs/conf/srs.conf
       - ./server.py:/usr/local/srs/server.py
+      - ./crossdomain.xml:/data/crossdomain.xml
+      - /etc/localtime:/etc/localtime
     networks:
       - srs-network
     deploy:

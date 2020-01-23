@@ -106,7 +106,7 @@ input {
 	</div>
 	<div class='input-container' style='width: 100%; max-width: 640px;'>
 		<span>
-			<input id='url-input' autocapitalize='off' value='http://studease.cn/vod/sample.flv'>
+			<input id='url-input' autocapitalize='off' value='http://127.0.0.1:11938/live/5021.flv'>
 		</span>
 		<a class='btn red' onclick='playTheURL();'>Play</a>
 	</div>
@@ -132,7 +132,7 @@ input {
 			//file: 'ws://127.0.0.1/live/sample',
 			//file: 'ws://127.0.0.1/live/sample.flv',
 			//file: 'http://127.0.0.1/live/sample.m3u8',
-			file: 'http://127.0.0.1/vod/sample.flv',
+			file: 'http://127.0.0.1:11938/live/5021.flv',
 			/*sources: [{
 				file: 'http://127.0.0.1/live/_definst_/sample.flv',
 				type: 'flv',
@@ -177,7 +177,7 @@ input {
 			render: {
 				name: 'flv',
 				bufferLength: 4 * 1024 * 1024,
-				swf: '../swf/playease.swf'
+				swf: './playease.swf'
 			}
 		});
 		

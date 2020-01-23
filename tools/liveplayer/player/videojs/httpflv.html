@@ -15,19 +15,19 @@
 </body>	 
 </html>
 	<script>
-		var flvUrl = "http://127.0.0.1:7001/live/1.flv";
+		var flvUrl = "http://127.0.0.1:11938/live/5021.flv";
 		var player = videojs('videojs-flvjs-player', {
 	    		techOrder: ['html5', 'flvjs'],
 	    		flvjs: {
 		            mediaDataSource: {
-				    isLive: false,
+				    isLive: true,
 				    cors: true,
 				    withCredentials: false,
 			    },
 		        },
 	    		sources: [{
 		            src: flvUrl,
-		            type: 'video/x-flv'
+		            type: 'video/mp4'
 		        }],
 	    		controls: true,
 	    		preload: "none"

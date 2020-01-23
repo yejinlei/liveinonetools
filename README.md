@@ -313,8 +313,9 @@ Media as a Service, from codec to server architecture...✍
   - install_emsdk.sh
 - X11 GUI in Docker
   - start_docker_ubuntu-desktop.sh
-- 龙芯全系 qemu 模拟器
-  - install_qemu_loongson.sh
+- 龙芯
+  - [loongnix.org](http://www.loongnix.org)
+  - install_qemu_loogson.sh, 龙芯全系 qemu 模拟器
 
 ### 测试地址
 - BSTV rtmp://202.69.69.180:443/webcast/bshdlive-pc
