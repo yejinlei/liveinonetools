@@ -314,7 +314,7 @@ Media as a Service, from codec to server architecture...✍
 - X11 GUI in Docker
   - start_docker_ubuntu-desktop.sh
 - 龙芯
-  - [loongnix.org](http://www.loongnix.org)
+  - [龙芯开源社区-项目快速导航](http://www.loongnix.org/index.php/%E9%A1%B9%E7%9B%AE)
   - install_qemu_loogson.sh, 龙芯全系 qemu 模拟器
 
 ### 测试地址
