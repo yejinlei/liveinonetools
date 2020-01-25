@@ -76,7 +76,7 @@ Media as a Service, from codec to server architecture...✍
   协议 | 源码、项目 | 例子
   ---|---|---
   webrtc2sip | [github](https://github.com/DoubangoTelecom/webrtc2sip) | webrtc sip proxy
-  OverSIP | | sip over websocket 
+  OverSIP | [github](https://github.com/versatica/OverSIP) | sip over websocket 
   kurento-rtmp | [github](https://github.com/godka/kurento-rtmp) |
   rtmp-to-webrtc | [github](https://github.com/notedit/rtmp-to-webrtc) |
   kurento-rtsp2webrtc | [github](https://github.com/lulop-k/kurento-rtsp2webrtc) |
@@ -212,7 +212,7 @@ Media as a Service, from codec to server architecture...✍
   asterisk-freepbx | [github](https://github.com/Brownster/asterisk-freepbx) |
   freeswitch | [github](https://github.com/signalwire/freeswitch) |
   kamailio | [官网](https://www.kamailio.org) | 开源sip代理服务器<br>![](tools/liveserver/doc/kamailio-sip-ucp.png)
-  oversip | [github](https://github.com/versatica/OverSIP) | 目前不再维护
+  oversip | [github](https://github.com/versatica/OverSIP) | OverSIP is a powerful and flexible SIP proxy & server by the authors of RFC 7118 (The WebSocket Protocol as a Transport for SIP)
   / | ***Signaling*** | /
   opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
   gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
