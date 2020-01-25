@@ -315,6 +315,7 @@ Media as a Service, from codec to server architecture...✍
   - start_docker_ubuntu-desktop.sh
 - 龙芯
   - [龙芯开源社区-项目快速导航](http://www.loongnix.org/index.php/%E9%A1%B9%E7%9B%AE)
+  - [龙芯全系 qemu 模拟器](https://gitee.com/loongsonlab/qemu)
   - install_qemu_loogson.sh, 龙芯全系 qemu 模拟器
 
 ### 测试地址
