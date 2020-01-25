@@ -61,9 +61,8 @@ Media as a Service, from codec to server architecture...✍
   协议 | _ | _
   ---|---|---
   **h.323** | | ![](tools/liveanalysis/doc/h323-stack.png)<br>1. [H.323 Version 6 - Overview](https://www.packetizer.com/ipmc/h323/whatsnew_v6.html)<br>2. [h323's wiki](https://wiki.wireshark.org/H323)<br>3. 参考实现：[h323plus's github](https://github.com/willamowius/h323plus)
-  **sip/simple** | | 1. 协议 - [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt)<br>2. 参考实现：[开源sip server & sip client 和开发库 一览](https://www.cnblogs.com/lidabo/p/7587709.html)、[baresip's github](https://github.com/alfredh/baresip)、[librc](https://github.com/creytiv/re)
-  **xmpp/jingle** | |
-  **xmpp/jingle** | |
+  **sip/simple** | | 1. [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt)<br>2. 参考实现：[开源sip server & sip client 和开发库 一览](https://www.cnblogs.com/lidabo/p/7587709.html)、[baresip's github](https://github.com/alfredh/baresip)、[librc's github](https://github.com/creytiv/re)
+  **xmpp/jingle** | | 1. [Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and Presence](https://xmpp.org/rfcs/rfc6121.html)
   **webrtc** | | [mozilla's webrtc api](https://developer.mozilla.org/zh-CN/docs/Web/API)
 
 - ❀NAT/ICE/STUN/TURN（中转）❀
