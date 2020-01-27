@@ -221,8 +221,7 @@ Media as a Service, from codec to server architecture...✍
   SimpleWebRTC | [github](https://github.com/simplewebrtc/SimpleWebRTC) | 
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
-  Janus | |
-  MediaSoup | |
+  MediaSoup | [github](https://github.com/versatica/mediasoup) |
   ant media server | [github](https://github.com/ant-media) | 
   licode | [github](https://github.com/lynckia/licode) |
   jitsi | [github](https://github.com/jitsi) | Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
