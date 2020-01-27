@@ -227,6 +227,8 @@ Media as a Service, from codec to server architecture...✍
   licode | [github](https://github.com/lynckia/licode) |
   jitsi | [github](https://github.com/jitsi) | Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
   kurento | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, etc
+  Kurento/OpenVidu | [github](https://github.com/OpenVidu/openvidu) | |
+  kite | [github](https://github.com/webrtc/KITE) | webrtc测试引擎
   / | ***Gateways*** | /
   janus-gateway | [github](https://github.com/meetecho/janus-gateway) |
   / | ***NAT traversal*** | /
