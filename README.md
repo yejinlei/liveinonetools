@@ -62,7 +62,7 @@ Media as a Service, from codec to server architecture...✍
   ---|---|---
   **h.323** | | ![](tools/liveanalysis/doc/h323-stack.png)<br>1. [H.323 Version 6 - Overview](https://www.packetizer.com/ipmc/h323/whatsnew_v6.html)<br>2. [h323's wiki](https://wiki.wireshark.org/H323)<br>3. 参考实现：[h323plus's github](https://github.com/willamowius/h323plus)
   **sip/simple** | | 1. [SIP: Session Initiation Protocol](https://www.ietf.org/rfc/rfc3261.txt)<br>2. 参考实现：[开源sip server & sip client 和开发库 一览](https://www.cnblogs.com/lidabo/p/7587709.html)、[baresip's github](https://github.com/alfredh/baresip)、[librc's github](https://github.com/creytiv/re)
-  **xmpp/jingle** | | 1. [Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and Presence](https://xmpp.org/rfcs/rfc6121.html)<br>2. 参考实现：[jxmpp's github](https://github.com/igniterealtime/jxmpp)
+  **xmpp/jingle** | | 1. [rfc3921:Extensible Messaging and Presence Protocol (XMPP):Instant Messaging and Presence](https://tools.ietf.org/html/rfc3921), [CN](http://wiki.jabbercn.org/RFC3921)<br>3. 参考实现：[jxmpp's github](https://github.com/igniterealtime/jxmpp)
   **webrtc** | | [mozilla's webrtc api](https://developer.mozilla.org/zh-CN/docs/Web/API)
 
 - ❀NAT/ICE/STUN/TURN（中转）❀
@@ -104,6 +104,7 @@ Media as a Service, from codec to server architecture...✍
 
 - VOIP
   - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
+  - [Real-Time Communications Quick Start Guide](http://rtcquickstart.org/guide/multi/index.html)
 - GB28181
     - [《GBT 28181-2011 安全防范视频监控联网系统信息传输、交换、控制技术要求》](https://share.weiyun.com/5FGvp0D)
     - [《GB/T 35114-2017 公共安全视频监控联网信息安全技术要求》](https://share.weiyun.com/59txAC8)
@@ -174,7 +175,7 @@ Media as a Service, from codec to server architecture...✍
   **WebRTC生态↷**|**---** |**---**
   linephone | [官网](http://www.linphone.org/technical-corner/linphone?qt-technical_corner=0) | |
   jsSip | [官网](https://jssip.net/) | 支持sip(over websocket)和WebRTC的简易javascript库
-  sipjs | |
+  sipjs | [github](https://github.com/onsip/SIP.js), [exmaple](https://github.com/onsip/sipjs-examples) |
   PeerJS | [github](https://github.com/peers/peerjs) | PeerJS提供了一个完整可配置易于使用基于WebRTC的点对点的数据通信和媒体流のAPI
 
 - call_run_nginx.sh，nginx启动脚本，会拷贝player到/
@@ -230,8 +231,8 @@ Media as a Service, from codec to server architecture...✍
   janus-gateway | [github](https://github.com/meetecho/janus-gateway) |
   / | ***NAT traversal*** | /
   coturn | [github](https://github.com/coturn/coturn) | 开源stun/turn穿透服务器
-  Restund | |
-  TurnServer | |
+  restund | [github](https://github.com/otalk/restund) |
+  turnserver | [github](https://github.com/pannzh/TurnServer) |
   reTurnServer | |
    / | ***Plugins and SDKs*** | /
   Pion | [github](https://github.com/pion/webrtc) | go实现的WebRTC API，包罗万象 
