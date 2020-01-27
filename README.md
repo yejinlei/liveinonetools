@@ -218,7 +218,7 @@ Media as a Service, from codec to server architecture...✍
   opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
   gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
   / | ***Media Servers*** | /
-  Medooze | | ![](tools/liveserver/doc/Medooze.png)
+  Medooze | (github)[https://github.com/medooze/media-server] | ![](tools/liveserver/doc/Medooze.png)
   SimpleWebRTC | [github](https://github.com/simplewebrtc/SimpleWebRTC) | 
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
