@@ -242,25 +242,32 @@ Media as a Service, from codec to server architecture...✍
 
 - srstools，srs直播工具相关工具
   - doc
-    - 官方文档
-      - [分发RTMP流](https://github.com/ossrs/srs/wiki/v1_CN_DeliveryRTMP)
-      - [分发HLS（m3u8）2.0](https://github.com/ossrs/srs/wiki/v2_CN_DeliveryHLS)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_DeliveryHLS)
-      - [分发HLS（只有音频）](https://github.com/ossrs/srs/wiki/v2_CN_DeliveryHLS#hlsaudioonly)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_DeliveryHLS#hlsaudioonly)
-      - [不中断配置重载](https://github.com/ossrs/srs/wiki/v1_CN_Reload)
-      - [Gop缓存 2.0](https://github.com/ossrs/srs/wiki/v2_CN_LowLatency#gop-cache)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_LowLatency#gop-cache)
-      - [Forward模式 2.0](https://github.com/ossrs/srs/wiki/v1_CN_Forward)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_Forward)
-      - [对推到SRS中的RTMP进行转码（via FFmpeg）2.0](https://github.com/ossrs/srs/wiki/v2_CN_FFMPEG)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_FFMPEG)
-      - [HTTP回调 2.0](https://github.com/ossrs/srs/wiki/v2_CN_HTTPCallback)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_HTTPCallback)
-      - [带宽测试](https://github.com/ossrs/srs/wiki/v1_CN_BandwidthTestTool)
-      - [HTTP API 2.0](https://github.com/ossrs/srs/wiki/v2_CN_HTTPApi)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_HTTPApi)
-      - [采集并推流（via FFmpeg）](https://github.com/ossrs/srs/wiki/v1_CN_Ingest)
-      - [DVR功能（SRS支持将RTMP流录制成flv文件）2.0](https://github.com/ossrs/srs/wiki/v2_CN_DVR)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_DVR)
-      - [SRS日志功能（输出到控制台或文件）](https://github.com/ossrs/srs/wiki/v1_CN_SrsLog)
-      - [内嵌HTTP服务器 2.0](https://github.com/ossrs/srs/wiki/v2_CN_SampleHTTP)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_SampleHTTP)
-      - [SRS支持点播FLV流](https://github.com/ossrs/srs/wiki/v2_CN_FlvVodStream)
-  - living
-    - start_srs_compose.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
-    - start_srs_stack.sh，SRS Forward模式集群docker swarm/stack编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
+    - [分发RTMP流](https://github.com/ossrs/srs/wiki/v1_CN_DeliveryRTMP)
+    - [分发HLS（m3u8）2.0](https://github.com/ossrs/srs/wiki/v2_CN_DeliveryHLS)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_DeliveryHLS)
+    - [分发HLS（只有音频）](https://github.com/ossrs/srs/wiki/v2_CN_DeliveryHLS#hlsaudioonly)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_DeliveryHLS#hlsaudioonly)
+    - [不中断配置重载](https://github.com/ossrs/srs/wiki/v1_CN_Reload)
+    - [Gop缓存 2.0](https://github.com/ossrs/srs/wiki/v2_CN_LowLatency#gop-cache)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_LowLatency#gop-cache)
+    - [Forward模式 2.0](https://github.com/ossrs/srs/wiki/v1_CN_Forward)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_Forward)
+    - [对推到SRS中的RTMP进行转码（via FFmpeg）2.0](https://github.com/ossrs/srs/wiki/v2_CN_FFMPEG)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_FFMPEG)
+    - [HTTP回调 2.0](https://github.com/ossrs/srs/wiki/v2_CN_HTTPCallback)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_HTTPCallback)
+    - [带宽测试](https://github.com/ossrs/srs/wiki/v1_CN_BandwidthTestTool)
+    - [HTTP API 2.0](https://github.com/ossrs/srs/wiki/v2_CN_HTTPApi)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_HTTPApi)
+    - [采集并推流（via FFmpeg）](https://github.com/ossrs/srs/wiki/v1_CN_Ingest)
+    - [DVR功能（SRS支持将RTMP流录制成flv文件）2.0](https://github.com/ossrs/srs/wiki/v2_CN_DVR)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_DVR)
+    - [SRS日志功能（输出到控制台或文件）](https://github.com/ossrs/srs/wiki/v1_CN_SrsLog)
+    - [内嵌HTTP服务器 2.0](https://github.com/ossrs/srs/wiki/v2_CN_SampleHTTP)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_SampleHTTP)
+    - [SRS支持点播FLV流](https://github.com/ossrs/srs/wiki/v2_CN_FlvVodStream)
+  - 源码分析
+    - SRS边缘(edge)，所谓边缘edge服务器，就是边缘直播缓存服务器，配置时指定为remote模式和origin*（指定一个或多个源站IP），这个边缘edge服务器就是源站的缓存了
+      - edge边缘节点，支持播放（SrsEdgeStatePlay）
+      - edge边缘节点，支持从源站拉流和采集（SrsEdgeStateIngestConnected）
+      - edge边缘节点，支持推流到源站（SrsEdgeStatePublish）
+ - 实战living目录
+   - Forward模式
+     - start_srs_compose.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
+     - start_srs_stack.sh，SRS Forward模式集群docker swarm/stack编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
+     - start_srs_k8s.sh
+    - edge模式
 - WebRTC生态
    - [WebRTC-Developer-Tools-Landscape](https://bloggeek.me/download/11768/)
    - [Comparative study of WebRTC SFUs for Video Conferencing](https://uploads-ssl.webflow.com/5c6853c495409838d874a0d2/5cbed66cae2b88609106befa_IPTComm_2018_LoadTesting-12%5B23229%5D.pdf)
