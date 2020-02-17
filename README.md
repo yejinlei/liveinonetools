@@ -259,9 +259,11 @@ Media as a Service, from codec to server architecture...✍
     - [SRS支持点播FLV流](https://github.com/ossrs/srs/wiki/v2_CN_FlvVodStream)
   - 源码分析
     - SRS边缘(edge)，所谓边缘edge服务器，就是边缘直播缓存服务器，配置时指定为remote模式和origin*（指定一个或多个源站IP），这个边缘edge服务器就是源站的缓存了
-      - edge边缘节点，支持播放（SrsEdgeStatePlay）
-      - edge边缘节点，支持从源站拉流和采集（SrsEdgeStateIngestConnected）
-      - edge边缘节点，支持推流到源站（SrsEdgeStatePublish）
+      - edge边缘节点，播放（SrsEdgeStatePlay标记）
+      - edge边缘节点，从源站拉流和采集（SrsEdgeStateIngestConnected标记）
+        - SrsEdgeUpstream::connect
+      - edge边缘节点，推流到源站（SrsEdgeStatePublish标记）
+        - SrsEdgeForwarder::start
  - 实战living目录
    - Forward模式
      - start_srs_compose.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
