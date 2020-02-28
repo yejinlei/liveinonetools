@@ -2,8 +2,8 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	_ "bytes"
+	"encoding/base64"
 	"fmt"
 	"os"
 	"os/exec"
@@ -28,31 +28,24 @@ func warp(ffmpeg_args string) {
 }
 
 func CheckHW() string {
-	list := "cat /sys/class/dmi/id/product_uuid /sys/class/dmi/id/board_serial | tr -d '\n/-'"
-	cmd := exec.Command("bash", "-c", list)
-	w := bytes.NewBuffer(nil)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = w
-	err := cmd.Run()
+	c, err := exec.Command("bash", "-c", "cat /sys/class/dmi/id/product_uuid | tr -d '-'").CombinedOutput()
 	if err != nil {
-		//fmt.Printf("%s\n", w.Bytes())
-		fmt.Printf("------------")
-		return string(w.Bytes())
-	} else {
 		return ""
 	}
+
+	return base64.StdEncoding.EncodeToString([]byte(strings.ToLower(string(c))))
 }
 
 func CheckEnv() bool {
-	c, err := exec.Command("/bin/sh", "-c", "cat /proc/1/status", "|", "head -1").CombinedOutput()
+	c, err := exec.Command("bash", "-c", "cat /proc/1/status", "|", "head -1").CombinedOutput()
 	if err != nil {
-		if strings.Contains(string(c), "systemd") {
-			return false
-		} else {
-			return true
-		}
-	} else {
 		return false
+	}
+
+	if strings.Contains(string(c), "systemd") {
+		return false
+	} else {
+		return true
 	}
 }
 
