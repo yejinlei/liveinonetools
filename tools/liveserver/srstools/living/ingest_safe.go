@@ -3,8 +3,9 @@ package main
 import (
 	"bufio"
 	_ "bytes"
-	"encoding/base64"
+	"crypto/md5"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"strings"
@@ -27,13 +28,16 @@ func warp(ffmpeg_args string) {
 	}
 }
 
+//cat /sys/class/dmi/id/product_uuid | tr '[:upper:]' '[:lower:]' | openssl md5
 func CheckHW() string {
-	c, err := exec.Command("bash", "-c", "cat /sys/class/dmi/id/product_uuid | tr -d '-'").CombinedOutput()
+	c, err := exec.Command("bash", "-c", "cat /sys/class/dmi/id/product_uuid").CombinedOutput()
 	if err != nil {
 		return ""
 	}
 
-	return base64.StdEncoding.EncodeToString([]byte(strings.ToLower(string(c))))
+	hash := md5.New()
+	io.WriteString(hash, strings.ToLower(string(c)))
+	return fmt.Sprintf("%x", hash.Sum(nil))
 }
 
 func CheckEnv() bool {
