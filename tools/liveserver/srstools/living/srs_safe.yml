@@ -4,6 +4,8 @@ services:
   live_ingest_loc:
     hostname: live_ingest_loc
     image: yejinlei/live_ingest_safe.go:1.0
+    secrets:
+      - regcode
     privileged: true
     networks:
       - srs-network
@@ -18,12 +20,15 @@ services:
       TASK_SLOT: 1
       SERVICE_NAME: 1
       NODE_HOSTNAME: 1
+      REGCODEFILE: /run/secrets/regcode
     entrypoint:
       - ./ingest
 
   live_ingest_ipc:
     hostname: live_ingest_ipc
     image: yejinlei/live_ingest_safe.go:1.0
+    secrets:
+      - regcode
     networks:
       - srs-network
     volumes:
@@ -36,6 +41,7 @@ services:
       TASK_SLOT: 1
       SERVICE_NAME: 1
       NODE_HOSTNAME: 1
+      REGCODEFILE: /run/secrets/regcode
     entrypoint:
       - ./ingest
 
@@ -184,6 +190,10 @@ services:
       - |
         objs/srs -c conf/srs.conf
         python server.py 8085
+
+secrets:
+  regcode:
+    file: gcj_regcode
 
 networks:
   srs-network:

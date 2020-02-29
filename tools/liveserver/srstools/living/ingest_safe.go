@@ -53,6 +53,22 @@ func CheckEnv() bool {
 	}
 }
 
+func CheckRegcode(regcode string) bool {
+	var regCodeFile string
+	regCodeFile = os.Getenv("REGCODEFILE")
+	r, _ := os.Open(regCodeFile)
+	defer r.Close()
+	s := bufio.NewScanner(r)
+	for s.Scan() {
+		line := s.Text()
+		if regcode == line {
+			return true
+		}
+	}
+
+	return false
+}
+
 func main() {
 
 	isInDocker := CheckEnv()
@@ -65,9 +81,13 @@ func main() {
 
 	hwinfo := CheckHW()
 	if hwinfo == "" {
+		fmt.Println("无法获取本机信息")
 		return
-	} else {
-		fmt.Println(hwinfo)
+	}
+
+	if CheckRegcode(hwinfo) == false {
+		fmt.Println("非法注册码")
+		return
 	}
 
 	var wg sync.WaitGroup
