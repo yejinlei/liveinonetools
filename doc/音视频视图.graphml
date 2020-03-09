@@ -265,10 +265,10 @@
                     <node id="n0::n0::n0::n2::n0">
                       <data key="d6">
                         <y:GenericNode configuration="com.yworks.flowchart.process">
-                          <y:Geometry height="40.0" width="110.0" x="-49.02161272912798" y="854.9039075623073"/>
+                          <y:Geometry height="40.0" width="119.35253906249997" x="-49.02161272912798" y="854.9039075623073"/>
                           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
                           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-                          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="52.01171875" x="28.994140625" xml:space="preserve" y="10.6494140625">IPC SDK<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="52.01171875" x="33.670410156249986" xml:space="preserve" y="10.6494140625">IPC SDK<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
                         </y:GenericNode>
                       </data>
                     </node>
@@ -600,10 +600,10 @@ Android/IOS 音视频API<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y
                     <node id="n0::n0::n1::n2::n0">
                       <data key="d6">
                         <y:GenericNode configuration="com.yworks.flowchart.process">
-                          <y:Geometry height="40.0" width="110.0" x="167.479104055969" y="850.6585775866594"/>
+                          <y:Geometry height="40.0" width="128.70507812499994" x="167.479104055969" y="850.6585775866594"/>
                           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
                           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-                          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="52.01171875" x="28.994140625" xml:space="preserve" y="10.6494140625">IPC SDK<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="52.01171875" x="38.34667968749997" xml:space="preserve" y="10.6494140625">IPC SDK<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
                         </y:GenericNode>
                       </data>
                     </node>
