@@ -15,12 +15,17 @@ Media as a Service, from codec to server architecture...✍
   **rtmps** | | | |
   **rtmpt** | | | |
   **rtmpts** | | | |
+  **UDT（可靠UDP协议）** | | | |
+  **SRT（基于UDT）** | | | | | 1. [srt's github](https://github.com/Haivision/srt)<br>2. [srt-live-server's github](https://github.com/Edward-Wu/srt-live-server)
   **hls**(Apple HTTP Live Streaming) | m3u8+mpegts部分 | | | 1. H5 video标签原生支持 or H5 MSE扩展<br>2. 协议 - [HTTP Live Streaming draft-pantos-http-live-streaming-12](https://tools.ietf.org/html/draft-pantos-http-live-streaming-12) |
   **dash**(Dynamic adaptive streaming over HTTP) | mpd+m4v/m4a\|webm\|3gp | | | | 1. [video.js dash插件](https://github.com/videojs/videojs-contrib-dash.git)<br>2. [dash测试页](http://reference.dashif.org/dash.js/nightly/samples/dash-if-reference-player/index.html)<br>3. [Bento4's github](https://github.com/axiomatic-systems/Bento4)<br>4. [Bento4's Bin](https://share.weiyun.com/5w4fPrC)<br>5. [DASHEncoder2's github](https://github.com/zhanghuicuc/DASHEncoder2/tree/dev-v2)<br>6. [DASH website demo's github（类似bitcodin网站）](https://github.com/zhanghuicuc/dash_website_demo)
   **http-flv** | | | | H5 MSE扩展
   **http-fmp4** | | | | H5 MSE扩展
   **websocket-flv** | | | | H5 MSE扩展
   **websocket-fmp4** | | | | H5 MSE扩展
+  **RTMP over QUIC(基于udp)** | | | |
+  **http-flv over QUIC(基于udp)** | | | |
+  **hls over QUIC(基于udp)** | | | |
   _ |**flv**(Flash Video) |    | | | [flv工具](https://share.weiyun.com/5h54Qqp)
   _ |**mp4**(MPEG-4 part 14) | h264视频编码+aac音频编码 | | H5 video标签原生支持 | 1. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>2. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
   _ |**fmp4(fragment mp4)** | h264视频编码+aac音频编码 | | | 
