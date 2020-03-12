@@ -26,6 +26,7 @@ Media as a Service, from codec to server architecture...✍
   **rtmp over Qquic（基于udp）** | | | |
   **http-flv over quic（基于udp）** | | | |
   **hls over quic（基于udp）** | | | |
+  **kmp（私有协议，基于可靠udp协议kcp）** | | | | | [媒体服务器NodeMediaServer](https://github.com/NodeMedia/NodeMediaServer)
   _ |**flv**(Flash Video) |    | | | [flv工具](https://share.weiyun.com/5h54Qqp)
   _ |**mp4**(MPEG-4 part 14) | h264视频编码+aac音频编码 | | H5 video标签原生支持 | 1. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>2. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
   _ |**fmp4(fragment mp4)** | h264视频编码+aac音频编码 | | | 
@@ -180,6 +181,7 @@ Media as a Service, from codec to server architecture...✍
   CyberPlayer | 基于jwplayer二次开发的flash播放器，支持rtmp、flv、hls，[source](https://share.weiyun.com/5rVCKPD) |
   rx-player | 支持dash、smooth，[测试页](https://developers.canal-plus.com/rx-player/)，[github](https://github.com/canalplus/rx-player) |
   libde265 & libde265.js| 开源h265解码库，js库用到了wasm，[libde265.js's github](https://github.com/strukturag/libde265.js), [libde265's github](https://github.com/strukturag/libde265) |
+  NodePlayer.js | 商业h265解码库，js库用到了wasm，[测试页](http://www.nodemedia.cn/products/node-media-player/) |
   **WebRTC生态↷**|**---** |**---**
   linephone | [官网](http://www.linphone.org/technical-corner/linphone?qt-technical_corner=0) | |
   jsSip | [官网](https://jssip.net/) | 支持sip(over websocket)和WebRTC的简易javascript库
@@ -342,3 +344,9 @@ Media as a Service, from codec to server architecture...✍
 
 ### 测试地址
 - BSTV rtmp://202.69.69.180:443/webcast/bshdlive-pc
+- game rtmp://1011.lssplay.aodianyun.com/demo/game
+- ljq rtmp://play.nodemedia.io/live/ljq
+- ljq kmp://play.nodemedia.io/live/ljq
+- http-flv(h265) http://alplay.nodemedia.cn/live/cam_178.flv
+- http-flv(h265) http://alplay.nodemedia.cn/live/cam_180.flv
+- http-flv(h265) http://alplay.nodemedia.cn/live/cam_112.flv
