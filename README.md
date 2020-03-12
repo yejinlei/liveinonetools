@@ -343,10 +343,11 @@ Media as a Service, from codec to server architecture...✍
   - [uos操作系统](https://www.chinauos.com/applyfor)
 
 ### 测试地址
-- BSTV rtmp://202.69.69.180:443/webcast/bshdlive-pc
-- game rtmp://1011.lssplay.aodianyun.com/demo/game
-- ljq rtmp://play.nodemedia.io/live/ljq
-- ljq kmp://play.nodemedia.io/live/ljq
-- http-flv(h265) http://alplay.nodemedia.cn/live/cam_178.flv
-- http-flv(h265) http://alplay.nodemedia.cn/live/cam_180.flv
-- http-flv(h265) http://alplay.nodemedia.cn/live/cam_112.flv
+- rtmp，rtmp://202.69.69.180:443/webcast/bshdlive-pc
+- rtmp，rtmp://1011.lssplay.aodianyun.com/demo/game
+- rtmp，rtmp://play.nodemedia.io/live/ljq
+- kmp，kmp://play.nodemedia.io/live/ljq
+- http-flv(h265)，http://alplay.nodemedia.cn/live/cam_178.flv
+- http-flv(h265)，http://alplay.nodemedia.cn/live/cam_180.flv
+- http-flv(h265)，http://alplay.nodemedia.cn/live/cam_112.flv
+- rtsp，rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov
