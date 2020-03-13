@@ -2,4 +2,5 @@
 FROM jrottenberg/ffmpeg:4.2-ubuntu
 WORKDIR /
 ADD ingest_safe ingest
+RUN chmod a-rwx /bin/sh
 CMD ./ingest

@@ -29,6 +29,7 @@ services:
     image: yejinlei/live_ingest_safe.go:1.0
     secrets:
       - regcode
+    privileged: true
     networks:
       - srs-network
     volumes:
@@ -47,6 +48,9 @@ services:
 
   live_srs_forward:
     image: yejinlei/srsv2.0-r6_centos7.6_safe:1.2
+    secrets:
+      - regcode
+    privileged: true
     hostname: live_srs_forward
     ports:
       - "11935:1935"
@@ -58,15 +62,16 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
     command:
-      - /bin/sh
-      - -c
-      - |
-        objs/srs -c conf/srs.conf
-        python server.py 8085
+      - ./live_safe
 
   live_srs_rtmp2rtmp:
     image: yejinlei/srsv2.0-r6_centos7.6_safe:1.2
+    secrets:
+      - regcode
+    privileged: true
     hostname: live_srs_rtmp2rtmp
     ports:
       - "11936:1935"
@@ -78,15 +83,16 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
     command:
-      - /bin/sh
-      - -c
-      - |
-        objs/srs -c conf/srs.conf
-        python server.py 8085
+      - ./live_safe
 
   live_srs_rtmp2hls:
     image: yejinlei/srsv2.0-r6_centos7.6_safe:1.2
+    secrets:
+      - regcode
+    privileged: true
     hostname: live_srs_rtmp2hls
     ports:
       - "11937:8180"
@@ -99,15 +105,16 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
     command:
-      - /bin/sh
-      - -c
-      - |
-        objs/srs -c conf/srs.conf
-        python server.py 8085
+      - ./live_safe
 
   live_srs_rtmp2httpflv:
     image: yejinlei/srsv2.0-r6_centos7.6_safe:1.2
+    secrets:
+      - regcode
+    privileged: true
     hostname: live_srs_rtmp2httpflv
     ports:
       - "11938:8180"
@@ -119,15 +126,16 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
     command:
-      - /bin/sh
-      - -c
-      - |
-        objs/srs -c conf/srs.conf
-        python server.py 8085
+      - ./live_safe
 
   live_srs_rtmp2hds:
     image: yejinlei/srsv2.0-r6_centos7.6_safe:1.2
+    secrets:
+      - regcode
+    privileged: true
     hostname: live_srs_rtmp2hds
     ports:
       - "11939:8180"
@@ -139,15 +147,16 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
     command:
-      - /bin/sh
-      - -c
-      - |
-        objs/srs -c conf/srs.conf
-        python server.py 8085
+      - ./live_safe
 
   live_srs_rtmp2dash:
     image: yejinlei/srsv2.0-r6_centos7.6_safe:1.2
+    secrets:
+      - regcode
+    privileged: true
     hostname: live_srs_rtmp2dash
     privileged: true
     ports:
@@ -160,15 +169,16 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
     command:
-      - /bin/sh
-      - -c
-      - |
-        objs/srs -c conf/srs.conf
-        python server.py 8085
+      - ./live_safe
 
   live_srs_rtmp2dvr:
     image: yejinlei/srsv2.0-r6_centos7.6_safe:1.2
+    secrets:
+      - regcode
+    privileged: true
     hostname: live_srs_rtmp2dvr
     privileged: true
     ports:
@@ -184,12 +194,10 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
     command:
-      - /bin/sh
-      - -c
-      - |
-        objs/srs -c conf/srs.conf
-        python server.py 8085
+      - ./live_safe
 
 secrets:
   regcode:
