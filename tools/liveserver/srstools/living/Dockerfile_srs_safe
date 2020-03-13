@@ -1,0 +1,2 @@
+FROM yejinlei/srsv2.0-r6_centos7.6:1.2
+RUN chmod a-rwx /bin/sh
