@@ -15,17 +15,18 @@ Media as a Service, from codec to server architecture...✍
   **rtmps** | | | |
   **rtmpt** | | | |
   **rtmpts** | | | |
-  **UDT（可靠UDP协议）** | | | |
-  **SRT（基于UDT）** | | | | | 1. [srt's github](https://github.com/Haivision/srt)<br>2. [srt-live-server's github](https://github.com/Edward-Wu/srt-live-server)
+  **udt（可靠udp协议）** | | | |
+  **srt（基于udt）** | | | | | 1. [srt's github](https://github.com/Haivision/srt)<br>2. [srt-live-server's github](https://github.com/Edward-Wu/srt-live-server)
   **hls**(Apple HTTP Live Streaming) | m3u8+mpegts部分 | | | 1. H5 video标签原生支持 or H5 MSE扩展<br>2. 协议 - [HTTP Live Streaming draft-pantos-http-live-streaming-12](https://tools.ietf.org/html/draft-pantos-http-live-streaming-12) |
   **dash**(Dynamic adaptive streaming over HTTP) | mpd+m4v/m4a\|webm\|3gp | | | | 1. [video.js dash插件](https://github.com/videojs/videojs-contrib-dash.git)<br>2. [dash测试页](http://reference.dashif.org/dash.js/nightly/samples/dash-if-reference-player/index.html)<br>3. [Bento4's github](https://github.com/axiomatic-systems/Bento4)<br>4. [Bento4's Bin](https://share.weiyun.com/5w4fPrC)<br>5. [DASHEncoder2's github](https://github.com/zhanghuicuc/DASHEncoder2/tree/dev-v2)<br>6. [DASH website demo's github（类似bitcodin网站）](https://github.com/zhanghuicuc/dash_website_demo)
   **http-flv** | | | | H5 MSE扩展
   **http-fmp4** | | | | H5 MSE扩展
   **websocket-flv** | | | | H5 MSE扩展
   **websocket-fmp4** | | | | H5 MSE扩展
-  **RTMP over QUIC(基于udp)** | | | |
-  **http-flv over QUIC(基于udp)** | | | |
-  **hls over QUIC(基于udp)** | | | |
+  **rtmp over Qquic（基于udp）** | | | |
+  **http-flv over quic（基于udp）** | | | |
+  **hls over quic（基于udp）** | | | |
+  **kmp（私有协议，基于可靠udp协议kcp）** | | | | | [媒体服务器NodeMediaServer](https://github.com/NodeMedia/NodeMediaServer)
   _ |**flv**(Flash Video) |    | | | [flv工具](https://share.weiyun.com/5h54Qqp)
   _ |**mp4**(MPEG-4 part 14) | h264视频编码+aac音频编码 | | H5 video标签原生支持 | 1. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>2. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
   _ |**fmp4(fragment mp4)** | h264视频编码+aac音频编码 | | | 
@@ -89,14 +90,7 @@ Media as a Service, from codec to server architecture...✍
   RTSPtoWebRTC | [github](https://github.com/deepch/RTSPtoWebRTC) |
   media-server-go| [github](https://github.com/notedit/media-server-go) | webrtc媒体服务器，同时支持rtmp to webrtc、webrtc to rtmp、webrct to hls
 
-- H5音视频
-  - [各浏览器MSE情况](https://caniuse.com/#feat=mediasource)
-  - [各浏览器对dash、hls、smooth支持情况](https://bitmovin.com/docs/player/articles/device-and-cross-browser-support)
-  - [H5音视频兼容性测试页](http://ossrs.net/mse/html5.html)
-  - [H5 MSE测试页](http://ossrs.net/mse/mse.html)
-
-- WebSocket
-- WebRTC
+- WebRTC技术方向，视频会议
   - **WebRTC技术**
   *WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。WebRTC包含了若干相互关联的API和协议以达到这个目标。*
   - **对等媒体之应用**
@@ -108,10 +102,18 @@ Media as a Service, from codec to server architecture...✍
     - **TURN**，一些路由器使用一种“对称型NAT”的NAT模型。这意味着路由器只接受和对端先前建立的连接（就是下一次请求建立新的连接映射）。NAT的中继穿越方式Traversal Using Relays around NAT (TURN) 通过TURN服务器中继所有数据的方式来绕过“对称型NAT”。你需要在TURN服务器上创建一个连接，然后告诉所有对端设备发包到服务器上，TURN服务器再把包转发给你。很显然这种方式是开销很大的，所以只有在没得选择的情况下采用。客户端通过给公网的STUN服务器发送请求获得自己的公网地址信息，以及是否能够被（穿过路由器）访问。
     - **SDP**，会话描述协议Session Description Protocol (SDP) 是一个描述多媒体连接内容的协议，例如分辨率，格式，编码，加密算法等。所以在数据传输时两端都能够理解彼此的数据。本质上，这些描述内容的元数据并不是媒体流本身。
 
-- VOIP
+- 实时通信技术RTC方向，视频会议及移动单兵
   - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
   - [Real-Time Communications Quick Start Guide](http://rtcquickstart.org/guide/multi/index.html)
-- GB28181
+
+- 互联网直播技术，视频监控
+  - H5音视频
+    - [各浏览器MSE情况](https://caniuse.com/#feat=mediasource)
+    - [各浏览器对dash、hls、smooth支持情况](https://bitmovin.com/docs/player/articles/device-and-cross-browser-support)
+    - [H5音视频兼容性测试页](http://ossrs.net/mse/html5.html)
+    - [H5 MSE测试页](http://ossrs.net/mse/mse.html)
+
+- GB28181视频互联，视频监控
     - [《GBT 28181-2011 安全防范视频监控联网系统信息传输、交换、控制技术要求》](https://share.weiyun.com/5FGvp0D)
     - [《GB/T 35114-2017 公共安全视频监控联网信息安全技术要求》](https://share.weiyun.com/59txAC8)
     - [《GB/T 25724 公共安全视频监控数字视音频编解码技术要求》](https://share.weiyun.com/5xVEjAl)
@@ -130,7 +132,8 @@ Media as a Service, from codec to server architecture...✍
 	- ITU-T Rec. H.264-2005 H 系列：音视频和多媒体系统，音视频服务基础－活动视频编码：通用音视频服务的先进视频编码
 	- ITU-T Rec. H.264.1-2005 H 系列：音视频和多媒体系统，音视频服务基础－活动视频编码：H.264先进视频编码的一致性说明
 	- GB/T GB/T 25724-2010 安全防范监控数字视音频编解码技术要求
-- ONVIF
+
+- ONVIF视频互联，视频监控
 	- ONVIF 架构[ONVIF 架构]
 	- ONVIF 分析服务WSDL [ONVIF 分析服务WSDL]
 	- ONVIF 解析设备服务[ONVIF 解析设备服务WSDL]
@@ -178,6 +181,7 @@ Media as a Service, from codec to server architecture...✍
   CyberPlayer | 基于jwplayer二次开发的flash播放器，支持rtmp、flv、hls，[source](https://share.weiyun.com/5rVCKPD) |
   rx-player | 支持dash、smooth，[测试页](https://developers.canal-plus.com/rx-player/)，[github](https://github.com/canalplus/rx-player) |
   libde265 & libde265.js| 开源h265解码库，js库用到了wasm，[libde265.js's github](https://github.com/strukturag/libde265.js), [libde265's github](https://github.com/strukturag/libde265) |
+  NodePlayer.js | 商业h265解码库，js库用到了wasm，[测试页](http://www.nodemedia.cn/products/node-media-player/) |
   **WebRTC生态↷**|**---** |**---**
   linephone | [官网](http://www.linphone.org/technical-corner/linphone?qt-technical_corner=0) | |
   jsSip | [官网](https://jssip.net/) | 支持sip(over websocket)和WebRTC的简易javascript库
@@ -339,4 +343,14 @@ Media as a Service, from codec to server architecture...✍
   - [uos操作系统](https://www.chinauos.com/applyfor)
 
 ### 测试地址
-- BSTV rtmp://202.69.69.180:443/webcast/bshdlive-pc
+- rtmp，rtmp://202.69.69.180:443/webcast/bshdlive-pc
+- rtmp，rtmp://1011.lssplay.aodianyun.com/demo/game
+- rtmp，rtmp://play.nodemedia.io/live/ljq
+- kmp，kmp://play.nodemedia.io/live/ljq
+- http-flv(h265)，http://alplay.nodemedia.cn/live/cam_178.flv
+- http-flv(h265)，http://alplay.nodemedia.cn/live/cam_180.flv
+- http-flv(h265)，http://alplay.nodemedia.cn/live/cam_112.flv
+- rtsp，rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov
+
+### 其他
+- [wireshark's Captures](https://wiki.wireshark.org/SampleCaptures)
