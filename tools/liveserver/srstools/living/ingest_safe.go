@@ -30,7 +30,7 @@ func warp(ffmpeg_args string) {
 
 //cat /sys/class/dmi/id/product_uuid | tr '[:upper:]' '[:lower:]' | openssl md5
 func CheckHW() string {
-	c, err := exec.Command("bash", "-c", "cat /sys/class/dmi/id/product_uuid").CombinedOutput()
+	c, err := exec.Command("cat", "/sys/class/dmi/id/product_uuid").CombinedOutput()
 	if err != nil {
 		return ""
 	}
@@ -41,7 +41,7 @@ func CheckHW() string {
 }
 
 func CheckEnv() bool {
-	c, err := exec.Command("bash", "-c", "cat /proc/1/status", "|", "head -1").CombinedOutput()
+	c, err := exec.Command("cat", "/proc/1/status").CombinedOutput()
 	if err != nil {
 		return false
 	}

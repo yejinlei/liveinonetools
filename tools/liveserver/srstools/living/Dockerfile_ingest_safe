@@ -1,6 +1,7 @@
 #https://github.com/jrottenberg/ffmpeg
 FROM jrottenberg/ffmpeg:4.2-ubuntu
 WORKDIR /
+RUN /sbin/ldconfig
 ADD ingest_safe ingest
 RUN chmod a-rwx /bin/sh
 CMD ./ingest
