@@ -18,7 +18,7 @@
 
 pyenv install 2.7.13 -v
 pyenv virtualenv 2.7.13 env_2.7.13
-pyenv activate env_2.7.13
+pyenv local env_2.7.13
 
 #pyenv deactivate
 #pyenv uninstall env_2.7.13
