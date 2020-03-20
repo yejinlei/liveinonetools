@@ -1,0 +1,10 @@
+#FROM centos:centos7.6.1810
+FROM jrottenberg/ffmpeg:4.2-ubuntu
+MAINTAINER yejinlei <4010896@qq.com>
+WORKDIR /usr/local/bin
+RUN mkdir -p /usr/local/bin/objs && mkdir -p /usr/local/bin/conf
+ADD ./gcj /usr/local/bin/objs/gcj
+ADD ./server /usr/local/bin/server
+ADD ./live /usr/local/bin/live
+#RUN chmod a-rwx /bin/sh
+CMD ./live

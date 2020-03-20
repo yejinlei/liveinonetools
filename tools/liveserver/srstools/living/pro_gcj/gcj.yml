@@ -1,0 +1,165 @@
+version: '3.3'
+
+services:
+  gcj_ingest_loc:
+    hostname: gcj_ingest_loc
+    image: yejinlei/gcj_ingest:1.0
+    secrets:
+      - regcode
+    privileged: true
+    networks:
+      - gcj-network
+    volumes:
+      - ./loc_camera.conf:/camera.conf
+      - ./loc_argv.conf:/argv.conf
+      - /dev/video0:/dev/video0
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      TASK_SLOT: 1
+      SERVICE_NAME: 1
+      NODE_HOSTNAME: 1
+      REGCODEFILE: /run/secrets/regcode
+    entrypoint:
+      - /ingest
+
+  gcj_ingest_ipc:
+    hostname: gcj_ingest_ipc
+    image: yejinlei/gcj_ingest:1.0
+    secrets:
+      - regcode
+    privileged: true
+    networks:
+      - gcj-network
+    volumes:
+      - ./ipc_camera.conf:/camera.conf
+      - ./ipc_argv.conf:/argv.conf
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      TASK_SLOT: 1
+      SERVICE_NAME: 1
+      NODE_HOSTNAME: 1
+      REGCODEFILE: /run/secrets/regcode
+    entrypoint:
+      - /ingest
+
+  gcj_forward:
+    image: yejinlei/gcj_live:1.2
+    secrets:
+      - regcode
+    privileged: true
+    hostname: gcj_forward
+    ports:
+      - "11935:1935"
+    volumes:
+      - ./forward.conf:/usr/local/bin/conf/gcj.conf
+    networks:
+      - gcj-network
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
+    working_dir: /usr/local/bin
+    entrypoint:
+      - ./live
+
+  gcj_rtmp2rtmp:
+    image: yejinlei/gcj_live:1.2
+    secrets:
+      - regcode
+    privileged: true
+    hostname: live_gcj_rtmp2rtmp
+    ports:
+      - "11936:1935"
+    volumes:
+      - ./rtmp2rtmp.conf:/usr/local/bin/conf/gcj.conf
+    networks:
+      - gcj-network
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
+    working_dir: /usr/local/bin
+    entrypoint:
+      - ./live
+
+  gcj_rtmp2hls:
+    image: yejinlei/gcj_live:1.2
+    secrets:
+      - regcode
+    privileged: true
+    hostname: gcj_rtmp2hls
+    ports:
+      - "11937:8180"
+    volumes:
+      - ./rtmp2hls.conf:/usr/local/bin/conf/gcj.conf
+      - ./crossdomain.xml:/hls/crossdomain.xml
+    networks:
+      - gcj-network
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
+    working_dir: /usr/local/bin
+    entrypoint:
+      - ./live
+
+  gcj_rtmp2httpflv:
+    image: yejinlei/gcj_live:1.2
+    secrets:
+      - regcode
+    privileged: true
+    hostname: gcj_rtmp2httpflv
+    ports:
+      - "11938:8180"
+    volumes:
+      - ./rtmp2httpflv.conf:/usr/local/bin/conf/gcj.conf
+    networks:
+      - gcj-network
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
+    working_dir: /usr/local/bin
+    entrypoint:
+      - ./live
+
+  gcj_rtmp2dvr:
+    image: yejinlei/gcj_live:1.2
+    secrets:
+      - regcode
+    privileged: true
+    hostname: gcj_rtmp2dvr
+    privileged: true
+    ports:
+      - "11941:8180"
+    volumes:
+      - ./tmp:/data
+      - ./rtmp2dvr.conf:/usr/local/bin/conf/gcj.conf
+      - ./crossdomain.xml:/data/crossdomain.xml
+      - /etc/localtime:/etc/localtime
+    networks:
+      - gcj-network
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      REGCODEFILE: /run/secrets/regcode
+    working_dir: /usr/local/bin
+    entrypoint:
+      - ./live
+
+secrets:
+  regcode:
+    file: gcj_regcode
+
+networks:
+  gcj-network:
+    driver: bridge
