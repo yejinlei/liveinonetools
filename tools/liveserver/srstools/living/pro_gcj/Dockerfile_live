@@ -6,5 +6,5 @@ RUN mkdir -p /usr/local/bin/objs && mkdir -p /usr/local/bin/conf
 ADD ./gcj /usr/local/bin/objs/gcj
 ADD ./server /usr/local/bin/server
 ADD ./live /usr/local/bin/live
-#RUN chmod a-rwx /bin/sh
+RUN chmod a-rwx /bin/sh
 CMD ./live
