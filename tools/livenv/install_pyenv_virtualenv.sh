@@ -7,20 +7,36 @@
 
 #curl -L https://raw.github.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
 #or
-#git clone git://github.com/yyuu/pyenv.git ～/.pyenv
+#git clone git://github.com/yyuu/pyenv.git ~/.pyenv
 #echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+#echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
 #echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+#echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
 #echo 'eval "$(pyenv init -)"' >> ~/.bashrc
-#source ~/.bashrc
+#echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+#exec $SHELL -l
 
 #git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
-#exec "$SHELL"
+#exec $SHELL -l
 
-pyenv install 2.7.13 -v
-pyenv virtualenv 2.7.13 env_2.7.13
-pyenv local env_2.7.13
+#echo 'eval "$(pipenv --completion)"'  >> ~/.bashrc
+#echo 'eval "$(pipenv --completion)"'  >> ~/.zshrc
+#exec $SHELL -l
+
+#cd ~/.pyenv/plugins/python-build/../.. && git pull && cd -
+
+v=$1
+#wget http://mirrors.sohu.com/python/$v/Python-$v.tar.xz -P ~/.pyenv/cache/
+axel -n 8 -o ~/.pyenv/cache/ http://mirrors.sohu.com/python/$v/Python-$v.tar.xz 
+pyenv install $v
+#pyenv install $1 -v
+
+pyenv rehash
+pyenv virtualenv $v dev_$v
+pyenv activate dev_$v
+pyenv rehash
+pip install pip --upgrade
 
 #pyenv deactivate
-#pyenv uninstall env_2.7.13
-#rm -rf ~/.pyenv/versions/env_2.7.13/
-
+#pyenv uninstall env_$1
+#rm -rf ~/.pyenv/versions/env_$1/
