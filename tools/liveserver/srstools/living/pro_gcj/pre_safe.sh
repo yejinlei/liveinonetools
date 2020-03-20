@@ -3,6 +3,7 @@ upx ./ingest
 ./build_docker_ingest_1.0.sh
 
 #去除符号
+srs2gcj.sh
 strip ./gcj
 upx ./live
 ./build_docker_live_1.2.sh
