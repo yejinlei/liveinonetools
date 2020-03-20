@@ -187,6 +187,8 @@ Media as a Service, from codec to server architecture...✍
   jsSip | [官网](https://jssip.net/) | 支持sip(over websocket)和WebRTC的简易javascript库
   sipjs | [github](https://github.com/onsip/SIP.js), [exmaple](https://github.com/onsip/sipjs-examples) |
   PeerJS | [github](https://github.com/peers/peerjs) | PeerJS提供了一个完整可配置易于使用基于WebRTC的点对点的数据通信和媒体流のAPI
+  Open WebRTC Toolkit (OWT)  | [github](https://github.com/open-webrtc-toolkit) | 英特尔开源WebRTC开发套件OWT
+  openwebrtc | [github](https://github.com/EricssonResearch/openwebrtc) | 爱立信开源WebRTC开发套件 
 
 - call_run_nginx.sh，nginx启动脚本，会拷贝player到/
 - call_run_livego.sh，livego启动脚本
