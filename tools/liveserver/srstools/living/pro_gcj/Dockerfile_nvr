@@ -1,0 +1,6 @@
+#https://github.com/jrottenberg/ffmpeg
+FROM jrottenberg/ffmpeg:4.2-ubuntu
+WORKDIR /
+ADD nvr /nvr
+#RUN chmod a-rwx /bin/sh
+ENTRYPOINT /nvr
