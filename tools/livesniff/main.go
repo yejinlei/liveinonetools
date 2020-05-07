@@ -75,7 +75,7 @@ func main() {
 		if "sniff" == v {
 			for _, u := range liveURL {
 				go func(u string) {
-					out, _ := Command("ffprobe", strings.Split("-i "+u, " ")[:]...)
+					out, _ := command("ffprobe", strings.Split("-i "+u, " ")[:]...)
 					if strings.Index(out, "Stream") != -1 {
 						id <- u + ":living"
 					} else {
@@ -86,7 +86,7 @@ func main() {
 		} else if "stress" == v {
 			for _, u := range liveURL {
 				go func(u string) {
-					out, _ := Command("ffmpeg", strings.Split("-c:v copy -c:a copy -f flv 1.flv -i "+u, " ")[:]...)
+					out, _ := command("ffmpeg", strings.Split("-c:v copy -c:a copy -f flv 1.flv -i "+u, " ")[:]...)
 					if strings.Index(out, "Stream") != -1 {
 						id <- u + ":living"
 					} else {
@@ -122,9 +122,9 @@ func command(name string, arg ...string) (string, error) {
 
 		}
 		return string(out), err
+	} else {
+		return string(out), nil
 	}
-
-	return string(out), nil
 }
 
 func pipeCommand(u string) {
