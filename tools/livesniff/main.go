@@ -12,8 +12,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	_ "github.com/go-echarts/go-echarts/charts"
 )
 
 var (
@@ -22,6 +20,7 @@ var (
 	ip string
 	t  int64
 	m  string
+	l  int64
 
 	lock sync.Mutex
 	id   = make(chan string, 1000)
@@ -53,7 +52,7 @@ func main() {
 	}
 
 	/*动态生成、文件读取*/
-	var liveUrl []string
+	var liveURL []string
 	if strings.Index(i, "://") != -1 {
 		if strings.Contains(i, "^") {
 			url := strings.Split(i, "^")
@@ -61,29 +60,23 @@ func main() {
 			s, _ := strconv.Atoi(urlRange[0])
 			e, _ := strconv.Atoi(urlRange[1])
 			for s <= e {
-				liveUrl = append(liveUrl, url[0]+strconv.Itoa(s)+url[2])
-				s += 1
+				liveURL = append(liveURL, url[0]+strconv.Itoa(s)+url[2])
+				s++
 			}
 		} else {
-			liveUrl = append(liveUrl, i)
+			liveURL = append(liveURL, i)
 		}
 	} else {
 
 	}
 
-	/*根据策略生成地址池*/
-	//streamidRange := strings.Split(i, "/")
-	//id := streamidRange[len(streamidRange)-1]
-
-	//liveUrl = []string{"rtmp://10.10.82.66:11936/live/6058", "rtmp://10.10.82.66:11936/live/5021"}
-
 	/*选择模式，嗅探、压力、显示*/
 	for _, v := range strings.Split(m, ";") {
 		if "sniff" == v {
-			for _, u := range liveUrl {
+			for _, u := range liveURL {
 				go func(u string) {
 					out, _ := Command("ffprobe", strings.Split("-i "+u, " ")[:]...)
-					if strings.Index(out, "title") != -1 && strings.Index(out, "Stream") != -1 {
+					if strings.Index(out, "Stream") != -1 {
 						id <- u + ":living"
 					} else {
 						id <- u + ":death"
@@ -91,9 +84,25 @@ func main() {
 				}(u)
 			}
 		} else if "stress" == v {
-
+			for _, u := range liveURL {
+				go func(u string) {
+					out, _ := Command("ffmpeg", strings.Split("-c:v copy -c:a copy -f flv 1.flv -i "+u, " ")[:]...)
+					if strings.Index(out, "Stream") != -1 {
+						id <- u + ":living"
+					} else {
+						id <- u + ":death"
+					}
+				}(u)
+			}
 		} else if "show" == v {
-			go PipeCommand()
+			//for _, u := range liveURL {
+			//	go pipeCommand(u)
+			//}
+			for _, u := range liveURL {
+				go func(u string) {
+					command("ffplay", strings.Split("-i "+u, " ")[:]...)
+				}(u)
+			}
 		}
 	}
 
@@ -101,7 +110,7 @@ func main() {
 	//time.Sleep(100000000000)
 }
 
-func Command(name string, arg ...string) (string, error) {
+func command(name string, arg ...string) (string, error) {
 	Timeout := time.Duration(t) * time.Second
 	ctxt, cancel := context.WithTimeout(context.Background(), Timeout)
 	defer cancel()
@@ -113,29 +122,26 @@ func Command(name string, arg ...string) (string, error) {
 
 		}
 		return string(out), err
-	} else {
-		return string(out), nil
 	}
+
+	return string(out), nil
 }
 
-func PipeCommand() {
+func pipeCommand(u string) {
 	var commands []*exec.Cmd
 	sysType := runtime.GOOS
 	shellType := map[string][]string{"linux": []string{"sh", "-c"},
 		"windows": []string{"cmd", "/C"}}
-	shell_args := shellType[sysType]
-	//ffmpeg_args := "ffmpeg -i rtmp://10.10.82.66:11936/live/5021 -i rtmp://10.10.82.66:11936/live/6058 -filter_complex 'nullsrc=size=1024x768[base]; [0:v]setpts=PTS-STARTPTS,scale=517x384[l1]; [1:v]setpts=PTS-STARTPTS,scale=517x384[l2]; [base][l1]overlay=x=0:y=0[tmp1]; [tmp1][l2]overlay=x=0:y=384' -f flv -"
-	ffmpeg_args := "ffmpeg -i rtmp://10.10.82.66:11936/live/5021 -i rtmp://10.10.82.66:11936/live/6058 -vcodec copy -f flv -"
-	ffplay_args := "ffplay -i -"
-	commands = append(commands, exec.Command(shell_args[0], shell_args[1], ffmpeg_args))
-	commands = append(commands, exec.Command(shell_args[0], shell_args[1], ffplay_args))
-
+	shellArgs := shellType[sysType]
+	//ffmpegArgs := "ffmpeg -i rtmp://10.10.82.66:11936/live/5021 -i rtmp://10.10.82.66:11936/live/6058 -filter_complex 'nullsrc=size=1024x768[base]; [0:v]setpts=PTS-STARTPTS,scale=517x384[l1]; [1:v]setpts=PTS-STARTPTS,scale=517x384[l2]; [base][l1]overlay=x=0:y=0[tmp1]; [tmp1][l2]overlay=x=0:y=384' -f flv -"
+	ffmpegArgs := "ffmpeg -t 10 -i " + u + " -vcodec copy -f flv -"
+	ffplayArgs := "ffplay -i -"
+	commands = append(commands, exec.Command(shellArgs[0], shellArgs[1], ffmpegArgs))
+	commands = append(commands, exec.Command(shellArgs[0], shellArgs[1], ffplayArgs))
 	for i := 1; i < len(commands); i++ {
 		commands[i].Stdin, _ = commands[i-1].StdoutPipe()
-
 	}
 	commands[len(commands)-1].Stdout = os.Stdout
-
 	for i := 1; i < len(commands); i++ {
 		err := commands[i].Start()
 		if err != nil {
@@ -156,8 +162,8 @@ func PipeCommand() {
 func stat() {
 	for {
 		select {
-		case urlId := <-id:
-			fmt.Println(urlId)
+		case urlID := <-id:
+			fmt.Println(urlID)
 		}
 	}
 }
