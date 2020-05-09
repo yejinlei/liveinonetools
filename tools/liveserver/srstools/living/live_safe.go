@@ -13,21 +13,22 @@ import (
 	"time"
 )
 
-func warp(ffmpeg_args string) {
+func warp(ffmpeg_args string, wg sync.WaitGroup) {
 	list := strings.Split(ffmpeg_args, " ")
 	for {
-		cmd := exec.Command(list[0], list[1:]...)
+		exec.Command(list[0], list[1:]...).CombinedOutput()
 		//w := bytes.NewBuffer(nil)
 		//cmd.Stdout = os.Stdout
 		//cmd.Stderr = w
-		cmd.Run()
+		//cmd.Run()
 		//if err != nil {
 		//      fmt.Printf("%s\n", w.Bytes())
 		//}
 		time.Sleep(time.Second * 5)
 	}
 
-	count -= 1
+	wg.Done()
+
 }
 
 //cat /sys/class/dmi/id/product_uuid | tr '[:upper:]' '[:lower:]' | openssl md5
@@ -94,15 +95,13 @@ func main() {
 	}
 
 	var wg sync.WaitGroup
-	
-	srs_args := "objs/srs -c conf/srs.conf"
-	go warp(srs_args)
-	count += 1
+	wg.Add(2)
 
-	python_args := "python server.py 8085"
-	go warp(python_args)
-	count += 1
+	srs_args := "objs/gcj -c conf/gcj.conf"
+	go warp(srs_args, wg)
 
-	wg.Add(count)
+	python_args := "./server 8085"
+	go warp(python_args, wg)
+
 	wg.Wait()
 }

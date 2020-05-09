@@ -1,0 +1,3 @@
+configparser
+py3Fdfs
+cherrypy
