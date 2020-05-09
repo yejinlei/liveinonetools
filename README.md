@@ -2,6 +2,7 @@
 Media as a Service, from codec to server architecture...✍ 
 
 ![](doc/音视频视图.png)
+![](doc/音视频方案.png)
 ---
 
 ### liveanalysis，多媒体、信令、消息等配套协议
