@@ -23,7 +23,7 @@ Media as a Service, from codec to server architecture...✍
   **http-fmp4** | | | | H5 MSE扩展
   **websocket-flv** | | | | H5 MSE扩展
   **websocket-fmp4** | | | | H5 MSE扩展
-  **rtmp over Qquic（基于udp）** | | | |
+  **rtmp over quic（基于udp）** | | | |
   **http-flv over quic（基于udp）** | | | |
   **hls over quic（基于udp）** | | | |
   **kmp（私有协议，基于可靠udp协议kcp）** | | | | | [媒体服务器NodeMediaServer](https://github.com/NodeMedia/NodeMediaServer)
