@@ -35,9 +35,8 @@ Media as a Service, from codec to server architecture...✍
   _ |**webm** | vp8视频编码+vorbis音频编码 | | H5 video标签原生支持 |
   _ |**ogg** | theora视频编码+vorbis音频编码 | | H5 video标签原生支持 |
   _ |**hds**(HDS Muxer) |    | | |
-  _ |**mpeg1video**(raw MPEG-1 video)
-  _ |**mpeg2video**(raw MPEG-2 video)
-  _ |**mpegts**(MPEG-2 Transport Stream) | | | | [雷霄骅 / TS_Analysis](https://gitee.com/leixiaohua/TS_Analysis)
+  _ |**mpeg1video的封装:**
+  _ |**mpeg2video的封装:包含mpeg2-ps流和mpeg2-ts流**<br>**mpegts**(本地文件)<br>**rtp_mpegts**(rtp推流) | | | | [雷霄骅 / TS_Analysis](https://gitee.com/leixiaohua/TS_Analysis)
   _ |**aac**(Advanced Audio Coding) | | | | [雷霄骅 / AAC_Analysis](https://gitee.com/leixiaohua/AAC_Analysis)
   _ |**adts**(ADTS AAC)
   _ |_ |**mpeg1video**(MPEG-1 video)    | | |
@@ -58,11 +57,11 @@ Media as a Service, from codec to server architecture...✍
 
 - ❀GB28181(音视频部分)❀
 
-  _ | _ |  协议及参考实现
+  名字 | 协议 |  参考实现
   ---|---|---
-  **rtsp** | | 1. 协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt)，实时流传输协议<br>2. 参考实现：[rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
-  **rtcp** | | 1. 协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550)，RTP控制协议
-  **rtp**(rtp_mepg_ts) | | 1. 协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551)，实时传输协议<br>2. 参考实现： [jrtplib's github](https://github.com/j0r1/JRTPLIB)、[GoRTP's github](https://github.com/whtang/GoRTP)、[linephone ortp's github](https://github.com/dmonakhov/ortp)、[live555's github](https://github.com/cmberryau/live555) 
+  **rtsp** | 1. 实时流传输协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt)，实时流传输协议 | [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
+  **rtcp** | 1. RTP控制协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550) |
+  **rtp** | 1. 实时传输协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551)<br>2. 视频关键帧的封装: RTP + PSheader + PS system header + PS system Map + PES header + h264 data<br>3. 视频非关键帧的封装: RTP + PS header + PES header + h264 data<br>4. 音频帧的封装: RTP + PES header + G711 | [jrtplib's github](https://github.com/j0r1/JRTPLIB)、[GoRTP's github](https://github.com/whtang/GoRTP)、[linephone ortp's github](https://github.com/dmonakhov/ortp)、[live555's github](https://github.com/cmberryau/live555) 
  
 - ❀信令控制、IM消息协议❀
   
