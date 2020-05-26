@@ -19,6 +19,7 @@ RUN apt-get install build-essential libtool gcc g++ make -y
 WORKDIR /usr/local/src/nginx-1.15.2/
 RUN ./configure --prefix=/usr/local/nginx --add-module=../nginx-rtmp-module-1.2.1 --with-pcre=../pcre-8.40 --with-openssl=../openssl-1.0.1f --with-http_ssl_module --with-zlib=../zlib-1.2.11 && make && make install
 #RUN ./configure --prefix=/usr/local/nginx --add-module=../nginx-rtmp-module-1.2.1 && make --with-zlib=../zlib-1.2.11 && make install
+RUN rm -rf /usr/local/src
 
 ENV PATH /usr/local/nginx/sbin:$PATH
 EXPOSE 80
