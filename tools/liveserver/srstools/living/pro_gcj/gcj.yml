@@ -32,6 +32,9 @@ services:
     privileged: true
     networks:
       - gcj-network
+    dns:
+      - 8.8.4.4
+      - 114.114.114.114
     volumes:
       - ./ipc_camera.conf:/camera.conf
       - ./ipc_argv.conf:/argv.conf
@@ -47,7 +50,7 @@ services:
       - /ingest
 
   gcj_forward:
-    image: yejinlei/gcj_live:1.2
+    image: yejinlei/gcj_live:1.3
     secrets:
       - regcode
     privileged: true
@@ -68,11 +71,11 @@ services:
       - ./live
 
   gcj_rtmp2rtmp:
-    image: yejinlei/gcj_live:1.2
+    image: yejinlei/gcj_live:1.3
     secrets:
       - regcode
     privileged: true
-    hostname: live_gcj_rtmp2rtmp
+    hostname: gcj_rtmp2rtmp
     ports:
       - "11936:1935"
     volumes:
@@ -89,7 +92,7 @@ services:
       - ./live
 
   gcj_rtmp2hls:
-    image: yejinlei/gcj_live:1.2
+    image: yejinlei/gcj_live:1.3
     secrets:
       - regcode
     privileged: true
@@ -111,7 +114,7 @@ services:
       - ./live
 
   gcj_rtmp2httpflv:
-    image: yejinlei/gcj_live:1.2
+    image: yejinlei/gcj_live:1.3
     secrets:
       - regcode
     privileged: true
@@ -132,7 +135,7 @@ services:
       - ./live
 
   gcj_rtmp2dvr:
-    image: yejinlei/gcj_live:1.2
+    image: yejinlei/gcj_live:1.3
     secrets:
       - regcode
     privileged: true
