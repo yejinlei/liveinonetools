@@ -9,18 +9,16 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/pkg/profile"
 )
 
 func warp(ffmpeg_args string) {
 	list := strings.Split(ffmpeg_args, " ")
 	for {
-		cmd := exec.Command(list[0], list[1:]...)
+		exec.Command(list[0], list[1:]...).CombinedOutput()
 		//w := bytes.NewBuffer(nil)
 		//cmd.Stdout = os.Stdout
 		//cmd.Stderr = w
-		cmd.Run()
+		//cmd.Run()
 		//if err != nil {
 		//      fmt.Printf("%s\n", w.Bytes())
 		//}
@@ -31,7 +29,6 @@ func warp(ffmpeg_args string) {
 func main() {
 
 	var wg sync.WaitGroup
-	defer profile.Start(profile.MemProfile).Stop()
 	conf1, err := os.Open("./argv.conf")
 	if err != nil {
 		defer conf1.Close()
