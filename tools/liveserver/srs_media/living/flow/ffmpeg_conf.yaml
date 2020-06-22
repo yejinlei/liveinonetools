@@ -1,0 +1,2 @@
+ffmpeg.timeout: 100000000  #秒，运行时长
+ffmpeg.times: 5     #重启次数
