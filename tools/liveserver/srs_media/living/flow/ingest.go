@@ -31,6 +31,7 @@ var c *kafka.Consumer
 func init() {
 	go initKafka()
 	go initRest()
+	go timerTask()
 	fmt.Println("init exit")
 }
 
@@ -79,7 +80,7 @@ func initKafka() {
 		if err == nil {
 			fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
 			var info ffprobeinfo
-			info.mode = ""
+			info.mode = ONETIME
 			info.timeout = 10
 			info.streams = string(msg.Value)
 			go schedFFprobe(&info)
@@ -135,7 +136,7 @@ func initRest() {
 	{
 		d.POST("/check", func(c *gin.Context) {
 			var info ffprobeinfo
-			info.mode = ""
+			info.mode = ONETIME
 			info.timeout = 10
 			info.streams = "rtmp://202.69.69.180:443/webcast/bshdlive-pc"
 			status := schedFFprobe(&info)
@@ -147,8 +148,8 @@ func initRest() {
 
 		d.POST("/select", func(c *gin.Context) {
 			var info ffprobeinfo
-			info.mode = ""
 			info.timeout = 10
+			info.mode = ONETIME
 			info.streams = "rtmp://202.69.69.180:443/webcast/bshdlive-pc"
 			if status := schedFFprobe(&info); status == "living" {
 				fmt.Println("ffmpeg " + info.streams)
@@ -167,6 +168,18 @@ func initRest() {
 	}
 
 	r.Run(":8080")
+}
+
+func timerTask() {
+	wg.Add(1)
+	defer wg.Done()
+	fmt.Println("timerTask")
+
+	var info ffprobeinfo
+	info.mode = PERIOD
+	info.timeout = 10
+	info.streams = "rtmp://202.69.69.180:443/webcast/bshdlive-pc"
+	schedFFprobe(&info)
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -242,21 +255,44 @@ func schedFFmpeg() bool {
 	return true
 }
 
+type Mode int
+
+const (
+	ONETIME Mode = iota
+	PERIOD
+)
+
 type ffprobeinfo struct {
-	mode    string
+	mode    Mode
 	timeout time.Duration
 	streams string
 }
 
 func schedFFprobe(info *ffprobeinfo) (status string) {
-	out, _ := command(info.timeout, "ffprobe", strings.Split(info.streams, " ")[:]...)
-	fmt.Println(string(out[:]))
-	if strings.Contains(string(out[:]), "Stream") {
-		fmt.Println(info.streams + " is living")
-		return "living"
+	if info.mode == PERIOD {
+		c := time.Tick(5 * time.Second)
+		for {
+			<-c
+			go func() {
+				out, _ := command(info.timeout, "ffprobe", strings.Split(info.streams, " ")[:]...)
+				fmt.Println(string(out[:]))
+				if strings.Contains(string(out[:]), "Stream") {
+					fmt.Println(info.streams + " is living")
+				} else {
+					fmt.Println(info.streams + " is offline")
+				}
+			}()
+		}
 	} else {
-		fmt.Println(info.streams + " is offline")
-		return "offline"
+		out, _ := command(info.timeout, "ffprobe", strings.Split(info.streams, " ")[:]...)
+		fmt.Println(string(out[:]))
+		if strings.Contains(string(out[:]), "Stream") {
+			fmt.Println(info.streams + " is living")
+			return "living"
+		} else {
+			fmt.Println(info.streams + " is offline")
+			return "offline"
+		}
 	}
 
 	return "offline"
