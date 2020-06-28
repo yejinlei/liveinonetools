@@ -73,11 +73,17 @@ func initKafka() {
 	}
 	defer consumer.Close()
 
-	consumer.SubscribeTopics([]string{"myTopic", "^aRegex.*[Tt]opic"}, nil)
+	consumer.SubscribeTopics([]string{"SELECT"}, nil)
 	for {
 		msg, err := consumer.ReadMessage(-1)
 		if err == nil {
 			fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
+			var info ffprobeinfo
+			info.mode = ""
+			info.timeout = 10
+			info.streams = string(msg.Value)
+			go schedFFprobe(&info)
+
 		} else {
 			// The client will automatically try to recover from all errors.
 			fmt.Printf("Consumer error: %v (%v)\n", err, msg)
@@ -100,7 +106,8 @@ func initRest() {
 			"message": `
 			/c/status		采集器运行状态
 			/c/close		采集器停止
-			/d				数据面接口
+			/d/check		检查IPC状态
+			/d/select       启动IPC采集
 			`,
 		})
 	})
@@ -124,13 +131,42 @@ func initRest() {
 		})
 	}
 
-	r.GET("/d", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "OK",
+	d := r.Group("/d")
+	{
+		d.POST("/check", func(c *gin.Context) {
+			var info ffprobeinfo
+			info.mode = ""
+			info.timeout = 10
+			info.streams = "rtmp://202.69.69.180:443/webcast/bshdlive-pc"
+			status := schedFFprobe(&info)
+			c.JSON(200, gin.H{
+				"stream": info.streams,
+				"status": status,
+			})
 		})
-	})
 
-	r.Run(":19361")
+		d.POST("/select", func(c *gin.Context) {
+			var info ffprobeinfo
+			info.mode = ""
+			info.timeout = 10
+			info.streams = "rtmp://202.69.69.180:443/webcast/bshdlive-pc"
+			if status := schedFFprobe(&info); status == "living" {
+				fmt.Println("ffmpeg " + info.streams)
+				c.JSON(200, gin.H{
+					"stream": info.streams,
+					"select": "success",
+				})
+
+			} else {
+				c.JSON(200, gin.H{
+					"stream": info.streams,
+					"select": "failed",
+				})
+			}
+		})
+	}
+
+	r.Run(":8080")
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -204,6 +240,26 @@ func schedFFmpeg() bool {
 	}
 
 	return true
+}
+
+type ffprobeinfo struct {
+	mode    string
+	timeout time.Duration
+	streams string
+}
+
+func schedFFprobe(info *ffprobeinfo) (status string) {
+	out, _ := command(info.timeout, "ffprobe", strings.Split(info.streams, " ")[:]...)
+	fmt.Println(string(out[:]))
+	if strings.Contains(string(out[:]), "Stream") {
+		fmt.Println(info.streams + " is living")
+		return "living"
+	} else {
+		fmt.Println(info.streams + " is offline")
+		return "offline"
+	}
+
+	return "offline"
 }
 
 func command(timeout time.Duration, name string, arg ...string) ([]byte, error) {
