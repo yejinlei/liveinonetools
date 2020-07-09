@@ -35,8 +35,7 @@ Media as a Service, from codec to server architecture...✍
   _ |**webm** | vp8视频编码+vorbis音频编码 | | H5 video标签原生支持 |
   _ |**ogg** | theora视频编码+vorbis音频编码 | | H5 video标签原生支持 |
   _ |**hds**(HDS Muxer) |    | | |
-  _ |**mpeg1video的封装:**
-  _ |**mpeg2video的封装:包含mpeg2-ps流和mpeg2-ts流**<br>**mpegts**(本地文件)<br>**rtp_mpegts**(rtp推流) | | | | [雷霄骅 / TS_Analysis](https://gitee.com/leixiaohua/TS_Analysis)
+  _ |**mpegts**(MPEG2 Transport Stream) | mpeg1video/mpeg2video视频编码+mp1/2音频编码 | | | [雷霄骅 / TS_Analysis](https://gitee.com/leixiaohua/TS_Analysis)
   _ |**aac**(Advanced Audio Coding) | | | | [雷霄骅 / AAC_Analysis](https://gitee.com/leixiaohua/AAC_Analysis)
   _ |**adts**(ADTS AAC)
   _ |_ |**mpeg1video**(MPEG-1 video)    | | |
@@ -353,6 +352,9 @@ Media as a Service, from codec to server architecture...✍
 - http-flv(h265)，http://alplay.nodemedia.cn/live/cam_180.flv
 - http-flv(h265)，http://alplay.nodemedia.cn/live/cam_112.flv
 - rtsp，rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov
-
+- hls，https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8
+- hls，http://220.161.87.62:8800/hls/0/index.m3u8
+- hls，http://220.161.87.62:8800/hls/1/index.m3u8
+- mp4，http://www.w3school.com.cn/i/movie.mp4
 ### 其他
 - [wireshark's Captures](https://wiki.wireshark.org/SampleCaptures)
