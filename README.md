@@ -235,13 +235,13 @@ Media as a Service, from codec to server architecture...✍
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
   MediaSoup | [github](https://github.com/versatica/mediasoup) |
   ant media server | [github](https://github.com/ant-media) | 
-  licode | [github](https://github.com/lynckia/licode) |
+  licode | [github](https://github.com/lynckia/licode) | licode 从功能层面来讲分成三部分，即 Nuve 、ErizoController 和 ErizoAgent 三部分，它们之间通过消息队列进行通信。1. Nuve 是一个 Web 服务，用于管理用户、房间、产生 token 以及房间的均衡负载等相关工作。它使用 MangoDB 存储房间和 token 信息，但不存储用户信息。2. ErizoController，用于管理控制，信令和非音视频数据都通过它接收。它通过消息队列与 Nuve 进行通信，也就是说 Nuve 可以通过消息队列对 ErizoController 进行控制。3. ErizoAgent，用于音视频流媒体数据的传输，可以分布式布署。ErizoAgent 与 ErizoController 的通信也是通过消息队列，信令消息通过 ErizoController 接收到后，再通过消息队列发给 ErizoAgent，从而实现对 ErizoAgent 进行控制。<br>licode 不仅仅是一个 SFU 流媒体服务器，它还包括了与流媒体相关的业务管理系统、信令系统、流媒体服务器以及客户端 SDK 等等，可以说它是一个比较完善的产品。<br>![](tools/liveserver/doc/licode.jpeg)
   jitsi | [github](https://github.com/jitsi) | Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
   kurento | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, etc
   Kurento/OpenVidu | [github](https://github.com/OpenVidu/openvidu) | |
   kite | [github](https://github.com/webrtc/KITE) | webrtc测试引擎
   / | ***Gateways*** | /
-  janus-gateway | [github](https://github.com/meetecho/janus-gateway) |
+  janus-gateway | [github](https://github.com/meetecho/janus-gateway) | ![](tools/liveserver/doc/Janus.jpeg)
   / | ***NAT traversal*** | /
   coturn | [github](https://github.com/coturn/coturn) | 开源stun/turn穿透服务器
   restund | [github](https://github.com/otalk/restund) |
