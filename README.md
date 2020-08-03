@@ -186,7 +186,6 @@ Media as a Service, from codec to server architecture...✍
   jsSip | [官网](https://jssip.net/) | 支持sip(over websocket)和WebRTC的简易javascript库
   sipjs | [github](https://github.com/onsip/SIP.js), [exmaple](https://github.com/onsip/sipjs-examples) |
   PeerJS | [github](https://github.com/peers/peerjs) | PeerJS提供了一个完整可配置易于使用基于WebRTC的点对点的数据通信和媒体流のAPI
-  Open WebRTC Toolkit (OWT)  | [github](https://github.com/open-webrtc-toolkit) | 英特尔开源WebRTC开发套件OWT
   openwebrtc | [github](https://github.com/EricssonResearch/openwebrtc) | 爱立信开源WebRTC开发套件 
 
 - call_run_nginx.sh，nginx启动脚本，会拷贝player到/
@@ -229,13 +228,14 @@ Media as a Service, from codec to server architecture...✍
   opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
   gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
   / | ***Media Servers*** | /
-  Medooze | [github](https://github.com/medooze/media-server) | ![](tools/liveserver/doc/Medooze.png)
+  Medooze | [github](https://github.com/medooze/media-server) | Medooze 支持 RTP/RTCP、SRTP/SRCP 等相关协议，从而可以实现与 WebRTC 终端进行互联。除此之外，Medooze 还可以接入 RTP 流、RTMP 流等，因此你可以使用 GStreamer/FFmpeg 向 Medooze 推流，这样进入到同一个房间的其他 WebRTC 终端就可以看到 / 听到由 GStream/FFmpeg 推送上来的音视频流了。另外，Medooze 还支持录制功能，即上图中的 Recorder 模块的作用，可以通过它将房间内的音视频流录制下来，以便后期回放。<br>Medooze 的控制逻辑层是通过 Node.js 实现的，Medooze 通过 Node.js 对外提供了完整的控制逻辑操作相关的 API，通过这些 API 你可以很容易的控制 Medooze 的行为了。<br>Medooze 与 Mediasoup 相比，两者在核心层实现的功能都差不多，但 Medooze 的功能更强大，包括了录制、推 RTMP 流、播放 FLV 文件等相关的操作，而 Mediasoup 则没有这些功能。<br>Medooze 也有一些缺点，尽管 Medooze 也是 C++ 开发的流媒体服务务器，使用了异步 IO 事件处理机制，但它使用的异步 IO 事件处理的 API 是 poll，poll 在处理异步 IO 事件时，与 Linux 下最强劲的异步 IO 事件 API epoll 相比要逊色不少，这导致它在接收 / 发送音视频包时性能比 Mediasoup 要稍差一些。<br>![](tools/liveserver/doc/medooze.jpeg)<br>![](tools/liveserver/doc/Medooze.png)
   SimpleWebRTC | [github](https://github.com/simplewebrtc/SimpleWebRTC) | 
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
   MediaSoup | [github](https://github.com/versatica/mediasoup) |
   ant media server | [github](https://github.com/ant-media) | 
   licode | [github](https://github.com/lynckia/licode) | licode 从功能层面来讲分成三部分，即 Nuve 、ErizoController 和 ErizoAgent 三部分，它们之间通过消息队列进行通信。1. Nuve 是一个 Web 服务，用于管理用户、房间、产生 token 以及房间的均衡负载等相关工作。它使用 MangoDB 存储房间和 token 信息，但不存储用户信息。2. ErizoController，用于管理控制，信令和非音视频数据都通过它接收。它通过消息队列与 Nuve 进行通信，也就是说 Nuve 可以通过消息队列对 ErizoController 进行控制。3. ErizoAgent，用于音视频流媒体数据的传输，可以分布式布署。ErizoAgent 与 ErizoController 的通信也是通过消息队列，信令消息通过 ErizoController 接收到后，再通过消息队列发给 ErizoAgent，从而实现对 ErizoAgent 进行控制。<br>licode 不仅仅是一个 SFU 流媒体服务器，它还包括了与流媒体相关的业务管理系统、信令系统、流媒体服务器以及客户端 SDK 等等，可以说它是一个比较完善的产品。<br>![](tools/liveserver/doc/licode.jpeg)
+  Intel Open WebRTC Toolkit (OWT)  | [github](https://github.com/open-webrtc-toolkit) | 英特尔开源WebRTC开发套件OWT，基于licode
   jitsi | [github](https://github.com/jitsi) | Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
   kurento | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, etc
   Kurento/OpenVidu | [github](https://github.com/OpenVidu/openvidu) | |
@@ -266,7 +266,7 @@ Media as a Service, from codec to server architecture...✍
     - [采集并推流（via FFmpeg）](https://github.com/ossrs/srs/wiki/v1_CN_Ingest)
     - [DVR功能（SRS支持将RTMP流录制成flv文件）2.0](https://github.com/ossrs/srs/wiki/v2_CN_DVR)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_DVR)
     - [SRS日志功能（输出到控制台或文件）](https://github.com/ossrs/srs/wiki/v1_CN_SrsLog)
-    - [内嵌HTTP服务器 2.0](https://github.com/ossrs/srs/wiki/v2_CN_SampleHTTP)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_SampleHTTP)
+    - [内/嵌HTTP服务器 2.0](https://github.com/ossrs/srs/wiki/v2_CN_SampleHTTP)、[3.0](https://github.com/ossrs/srs/wiki/v3_CN_SampleHTTP)
     - [SRS支持点播FLV流](https://github.com/ossrs/srs/wiki/v2_CN_FlvVodStream)
   - 源码分析
     - SRS边缘(edge)，所谓边缘edge服务器，就是边缘直播缓存服务器，配置时指定为remote模式和origin*（指定一个或多个源站IP），这个边缘edge服务器就是源站的缓存了
