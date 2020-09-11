@@ -6,8 +6,7 @@ Media as a Service, from codec to server architecture...✍
 ---
 
 ### liveanalysis，多媒体、信令、消息等配套协议
-
-- ❀多媒体及相关协议视图❀
+- ❀音视频相关协议及编解码❀
 
   protocols（流协议及其他） | formats(封装容器) | codecs（音视频编解码） | hwaccels（硬件加速） | 协议/文档 | 工具/库
   ---|---|---|---|---|---
@@ -49,12 +48,12 @@ Media as a Service, from codec to server architecture...✍
   _ |_ |**vorbis** | | |
   _ |_ |_|**qsv** | |
   
-- ❀ONVIF❀
+- ❀安防ONVIF❀
   
   _ | _ |  _
   ---|---|---
 
-- ❀GB28181(音视频部分)❀
+- ❀安防GB28181(音视频部分)❀
 
   名字 | 协议 |  参考实现
   ---|---|---
@@ -62,7 +61,7 @@ Media as a Service, from codec to server architecture...✍
   **rtcp** | 1. RTP控制协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550) |
   **rtp** | 1. 实时传输协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551)<br>2. 视频关键帧的封装: RTP + PSheader + PS system header + PS system Map + PES header + h264 data<br>3. 视频非关键帧的封装: RTP + PS header + PES header + h264 data<br>4. 音频帧的封装: RTP + PES header + G711 | [jrtplib's github](https://github.com/j0r1/JRTPLIB)、[GoRTP's github](https://github.com/whtang/GoRTP)、[linephone ortp's github](https://github.com/dmonakhov/ortp)、[live555's github](https://github.com/cmberryau/live555) 
  
-- ❀信令控制、IM消息协议❀
+- ❀RTC信令控制、IM消息、WebRTC协议❀
   
   协议 | _ | _
   ---|---|---
@@ -71,7 +70,7 @@ Media as a Service, from codec to server architecture...✍
   **xmpp/jingle** | | 1. [rfc3921:Extensible Messaging and Presence Protocol (XMPP):Instant Messaging and Presence](https://tools.ietf.org/html/rfc3921), [CN](http://wiki.jabbercn.org/RFC3921)<br>3. 参考实现：[jxmpp's github](https://github.com/igniterealtime/jxmpp)
   **webrtc** | | [mozilla's webrtc api](https://developer.mozilla.org/zh-CN/docs/Web/API)
 
-- ❀NAT/ICE/STUN/TURN（中转）❀
+- ❀NAT穿透ICE/STUN/TURN❀
 
   NAT/ICE/STUN/TURN | 协议、标准 | 参考实现
   ---|---|---
@@ -89,7 +88,7 @@ Media as a Service, from codec to server architecture...✍
   RTSPtoWebRTC | [github](https://github.com/deepch/RTSPtoWebRTC) |
   media-server-go| [github](https://github.com/notedit/media-server-go) | webrtc媒体服务器，同时支持rtmp to webrtc、webrtc to rtmp、webrct to hls
 
-- WebRTC技术方向，视频会议
+- 实时通信技术RTC - WebRTC
   - **WebRTC技术**
   *WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。WebRTC包含了若干相互关联的API和协议以达到这个目标。*
   ![](tools/liveserver/doc/webrtc_arch.png)
@@ -103,7 +102,7 @@ Media as a Service, from codec to server architecture...✍
     - **TURN**，一些路由器使用一种“对称型NAT”的NAT模型。这意味着路由器只接受和对端先前建立的连接（就是下一次请求建立新的连接映射）。NAT的中继穿越方式Traversal Using Relays around NAT (TURN) 通过TURN服务器中继所有数据的方式来绕过“对称型NAT”。你需要在TURN服务器上创建一个连接，然后告诉所有对端设备发包到服务器上，TURN服务器再把包转发给你。很显然这种方式是开销很大的，所以只有在没得选择的情况下采用。客户端通过给公网的STUN服务器发送请求获得自己的公网地址信息，以及是否能够被（穿过路由器）访问。
     - **SDP**，会话描述协议Session Description Protocol (SDP) 是一个描述多媒体连接内容的协议，例如分辨率，格式，编码，加密算法等。所以在数据传输时两端都能够理解彼此的数据。本质上，这些描述内容的元数据并不是媒体流本身。
 
-- 实时通信技术RTC方向，视频会议及移动单兵
+- 实时通信技术RTC - Voip
   - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
   - [Real-Time Communications Quick Start Guide](http://rtcquickstart.org/guide/multi/index.html)
 
@@ -219,8 +218,8 @@ Media as a Service, from codec to server architecture...✍
   easydarwin | [github](https://github.com/EasyDarwin/EasyDarwin) | 开源rtsp多媒体服务器
   livego | [github](https://github.com/gwuhaolin/livego) | 开源rtsp多媒体服务器
   **WebRTC生态↷**|**---** |**---**
-  / | ***Voip*** | /
-  openmcu | [github](https://github.com/muggot/openmcu) | 全功能的H.323，SIP和RTSP的开源多点控制单元，具有以下特性：支持通过端口1420(http://localhost:1420)上的Web界面进行配置和控制;支持多国语言;支持的协议:H.323，SIP;支持的视频编解码器：H.261，H.263，H.263 +，H.264，VP8;支持的音频编解码器:G.711，G.722，G723.1，G.726，G.729，iLBC，Speex，SILK，OPUS;支持多个不同的会议可以同时进行，使用不同的“房间”;支持实时显示呼叫统计;支持从MCU发起呼叫到远程终端;支持会议翻译为网络流。
+  / | ***VoIP*** | ![](tools/liveserver/doc/webrtc-vs-voip2.jpg)<br>**WebRTC是VoIP**
+  openmcu | [github](https://github.com/muggot/openmcu)、[gitee](https://gitee.com/yejinlei-mirror/openmcu) | 全功能的H.323，SIP和RTSP的开源多点控制单元，具有以下特性：支持通过端口1420(http://localhost:1420)上的Web界面进行配置和控制;支持多国语言;支持的协议:H.323，SIP;支持的视频编解码器：H.261，H.263，H.263 +，H.264，VP8;支持的音频编解码器:G.711，G.722，G723.1，G.726，G.729，iLBC，Speex，SILK，OPUS;支持多个不同的会议可以同时进行，使用不同的“房间”;支持实时显示呼叫统计;支持从MCU发起呼叫到远程终端;支持会议翻译为网络流。
   asterisk | [github](https://github.com/asterisk/asterisk) |
   asterisk-freepbx | [github](https://github.com/Brownster/asterisk-freepbx) |
   freeswitch | [github](https://github.com/signalwire/freeswitch) |
@@ -230,16 +229,16 @@ Media as a Service, from codec to server architecture...✍
   opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
   gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
   / | ***Media Servers*** | /
-  Medooze | [github](https://github.com/medooze/media-server) | Medooze 支持 RTP/RTCP、SRTP/SRCP 等相关协议，从而可以实现与 WebRTC 终端进行互联。除此之外，Medooze 还可以接入 RTP 流、RTMP 流等，因此你可以使用 GStreamer/FFmpeg 向 Medooze 推流，这样进入到同一个房间的其他 WebRTC 终端就可以看到 / 听到由 GStream/FFmpeg 推送上来的音视频流了。另外，Medooze 还支持录制功能，即上图中的 Recorder 模块的作用，可以通过它将房间内的音视频流录制下来，以便后期回放。<br>Medooze 的控制逻辑层是通过 Node.js 实现的，Medooze 通过 Node.js 对外提供了完整的控制逻辑操作相关的 API，通过这些 API 你可以很容易的控制 Medooze 的行为了。<br>Medooze 与 Mediasoup 相比，两者在核心层实现的功能都差不多，但 Medooze 的功能更强大，包括了录制、推 RTMP 流、播放 FLV 文件等相关的操作，而 Mediasoup 则没有这些功能。<br>Medooze 也有一些缺点，尽管 Medooze 也是 C++ 开发的流媒体服务务器，使用了异步 IO 事件处理机制，但它使用的异步 IO 事件处理的 API 是 poll，poll 在处理异步 IO 事件时，与 Linux 下最强劲的异步 IO 事件 API epoll 相比要逊色不少，这导致它在接收 / 发送音视频包时性能比 Mediasoup 要稍差一些。<br>![](tools/liveserver/doc/medooze.jpeg)<br>![](tools/liveserver/doc/Medooze.png)
+  ![](tools/liveserver/doc/Medooze-logo.png) | [github](https://github.com/medooze/media-server) | ![](tools/liveserver/doc/Medooze_arch.png)<br>Medooze 支持 RTP/RTCP、SRTP/SRCP 等相关协议，从而可以实现与 WebRTC 终端进行互联。除此之外，Medooze 还可以接入 RTP 流、RTMP 流等，因此你可以使用 GStreamer/FFmpeg 向 Medooze 推流，这样进入到同一个房间的其他 WebRTC 终端就可以看到 / 听到由 GStream/FFmpeg 推送上来的音视频流了。另外，Medooze 还支持录制功能，即上图中的 Recorder 模块的作用，可以通过它将房间内的音视频流录制下来，以便后期回放。<br>Medooze 的控制逻辑层是通过 Node.js 实现的，Medooze 通过 Node.js 对外提供了完整的控制逻辑操作相关的 API，通过这些 API 你可以很容易的控制 Medooze 的行为了。<br>Medooze 与 Mediasoup 相比，两者在核心层实现的功能都差不多，但 Medooze 的功能更强大，包括了录制、推 RTMP 流、播放 FLV 文件等相关的操作，而 Mediasoup 则没有这些功能。<br>Medooze 也有一些缺点，尽管 Medooze 也是 C++ 开发的流媒体服务务器，使用了异步 IO 事件处理机制，但它使用的异步 IO 事件处理的 API 是 poll，poll 在处理异步 IO 事件时，与 Linux 下最强劲的异步 IO 事件 API epoll 相比要逊色不少，这导致它在接收 / 发送音视频包时性能比 Mediasoup 要稍差一些。<br>![](tools/liveserver/doc/medooze.jpeg)<br>![](tools/liveserver/doc/Medooze.png)
   SimpleWebRTC | [github](https://github.com/simplewebrtc/SimpleWebRTC) | 
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
-  MediaSoup | [github](https://github.com/versatica/mediasoup) |
+  ![](tools/liveserver/doc/mediasoup-logo.png) | [github](https://github.com/versatica/mediasoup) | ![](tools/liveserver/doc/Mediasoup_arch.png)
   ant media server | [github](https://github.com/ant-media) | 
-  licode | [github](https://github.com/lynckia/licode) | licode 从功能层面来讲分成三部分，即 Nuve 、ErizoController 和 ErizoAgent 三部分，它们之间通过消息队列进行通信。1. Nuve 是一个 Web 服务，用于管理用户、房间、产生 token 以及房间的均衡负载等相关工作。它使用 MangoDB 存储房间和 token 信息，但不存储用户信息。2. ErizoController，用于管理控制，信令和非音视频数据都通过它接收。它通过消息队列与 Nuve 进行通信，也就是说 Nuve 可以通过消息队列对 ErizoController 进行控制。3. ErizoAgent，用于音视频流媒体数据的传输，可以分布式布署。ErizoAgent 与 ErizoController 的通信也是通过消息队列，信令消息通过 ErizoController 接收到后，再通过消息队列发给 ErizoAgent，从而实现对 ErizoAgent 进行控制。<br>licode 不仅仅是一个 SFU 流媒体服务器，它还包括了与流媒体相关的业务管理系统、信令系统、流媒体服务器以及客户端 SDK 等等，可以说它是一个比较完善的产品。<br>![](tools/liveserver/doc/licode.jpeg)
+  ![](tools/liveserver/doc/licode-logo.png) | [github](https://github.com/lynckia/licode) | licode 从功能层面来讲分成三部分，即 Nuve 、ErizoController 和 ErizoAgent 三部分，它们之间通过消息队列进行通信。1. Nuve 是一个 Web 服务，用于管理用户、房间、产生 token 以及房间的均衡负载等相关工作。它使用 MangoDB 存储房间和 token 信息，但不存储用户信息。2. ErizoController，用于管理控制，信令和非音视频数据都通过它接收。它通过消息队列与 Nuve 进行通信，也就是说 Nuve 可以通过消息队列对 ErizoController 进行控制。3. ErizoAgent，用于音视频流媒体数据的传输，可以分布式布署。ErizoAgent 与 ErizoController 的通信也是通过消息队列，信令消息通过 ErizoController 接收到后，再通过消息队列发给 ErizoAgent，从而实现对 ErizoAgent 进行控制。<br>licode 不仅仅是一个 SFU 流媒体服务器，它还包括了与流媒体相关的业务管理系统、信令系统、流媒体服务器以及客户端 SDK 等等，可以说它是一个比较完善的产品。<br>![](tools/liveserver/doc/licode.jpeg)
   Intel Open WebRTC Toolkit (OWT)  | [github](https://github.com/open-webrtc-toolkit) | 英特尔开源WebRTC开发套件OWT，基于licode
-  jitsi | [github](https://github.com/jitsi)<br>[测试](https://meet.jit.si/)| ![](tools/liveserver/doc/jitsi.png)<br>Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
-  kurento | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, etc
+  ![](tools/liveserver/doc/jitsi-log.png) | [github](https://github.com/jitsi)<br>[测试](https://meet.jit.si/)| ![](tools/liveserver/doc/jitsi.png)<br>Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
+  ![](tools/liveserver/doc/kurento-logo.png) | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, etc
   Kurento/OpenVidu | [github](https://github.com/OpenVidu/openvidu) | |
   kite | [github](https://github.com/webrtc/KITE) | webrtc测试引擎
   / | ***Gateways*** | /
