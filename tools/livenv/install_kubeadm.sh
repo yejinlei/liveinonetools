@@ -1,0 +1,1 @@
+curl -LO http://kubernetes.oss-cn-hangzhou.aliyuncs.com/kubernetes-release/release/`curl -s http://kubernetes.oss-cn-hangzhou.aliyuncs.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubeadm && chmod +x kubeadm
