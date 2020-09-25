@@ -95,12 +95,29 @@ Media as a Service, from codec to server architecture...✍
   - **WebRTC开发工具**
     ![](liveserver/doc/../../tools/liveserver/doc/WebRTC-Developer-Tools-Landscape-201904.png)
   - **信令服务器**
-  - **[ICE/STUN/TURN/SDP依赖协议](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API/Protocols)**
-    - **ICE**，交互式连接设施Interactive Connectivity Establishment (ICE) 是一个允许你的浏览器和对端浏览器建立连接的协议框架。在实际的网络当中，有很多原因能导致简单的从A端到B端直连不能如愿完成。这需要绕过阻止建立连接的防火墙，给你的设备分配一个唯一可见的地址（通常情况下我们的大部分设备没有一个固定的公网地址），如果路由器不允许主机直连，还得通过一台服务器转发数据。ICE通过使用以下几种技术完成上述工作：
-    - **STUN**，NAT的会话穿越功能Session Traversal Utilities for NAT (STUN) (缩略语的最后一个字母是NAT的首字母)是一个允许位于NAT后的客户端找出自己的公网地址，判断出路由器阻止直连的限制方法的协议。
-    - **NAT**，网络地址转换协议Network Address Translation (NAT) 用来给你的（私网）设备映射一个公网的IP地址的协议。一般情况下，路由器的WAN口有一个公网IP，所有连接这个路由器LAN口的设备会分配一个私有网段的IP地址（例如192.168.1.3）。私网设备的IP被映射成路由器的公网IP和唯一的端口，通过这种方式不需要为每一个私网设备分配不同的公网IP，但是依然能被外网设备发现。一些路由器严格地限定了部分私网设备的对外连接。这种情况下，即使STUN服务器识别了该私网设备的公网IP和端口的映射，依然无法和这个私网设备建立连接。这种情况下就需要转向TURN协议。
-    - **TURN**，一些路由器使用一种“对称型NAT”的NAT模型。这意味着路由器只接受和对端先前建立的连接（就是下一次请求建立新的连接映射）。NAT的中继穿越方式Traversal Using Relays around NAT (TURN) 通过TURN服务器中继所有数据的方式来绕过“对称型NAT”。你需要在TURN服务器上创建一个连接，然后告诉所有对端设备发包到服务器上，TURN服务器再把包转发给你。很显然这种方式是开销很大的，所以只有在没得选择的情况下采用。客户端通过给公网的STUN服务器发送请求获得自己的公网地址信息，以及是否能够被（穿过路由器）访问。
-    - **SDP**，会话描述协议Session Description Protocol (SDP) 是一个描述多媒体连接内容的协议，例如分辨率，格式，编码，加密算法等。所以在数据传输时两端都能够理解彼此的数据。本质上，这些描述内容的元数据并不是媒体流本身。
+    1. 为什么需要信令服务器？
+      > 为了媒体协商交换SDP。会话描述协议Session Description Protocol (SDP) 是一个描述多媒体连接内容的协议，例如分辨率，格式，编码，加密算法等。所以在数据传输时两端都能够理解彼此的数据。本质上，这些描述内容的元数据并不是媒体流本身。从技术上讲，SDP并不是一个真正的协议，而是一种数据格式，用于描述在设备之间共享媒体的连接。
+    2. WebRTC标准中没有规定信令服务具体实现以及交换方式
+    3. 媒体协商交换SDP过程:
+       1. Amy 调用 createOffer 方法创建 offer 消息。offer 消息中的内容是 Amy 的 SDP 信息。
+       2. Amy 调用 setLocalDescription 方法，将本端的 SDP 信息保存起来。
+       3. Amy 将 offer 消息通过信令服务器传给 Bob。
+       4. Bob 收到 offer 消息后，调用 setRemoteDescription 方法将其存储起来。
+       5. Bob 调用 createAnswer 方法创建 answer 消息， 同样，answer 消息中的内容是 Bob 的 SDP 信息。
+       6. Bob 调用 setLocalDescription 方法，将本端的 SDP 信息保存起来。
+       7. Bob 将 anwser 消息通过信令服务器传给 Amy。
+       8. Amy 收到 anwser 消息后，调用 setRemoteDescription 方法，将其保存起来。
+      ![](tools/liveserver/doc/signal_sdp.png)
+  - **媒体服务器**
+    1. 为什么需要媒体服务器？
+  - **[NAT穿透](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API/Protocols)**
+    1. 为什么需要NAT穿透及相关协议？
+      - **ICE**，交互式连接设施Interactive Connectivity Establishment (ICE) 是一个允许你的浏览器和对端浏览器建立连接的协议框架。在实际的网络当中，有很多原因能导致简单的从A端到B端直连不能如愿完成。这需要绕过阻止建立连接的防火墙，给你的设备分配一个唯一可见的地址（通常情况下我们的大部分设备没有一个固定的公网地址），如果路由器不允许主机直连，还得通过一台服务器转发数据。ICE通过使用以下几种技术完成上述工作：
+      - **STUN**，NAT的会话穿越功能Session Traversal Utilities for NAT (STUN) (缩略语的最后一个字母是NAT的首字母)是一个允许位于NAT后的客户端找出自己的公网地址，判断出路由器阻止直连的限制方法的协议。
+      - **NAT**，网络地址转换协议Network Address Translation (NAT) 用来给你的（私网）设备映射一个公网的IP地址的协议。一般情况下，路由器的WAN口有一个公网IP，所有连接这个路由器LAN口的设备会分配一个私有网段的IP地址（例如192.168.1.3）。私网设备的IP被映射成路由器的公网IP和唯一的端口，通过这种方式不需要为每一个私网设备分配不同的公网IP，但是依然能被外网设备发现。一些路由器严格地限定了部分私网设备的对外连接。这种情况下，即使STUN服务器识别了该私网设备的公网IP和端口的映射，依然无法和这个私网设备建立连接。这种情况下就需要转向TURN协议。
+      - **TURN**，一些路由器使用一种“对称型NAT”的NAT模型。这意味着路由器只接受和对端先前建立的连接（就是下一次请求建立新的连接映射）。NAT的中继穿越方式Traversal Using Relays around NAT (TURN) 通过TURN服务器中继所有数据的方式来绕过“对称型NAT”。你需要在TURN服务器上创建一个连接，然后告诉所有对端设备发包到服务器上，TURN服务器再把包转发给你。很显然这种方式是开销很大的，所以只有在没得选择的情况下采用。客户端通过给公网的STUN服务器发送请求获得自己的公网地址信息，以及是否能够被（穿过路由器）访问。
+    2. ICE/STUN/TURN如何工作
+      ![](tools/liveserver/doc/turn.png)
 
 - 实时通信技术RTC - Voip
   - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
@@ -229,6 +246,7 @@ Media as a Service, from codec to server architecture...✍
   opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
   gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
   / | ***Media Servers*** | /
+  AppRTC | [github](https://github.com/webrtc/apprtc) | |
   ![](tools/liveserver/doc/Medooze-logo.png) | [github](https://github.com/medooze/media-server) | ![](tools/liveserver/doc/Medooze_arch.png)<br>Medooze 支持 RTP/RTCP、SRTP/SRCP 等相关协议，从而可以实现与 WebRTC 终端进行互联。除此之外，Medooze 还可以接入 RTP 流、RTMP 流等，因此你可以使用 GStreamer/FFmpeg 向 Medooze 推流，这样进入到同一个房间的其他 WebRTC 终端就可以看到 / 听到由 GStream/FFmpeg 推送上来的音视频流了。另外，Medooze 还支持录制功能，即上图中的 Recorder 模块的作用，可以通过它将房间内的音视频流录制下来，以便后期回放。<br>Medooze 的控制逻辑层是通过 Node.js 实现的，Medooze 通过 Node.js 对外提供了完整的控制逻辑操作相关的 API，通过这些 API 你可以很容易的控制 Medooze 的行为了。<br>Medooze 与 Mediasoup 相比，两者在核心层实现的功能都差不多，但 Medooze 的功能更强大，包括了录制、推 RTMP 流、播放 FLV 文件等相关的操作，而 Mediasoup 则没有这些功能。<br>Medooze 也有一些缺点，尽管 Medooze 也是 C++ 开发的流媒体服务务器，使用了异步 IO 事件处理机制，但它使用的异步 IO 事件处理的 API 是 poll，poll 在处理异步 IO 事件时，与 Linux 下最强劲的异步 IO 事件 API epoll 相比要逊色不少，这导致它在接收 / 发送音视频包时性能比 Mediasoup 要稍差一些。<br>![](tools/liveserver/doc/medooze.jpeg)<br>![](tools/liveserver/doc/Medooze.png)
   SimpleWebRTC | [github](https://github.com/simplewebrtc/SimpleWebRTC) | 
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
@@ -236,13 +254,12 @@ Media as a Service, from codec to server architecture...✍
   ![](tools/liveserver/doc/mediasoup-logo.png) | [github](https://github.com/versatica/mediasoup) | ![](tools/liveserver/doc/Mediasoup_arch.png)
   ant media server | [github](https://github.com/ant-media) | 
   ![](tools/liveserver/doc/licode-logo.png) | [github](https://github.com/lynckia/licode) | licode 从功能层面来讲分成三部分，即 Nuve 、ErizoController 和 ErizoAgent 三部分，它们之间通过消息队列进行通信。1. Nuve 是一个 Web 服务，用于管理用户、房间、产生 token 以及房间的均衡负载等相关工作。它使用 MangoDB 存储房间和 token 信息，但不存储用户信息。2. ErizoController，用于管理控制，信令和非音视频数据都通过它接收。它通过消息队列与 Nuve 进行通信，也就是说 Nuve 可以通过消息队列对 ErizoController 进行控制。3. ErizoAgent，用于音视频流媒体数据的传输，可以分布式布署。ErizoAgent 与 ErizoController 的通信也是通过消息队列，信令消息通过 ErizoController 接收到后，再通过消息队列发给 ErizoAgent，从而实现对 ErizoAgent 进行控制。<br>licode 不仅仅是一个 SFU 流媒体服务器，它还包括了与流媒体相关的业务管理系统、信令系统、流媒体服务器以及客户端 SDK 等等，可以说它是一个比较完善的产品。<br>![](tools/liveserver/doc/licode.jpeg)
-  Intel Open WebRTC Toolkit (OWT)  | [github](https://github.com/open-webrtc-toolkit) | 英特尔开源WebRTC开发套件OWT，基于licode
+  ![](tools/liveserver/doc/Intel-logo.jpeg)  | [github](https://github.com/open-webrtc-toolkit) | 英特尔开源WebRTC开发套件OWT，基于licode
   ![](tools/liveserver/doc/jitsi-log.png) | [github](https://github.com/jitsi)<br>[测试](https://meet.jit.si/)| ![](tools/liveserver/doc/jitsi.png)<br>Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
-  ![](tools/liveserver/doc/kurento-logo.png) | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>Networked streaming protocols, including HTTP, RTP and WebRTC. Group communications (MCUs( Multipoint Conferencing Unit) and SFUs(Selective Forwarding Unit.) functionality) supporting bothmedia mixing and media routing/dispatching. Generic support for computational vision（计算机视觉） and augmented reality（现实增强） filters. Media storage supporting writing operations for WebM andMP4and playing in all formats supported by GStreamer. Automatic media transcodification between any of the codecs supported by GStreamer including VP8, H.264, H.263, AMR, OPUS, Speex, G.711, etc
-  Kurento/OpenVidu | [github](https://github.com/OpenVidu/openvidu) | |
-  kite | [github](https://github.com/webrtc/KITE) | webrtc测试引擎
+  ![](tools/liveserver/doc/kurento-logo.png) | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>它也不仅仅是一个媒体服务器，而是构建了一个工具包。Kurento的主要优点是通过引入媒体工作流(meidia workflow)的概念实现了多功能性，它允许在代码中定义媒体流以何种方式传输以及传到到哪里。这就允许WebRTC开发者将非常有趣的功能进行集成，例如计算机视觉（例如识别QR码，面部检测），实时媒体修正和与RTP（VoIP）服务的互操作。 Kurento还可以在单个实例中配置成SFU或MCU（或者同时使用）。
+  ![](tools/doc/liveserver/doc/../../../liveserver/doc/janus-logo.png) | [github](https://github.com/meetecho/janus-gateway)、[demo](https://janus.conf.meetecho.com/demos.html) | ![](tools/liveserver/doc/Janus.jpeg)
   / | ***Gateways*** | /
-  janus-gateway | [github](https://github.com/meetecho/janus-gateway) | ![](tools/liveserver/doc/Janus.jpeg)
+   | |
   / | ***NAT traversal*** | /
   coturn | [github](https://github.com/coturn/coturn) | 开源stun/turn穿透服务器
   restund | [github](https://github.com/otalk/restund) |

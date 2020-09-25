@@ -1,2 +1,4 @@
-minikube start --registry-mirror=http://f1361db2.m.daocloud.io --registry-mirror=https://registry.docker-cn.com --registry-mirror=https://8eoqixdq.mirror.aliyuncs.com --registry-mirror=https://dockerhub.azk8s.cn  --insecure-registry=local.registry:5000 --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers  --vm-driver="none"
+#minikube start --registry-mirror=http://f1361db2.m.daocloud.io --registry-mirror=https://registry.docker-cn.com --registry-mirror=https://8eoqixdq.mirror.aliyuncs.com --registry-mirror=https://dockerhub.azk8s.cn  --insecure-registry=local.registry:5000 --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers  --vm-driver="none"
 #minikube start --driver=none --registry-mirror=https://dockerhub.azk8s.cn --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers
+./minikube start --vm-driver=docker
+./minikube dashboard
