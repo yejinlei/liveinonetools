@@ -370,6 +370,7 @@ Media as a Service, from codec to server architecture...✍
 - http-flv(h265)，http://alplay.nodemedia.cn/live/cam_180.flv
 - http-flv(h265)，http://alplay.nodemedia.cn/live/cam_112.flv
 - rtsp，rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov
+- rtsp，rtsp://170.93.143.139/rtplive/470011e600ef003a004ee33696235daa
 - hls，https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8
 - hls，http://220.161.87.62:8800/hls/0/index.m3u8
 - hls，http://220.161.87.62:8800/hls/1/index.m3u8
