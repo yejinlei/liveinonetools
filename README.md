@@ -57,9 +57,9 @@ Media as a Service, from codec to server architecture...✍
 
   名字 | 协议 |  参考实现
   ---|---|---
-  **rtsp** | 1. 实时流传输协议-[Real Time Streaming Protocol (RTSP)](https://www.ietf.org/rfc/rfc2326.txt)，实时流传输协议 | [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
-  **rtcp** | 1. RTP控制协议 - [RTP: A Transport Protocol for Real-Time Applications](https://tools.ietf.org/html/rfc3550) |
-  **rtp** | 1. 实时传输协议 - [ RTP Profile for Audio and Video Conferences with Minimal Control](https://tools.ietf.org/html/rfc3551)<br>2. 视频关键帧的封装: RTP + PSheader + PS system header + PS system Map + PES header + h264 data<br>3. 视频非关键帧的封装: RTP + PS header + PES header + h264 data<br>4. 音频帧的封装: RTP + PES header + G711 | [jrtplib's github](https://github.com/j0r1/JRTPLIB)、[GoRTP's github](https://github.com/whtang/GoRTP)、[linephone ortp's github](https://github.com/dmonakhov/ortp)、[live555's github](https://github.com/cmberryau/live555) 
+  **rtsp** | [RFC 2326](https://tools.ietf.org/html/rfc2326) , Real Time Streaming Protocol (RTSP) | [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
+  **rtcp** | [RFC 3550](http://tools.ietf.org/html/rfc3550) , RTP: A Transport Protocol for Real-Time Applications<br>[RFC 3605](https://tools.ietf.org/html/rfc3605) , Real Time Control Protocol (RTCP) attribute in Session Description Protocol (SDP) |
+  **rtp** | 1. 视频关键帧的封装: RTP + PSheader + PS system header + PS system Map + PES header + h264 data<br>2. 视频非关键帧的封装: RTP + PS header + PES header + h264 data<br>3. 音频帧的封装: RTP + PES header + G711<br><br>[RFC 3550](http://tools.ietf.org/html/rfc3550) , RTP: A Transport Protocol for Real-Time Applications<br>[RFC 3551](http://tools.ietf.org/html/rfc3551) , RTP Profile for Audio and Video Conferences with Minimal Control<br>[RFC 5761](http://tools.ietf.org/html/rfc5761) , Multiplexing RTP Data and Control Packets on a Single Port<br>[RFC 6051](http://tools.ietf.org/html/rfc6051) , Rapid Synchronisation of RTP Flows<br>[RFC 6184](http://tools.ietf.org/html/rfc6184) , RTP Payload Format for H.264 Video<br>[RFC 6416](https://tools.ietf.org/html/rfc6416) , RTP Payload Format for MPEG-4 Audio/Visual Streams<br>[RFC 5215](http://tools.ietf.org/html/rfc5215) , RTP Payload Format for Vorbis Encoded Audio<br>[RFC 5219](https://tools.ietf.org/html/rfc5219) , A More Loss-Tolerant RTP Payload Format for MP3 Audio<br>[RFC 7741](https://tools.ietf.org/html/rfc7741) , RTP Payload Format for VP8 Video<br>[draft-ietf-payload-vp9-02](https://tools.ietf.org/html/draft-ietf-payload-vp9-02) , RTP Payload Format for VP9 Video draft-ietf-payload-vp9-02<br>[RFC 7007](http://tools.ietf.org/html/rfc7007) , Update to Remove DVI4 from the Recommended Codecs for the RTP Profile for Audio and Video Conferences with Minimal Control (RTP/AVP)<br>[RFC 7160](https://tools.ietf.org/html/rfc7160) , Support for Multiple Clock Rates in an RTP Session<br>[RFC 7164](https://tools.ietf.org/html/rfc7164) , RTP and Leap Seconds<br>[Real-Time Transport Protocol (RTP) Parameters](http://www.iana.org/assignments/rtp-parameters/rtp-parameters.xhtml#rtp-parameters-1) | [jrtplib's github](https://github.com/j0r1/JRTPLIB)、[GoRTP's github](https://github.com/whtang/GoRTP)、[linephone ortp's github](https://github.com/dmonakhov/ortp)、[live555's github](https://github.com/cmberryau/live555) 
  
 - ❀RTC信令控制、IM消息、WebRTC协议❀
   
@@ -165,7 +165,7 @@ Media as a Service, from codec to server architecture...✍
 	- ONVIF 远程发现WSDL [ONVIF 远程发现WSDL]
 	- ONVIF 重放服务WSDL [ONVIF 重放WSDL]
 	- ONVIF 检索服务WSDL [ONVIF 检索WSDL]
-	- ONVIF 主题XML 命名空间[ONVIF 主题命名空间]
+	- ONVIF 主题XML 命名空间[ONV/IF 主题命名空间]
 
 ### livesniff， 多媒体嗅探、压测
 - livesniff，多功能多媒体嗅探，压测工具
