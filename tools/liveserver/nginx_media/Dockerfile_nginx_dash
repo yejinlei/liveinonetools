@@ -4,7 +4,7 @@ MAINTAINER yejinlei 4010896@qq.com
 ENV DEBIAN_FRONTEND noninteractive
 
 ADD nginx-1.15.2.tar.gz /usr/local/src/
-ADD v1.2.1.tar.gz /usr/local/src/
+ADD nginx-rtmp-module-1.2.1.tar.gz /usr/local/src/
 ADD pcre-8.40.tar.gz /usr/local/src/
 ADD openssl_1.0.1f.orig.tar.gz /usr/local/src/
 ADD zlib-1.2.11.tar.gz /usr/local/src/
