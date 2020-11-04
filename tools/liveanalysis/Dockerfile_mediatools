@@ -1,0 +1,16 @@
+FROM ubuntu:20.04
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN echo 'nameserver 114.114.114.114' >> /etc/resolv.conf && echo 'nameserver 8.8.4.4' >> /etc/resolv.conf
+ADD sources.list /etc/apt/sources.list
+RUN apt-get update --fix-missing
+
+RUN apt-get install -y apt-transport-https apt-utils ca-certificates gnupg build-essential git vim iputils-ping net-tools telnet tcpdump nload nethogs iptraf-ng wget axel
+
+RUN /bin/bash -c 'git clone https://gitee.com/yejinlei-mirror/rtptools && pushd . && cd rtptools && ./configure && make -j8 && make install && popd && rm -rf rtptools'
+
+RUN apt-get clean
+
+ENTRYPOINT ["ls"]
+CMD ["/usr/local/bin"]
+ENV PATH="/usr/local/bin:${PATH}"

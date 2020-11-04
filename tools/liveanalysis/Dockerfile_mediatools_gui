@@ -1,0 +1,19 @@
+FROM dorowu/ubuntu-desktop-lxde-vnc
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN useradd --create-home --no-log-init --shell /bin/bash yejinlei
+RUN adduser yejinlei sudoRUN echo 'yejinlei:eye' | chpasswd
+#USER yejinlei
+WORKDIR /home/yejinlei
+
+RUN echo 'nameserver 114.114.114.114' >> /etc/resolv.conf && echo 'nameserver 8.8.4.4' >> /etc/resolv.conf
+ADD sources.list /etc/apt/sources.list
+RUN apt-get update --fix-missing
+
+RUN apt-get install -y apt-transport-https apt-utils ca-certificates gnupg build-essential git vlc ffmpeg wireshark vim iputils-ping net-tools telnet tcpdump nload nethogs iptraf-ng wget axel
+
+#rtp
+RUN /bin/bash -c 'git clone https://gitee.com/yejinlei-mirror/rtptools && pushd . && cd rtptools && ./configure && make -j8 && make install && popd && rm -rf rtptools'
+
+RUN apt-get clean
+ENV PATH="/usr/local/bin:${PATH}"
