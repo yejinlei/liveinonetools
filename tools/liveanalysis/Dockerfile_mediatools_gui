@@ -1,36 +1,59 @@
 FROM dorowu/ubuntu-desktop-lxde-vnc
 ENV DEBIAN_FRONTEND noninteractive
+
 ENV HOME=/root
 WORKDIR /root
 USER root
+RUN echo "root:root" | chpasswd
 
-RUN echo 'nameserver 114.114.114.114' >> /etc/resolv.conf && echo 'nameserver 8.8.4.4' >> /etc/resolv.conf
+RUN echo 'nameserver 114.114.114.114' >> /etc/resolv.conf && echo 'nameserver 8.8.4.4' >> /etc/resolv.conf && echo '199.232.68.133 raw.githubusercontent.com' >> /etc/hosts
 ADD sources.list /etc/apt/sources.list
 RUN apt-get update --fix-missing && apt-get dist-upgrade -y
 
 RUN apt-get install -y --fix-missing apt-transport-https wget curl axel
 RUN axel -n 16 http://mirrors.aliyun.com/ubuntu/pool/main/f/fonts-freefont/fonts-freefont-ttf_20120503-10_all.deb && dpkg -i fonts-freefont-ttf_20120503-10_all.deb
-RUN apt-get install -y --fix-missing ca-certificates gnupg build-essential bison zsh tmux git vlc ffmpeg wireshark vim iputils-ping net-tools telnet tcpdump nload nethogs iptraf-ng
+RUN apt-get install -y --fix-missing ca-certificates gnupg build-essential bison zsh tmux htop git vlc ffmpeg wireshark vim iputils-ping net-tools telnet tcpdump nload nethogs iptraf-ng
 RUN apt-get install -y --fix-missing libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
 RUN git clone https://gitee.com/yejinlei-mirror/oh-my-zsh.git ~/.oh-my-zsh \
     && cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc \
-    && chsh -s /bin/zsh
+    && chsh -s /bin/zsh \
+    && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh}/plugins/zsh-autosuggestions && apt-get install -y --fix-missing autojump && echo 'plugins=(git autojump zsh-syntax-highlighting zsh-autosuggestions)' >> ~/.zshrc && /bin/bash -c 'source ~/.zshrc'
 
-#RUN apt-get install -y wine64-tools wine32
+RUN apt-get install -y wine64-tools && dpkg --add-architecture i386 && apt-get update -y && apt-get install -qq wine32
 
 RUN useradd -ms /bin/zsh yejinlei
 RUN adduser yejinlei sudo
 RUN echo 'yejinlei:yejinlei' | chpasswd
 
-WORKDIR ~/src
+#WORKDIR /root/down
 ####################
 #  编译及运行环境  #
 ####################
-RUN apt-get install -y golang
+RUN apt-get install -y golang openjdk-8-jre-headless lua5.2 liblua5.2-dev libsasl2-dev luarocks
+
+##gvm for golang
 RUN /bin/zsh -c 'zsh < <(curl -sSL https://gitee.com/yejinlei-mirror/gvm/raw/master/binscripts/gvm-installer)'
 RUN echo '[[ -s "$HOME/.gvm/scripts/gvm" ]]' >> ~/.zshrc && /bin/bash -c 'source ~/.zshrc'
 
-WORKDIR ~/src
+##pyenv for python
+RUN /bin/zsh -c 'curl -L https://gitee.com/yejinlei-mirror/pyenv-installer/raw/master/bin/pyenv-installer | zsh' 
+RUN echo 'export PATH=~/.pyenv/bin:$PATH' >> ~/.zshrc && echo 'export PYENV_ROOT=~/.pyenv' >> ~/.zshrc && echo 'eval "$(pyenv init -)"' >> ~/.zshrc && /bin/bash -c 'source ~/.zshrc'
+RUN apt-get install -y --fix-missing python3-pip && mkdir -p ~/.pip && echo '[global]\nindex-url = http://mirrors.aliyun.com/pypi/simple/ \n[install]\ntrusted-host=mirrors.aliyun.com' > ~/.pip/pip.conf
+
+##sdkman for java
+RUN apt-get install -y --fix-missing unzip && /bin/zsh -c 'curl -s "https://get.sdkman.io" | zsh' && /bin/bash -c 'source ~/.sdkman/bin/sdkman-init.sh'
+
+##nvm for nodejs
+RUN /bin/zsh -c 'curl -o- https://gitee.com/yejinlei-mirror/nvm/raw/master/install.sh | zsh' && /bin/bash -c 'source ~/.zshrc'
+
+##jetbrains开发环境
+RUN apt-get install -y  libfuse2
+RUN axel -n 16 https://download.jetbrains.8686c.com/toolbox/jetbrains-toolbox-1.18.7455.tar.gz && tar -zxvf jetbrains-toolbox-1.18.7455.tar.gz
+
+##code开发环境
+RUN axel -n 16 'https://vscode.cdn.azure.cn/stable/d2e414d9e4239a252d1ab117bd7067f125afd80a/code_1.50.1-1602600906_amd64.deb' && dpkg -i code_1.50.1-1602600906_amd64.deb
+
+WORKDIR /root/src
 ####################
 #    音视频工具    #
 ####################
@@ -40,6 +63,7 @@ WORKDIR ~/src
 #RUN apt install libssl-dev
 #RUN axel -n 16 http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb && dpkg -i libssl1.1_1.1.0g-2ubuntu4_amd64.deb
 #RUN /bin/bash -c 'git clone https://gitee.com/yejinlei-mirror/rtmpdump && pushd . && cd rtmpdump && make all && make install && popd && rm -rf rtmpdump'
+RUN axel -n 8 https://raw.githubusercontent.com/wenshui2008/rtmpstress/master/dist/rtmpstress.exe -o /usr/local/bin/rtmpstress.exe
 
 ##rtp
 RUN /bin/bash -c 'git clone https://gitee.com/yejinlei-mirror/rtptools && pushd . && cd rtptools && ./configure && make -j8 && make install && popd && rm -rf rtptools'
