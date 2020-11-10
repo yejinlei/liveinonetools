@@ -29,7 +29,7 @@ RUN echo 'yejinlei:yejinlei' | chpasswd
 ####################
 #  编译及运行环境  #
 ####################
-RUN apt-get install -y golang openjdk-8-jre-headless lua5.2 liblua5.2-dev libsasl2-dev luarocks
+RUN apt-get install -y rustc golang openjdk-8-jre-headless lua5.2 liblua5.2-dev libsasl2-dev luarocks
 
 ##gvm for golang
 RUN /bin/zsh -c 'zsh < <(curl -sSL https://gitee.com/yejinlei-mirror/gvm/raw/master/binscripts/gvm-installer)'
