@@ -56,6 +56,7 @@ WORKDIR /root/src
 #RUN /bin/bash -c 'git clone https://gitee.com/yejinlei-mirror/rtmpdump && pushd . && cd rtmpdump && make all && make install && popd && rm -rf rtmpdump'
 RUN axel -n 8 https://raw.githubusercontent.com/wenshui2008/rtmpstress/master/dist/rtmpstress.exe -o /usr/local/bin/rtmpstress.exe && chmod +x /usr/local/bin/rtmpstress.exe
 RUN axel -n 8 http://rtmpdump.mplayerhq.hu/download/rtmpdump-2.3-windows.zip && unzip rtmpdump-2.3-windows.zip && chmod +x rtmpdump-2.3/* && mv rtmpdump-2.3/* /usr/local/bin/ && rm rtmpdump-2.3-windows.zip && rm -rf rtmpdump-2.3
+RUN git clone https://gitee.com/yejinlei-mirror/srs-bench.git && ./configure && make && make install && rm -rf srs-bench
 
 ##rtp
 RUN /bin/bash -c 'git clone https://gitee.com/yejinlei-mirror/rtptools && pushd . && cd rtptools && ./configure && make -j8 && make install && popd && rm -rf rtptools'

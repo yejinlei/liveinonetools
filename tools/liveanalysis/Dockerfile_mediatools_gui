@@ -20,6 +20,7 @@ RUN git clone https://gitee.com/yejinlei-mirror/oh-my-zsh.git ~/.oh-my-zsh \
     && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh}/plugins/zsh-autosuggestions && apt-get install -y --fix-missing autojump && echo 'plugins=(git autojump zsh-syntax-highlighting zsh-autosuggestions)' >> ~/.zshrc && /bin/bash -c 'source ~/.zshrc'
 
 RUN apt-get install -y wine64-tools && dpkg --add-architecture i386 && apt-get update -y && apt-get install -qq wine32
+RUN apt-get install -y docker.io
 
 RUN useradd -ms /bin/zsh yejinlei
 RUN adduser yejinlei sudo
