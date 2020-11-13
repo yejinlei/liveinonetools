@@ -10,16 +10,26 @@ RUN echo 'nameserver 114.114.114.114' >> /etc/resolv.conf && echo 'nameserver 8.
 ADD sources.list /etc/apt/sources.list
 RUN apt-get update --fix-missing && apt-get dist-upgrade -y
 
-RUN apt-get install -y --fix-missing apt-transport-https wget curl axel
+##下载工具
+RUN apt-get install -y --fix-missing apt-transport-https wget curl axel git
 RUN axel -n 16 http://mirrors.aliyun.com/ubuntu/pool/main/f/fonts-freefont/fonts-freefont-ttf_20120503-10_all.deb && dpkg -i fonts-freefont-ttf_20120503-10_all.deb
-RUN apt-get install -y --fix-missing ca-certificates gnupg build-essential bison zsh tmux htop git vlc ffmpeg wireshark vim iputils-ping net-tools telnet tcpdump nload nethogs iptraf-ng
-RUN apt-get install -y --fix-missing libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
-RUN git clone https://gitee.com/yejinlei-mirror/oh-my-zsh.git ~/.oh-my-zsh \
+
+##分析工具
+RUN apt-get install -y --fix-missing ca-certificates gnupg build-essential bison htop wireshark iputils-ping net-tools telnet tcpdump nload nethogs iptraf-ng iperf iftop netcat-openbsd iproute2 bridge-utils ethtool nmap ngrep
+
+##音视频工具
+RUN apt-get install -y --fix-missing ffmpeg vlc libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
+
+##shell工具
+RUN apt-get install -y --fix-missing zsh tmux neovim && git clone https://gitee.com/yejinlei-mirror/oh-my-zsh.git ~/.oh-my-zsh \
     && cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc \
     && chsh -s /bin/zsh \
     && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh}/plugins/zsh-autosuggestions && apt-get install -y --fix-missing autojump && echo 'plugins=(git autojump zsh-syntax-highlighting zsh-autosuggestions)' >> ~/.zshrc && /bin/bash -c 'source ~/.zshrc'
 
+##wine for windows工具
 RUN apt-get install -y wine64-tools && dpkg --add-architecture i386 && apt-get update -y && apt-get install -qq wine32
+
+##docker工具
 RUN apt-get install -y docker.io
 
 RUN useradd -ms /bin/zsh yejinlei
@@ -69,6 +79,11 @@ RUN axel -n 8 http://rtmpdump.mplayerhq.hu/download/rtmpdump-2.3-windows.zip && 
 
 ##rtp
 RUN /bin/bash -c 'git clone https://gitee.com/yejinlei-mirror/rtptools && pushd . && cd rtptools && ./configure && make -j8 && make install && popd && rm -rf rtptools'
+
+####################
+#    	脚本	   #
+####################
+ADD ./scripts/* /usr/local/bin/
 
 RUN apt-get clean
 ENV PATH="/usr/local/bin:${PATH}"
