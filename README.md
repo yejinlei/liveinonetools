@@ -97,6 +97,8 @@ Media as a Service, from codec to server architecture...✍
   ![](tools/liveserver/doc/webrtc_arch.png)
   - **WebRTC开发工具**
     ![](liveserver/doc/../../tools/liveserver/doc/WebRTC-Developer-Tools-Landscape-201904.png)
+  - **WebRTC涉及协议**
+    ![](tools/liveserver/doc/webrtc_pro.png)
   - **信令服务器**
     1. 为什么需要信令服务器？
       > 为了媒体协商交换SDP。会话描述协议Session Description Protocol (SDP) 是一个描述多媒体连接内容的协议，例如分辨率，格式，编码，加密算法等。所以在数据传输时两端都能够理解彼此的数据。本质上，这些描述内容的元数据并不是媒体流本身。从技术上讲，SDP并不是一个真正的协议，而是一种数据格式，用于描述在设备之间共享媒体的连接。
@@ -249,7 +251,7 @@ Media as a Service, from codec to server architecture...✍
   opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
   gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
   / | ***Media Servers*** | /
-  AppRTC | [github](https://github.com/webrtc/apprtc) | |
+  AppRTC | [github](https://github.com/webrtc/apprtc)<br>[webserver.cn](https://www.webrtcserver.cn/),[测试服务器](https://apprtc.webrtcserver.cn/) | |
   ![](tools/liveserver/doc/Medooze-logo.png) | [github](https://github.com/medooze/media-server) | ![](tools/liveserver/doc/Medooze_arch.png)<br>Medooze 支持 RTP/RTCP、SRTP/SRCP 等相关协议，从而可以实现与 WebRTC 终端进行互联。除此之外，Medooze 还可以接入 RTP 流、RTMP 流等，因此你可以使用 GStreamer/FFmpeg 向 Medooze 推流，这样进入到同一个房间的其他 WebRTC 终端就可以看到 / 听到由 GStream/FFmpeg 推送上来的音视频流了。另外，Medooze 还支持录制功能，即上图中的 Recorder 模块的作用，可以通过它将房间内的音视频流录制下来，以便后期回放。<br>Medooze 的控制逻辑层是通过 Node.js 实现的，Medooze 通过 Node.js 对外提供了完整的控制逻辑操作相关的 API，通过这些 API 你可以很容易的控制 Medooze 的行为了。<br>Medooze 与 Mediasoup 相比，两者在核心层实现的功能都差不多，但 Medooze 的功能更强大，包括了录制、推 RTMP 流、播放 FLV 文件等相关的操作，而 Mediasoup 则没有这些功能。<br>Medooze 也有一些缺点，尽管 Medooze 也是 C++ 开发的流媒体服务务器，使用了异步 IO 事件处理机制，但它使用的异步 IO 事件处理的 API 是 poll，poll 在处理异步 IO 事件时，与 Linux 下最强劲的异步 IO 事件 API epoll 相比要逊色不少，这导致它在接收 / 发送音视频包时性能比 Mediasoup 要稍差一些。<br>![](tools/liveserver/doc/medooze.jpeg)<br>![](tools/liveserver/doc/Medooze.png)
   SimpleWebRTC | [github](https://github.com/simplewebrtc/SimpleWebRTC) | 
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
@@ -258,9 +260,9 @@ Media as a Service, from codec to server architecture...✍
   ant media server | [github](https://github.com/ant-media) | 
   ![](tools/liveserver/doc/licode-logo.png) | [github](https://github.com/lynckia/licode) | licode 从功能层面来讲分成三部分，即 Nuve 、ErizoController 和 ErizoAgent 三部分，它们之间通过消息队列进行通信。1. Nuve 是一个 Web 服务，用于管理用户、房间、产生 token 以及房间的均衡负载等相关工作。它使用 MangoDB 存储房间和 token 信息，但不存储用户信息。2. ErizoController，用于管理控制，信令和非音视频数据都通过它接收。它通过消息队列与 Nuve 进行通信，也就是说 Nuve 可以通过消息队列对 ErizoController 进行控制。3. ErizoAgent，用于音视频流媒体数据的传输，可以分布式布署。ErizoAgent 与 ErizoController 的通信也是通过消息队列，信令消息通过 ErizoController 接收到后，再通过消息队列发给 ErizoAgent，从而实现对 ErizoAgent 进行控制。<br>licode 不仅仅是一个 SFU 流媒体服务器，它还包括了与流媒体相关的业务管理系统、信令系统、流媒体服务器以及客户端 SDK 等等，可以说它是一个比较完善的产品。<br>![](tools/liveserver/doc/licode.jpeg)
   ![](tools/liveserver/doc/Intel-logo.jpeg)  | [github](https://github.com/open-webrtc-toolkit) | 英特尔开源WebRTC开发套件OWT，基于licode
-  ![](tools/liveserver/doc/jitsi-log.png) | [github](https://github.com/jitsi)<br>[测试](https://meet.jit.si/)| ![](tools/liveserver/doc/jitsi.png)<br>Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
+  ![](tools/liveserver/doc/jitsi-log.png) | [github](https://github.com/jitsi)<br>[测试服务器](https://meet.jit.si/)| ![](tools/liveserver/doc/jitsi.png)<br>Jitsi不仅是WebRTC媒体服务器，而且还有一个完整的平台。 Jitsi系列产品包括Jitsi Videobridge（媒体中继，SFU），Jitsi Meet（会议网络客户端），Jicofo（Jitsi Conference Focus），Jigasi（Jitsi Gateway to SIP）和Jitsi SIP Phone。 它还使用Jingle（XMPP）和功能齐全的Web界面实现自己的信令控制。
   ![](tools/liveserver/doc/kurento-logo.png) | [github](https://github.com/Kurento) | 基于WebRTC开源MCU框架，架构图<br>![架构图](tools/liveserver/doc/kurento.png)<br>它也不仅仅是一个媒体服务器，而是构建了一个工具包。Kurento的主要优点是通过引入媒体工作流(meidia workflow)的概念实现了多功能性，它允许在代码中定义媒体流以何种方式传输以及传到到哪里。这就允许WebRTC开发者将非常有趣的功能进行集成，例如计算机视觉（例如识别QR码，面部检测），实时媒体修正和与RTP（VoIP）服务的互操作。 Kurento还可以在单个实例中配置成SFU或MCU（或者同时使用）。
-  ![](tools/doc/liveserver/doc/../../../liveserver/doc/janus-logo.png) | [github](https://github.com/meetecho/janus-gateway)、[demo](https://janus.conf.meetecho.com/demos.html) | ![](tools/liveserver/doc/Janus.jpeg)
+  ![](tools/doc/liveserver/doc/../../../liveserver/doc/janus-logo.png) | [github](https://github.com/meetecho/janus-gateway)、[测试服务器](https://janus.conf.meetecho.com/demos.html) | ![](tools/liveserver/doc/Janus.jpeg)
   / | ***Gateways*** | /
    | |
   / | ***NAT traversal*** | /
