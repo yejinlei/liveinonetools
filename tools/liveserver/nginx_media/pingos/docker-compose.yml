@@ -1,0 +1,33 @@
+#version: '3.5'
+#services:
+#  pingos:
+#    build: .
+#    image: "yejinlei/pingos"
+#    volumes:
+#      - ./conf/nginx.conf:/usr/local/pingos/conf/nginx.conf:ro
+#      - type: tmpfs
+#        target: /tmp
+#    command: [./sbin/nginx, '-g', 'daemon off;'] 
+#    network_mode: "host"
+#    privileged: true
+#    restart: always
+#
+version: '3.5'
+services:
+  pingos:
+    image: "yejinlei/pingos:0.1"
+    networks:
+      - liveinone-network
+    ports:                                                                                                                                                                                  
+      - "11942:1935"
+      - "9090:80"
+    volumes:
+      - ./conf/nginx.conf:/usr/local/pingos/conf/nginx.conf:ro
+      - type: tmpfs
+        target: /tmp
+    command: [./sbin/nginx, '-g', 'daemon off;'] 
+    privileged: true
+
+networks:
+  liveinone-network:
+    driver: bridge
