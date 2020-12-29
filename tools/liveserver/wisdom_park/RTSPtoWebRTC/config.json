@@ -1,0 +1,10 @@
+{
+  "server": {
+    "http_port": ":8083"
+  },
+  "streams": {
+    "305": {
+      "url": "rtsp://admin:admin@10.9.0.227:554/cam/realmonitor?channel=1&subtype=1"
+    }
+  }
+}
