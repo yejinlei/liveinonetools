@@ -67,7 +67,7 @@ Media as a Service, from codec to server architecture...✍
   **rtsp** | [RFC 2326](https://tools.ietf.org/html/rfc2326) , Real Time Streaming Protocol (RTSP) | [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
   **rtcp** | [RFC 3550](http://tools.ietf.org/html/rfc3550) , RTP: A Transport Protocol for Real-Time Applications<br>[RFC 3605](https://tools.ietf.org/html/rfc3605) , Real Time Control Protocol (RTCP) attribute in Session Description Protocol (SDP) |
   **rtp** | 1. 视频关键帧的封装: RTP + PSheader + PS system header + PS system Map + PES header + h264 data<br>2. 视频非关键帧的封装: RTP + PS header + PES header + h264 data<br>3. 音频帧的封装: RTP + PES header + G711<br><br>[RFC 3550](http://tools.ietf.org/html/rfc3550) , RTP: A Transport Protocol for Real-Time Applications<br>[RFC 3551](http://tools.ietf.org/html/rfc3551) , RTP Profile for Audio and Video Conferences with Minimal Control<br>[RFC 5761](http://tools.ietf.org/html/rfc5761) , Multiplexing RTP Data and Control Packets on a Single Port<br>[RFC 6051](http://tools.ietf.org/html/rfc6051) , Rapid Synchronisation of RTP Flows<br>[RFC 6184](http://tools.ietf.org/html/rfc6184) , RTP Payload Format for H.264 Video<br>[RFC 6416](https://tools.ietf.org/html/rfc6416) , RTP Payload Format for MPEG-4 Audio/Visual Streams<br>[RFC 5215](http://tools.ietf.org/html/rfc5215) , RTP Payload Format for Vorbis Encoded Audio<br>[RFC 5219](https://tools.ietf.org/html/rfc5219) , A More Loss-Tolerant RTP Payload Format for MP3 Audio<br>[RFC 7741](https://tools.ietf.org/html/rfc7741) , RTP Payload Format for VP8 Video<br>[draft-ietf-payload-vp9-02](https://tools.ietf.org/html/draft-ietf-payload-vp9-02) , RTP Payload Format for VP9 Video draft-ietf-payload-vp9-02<br>[RFC 7007](http://tools.ietf.org/html/rfc7007) , Update to Remove DVI4 from the Recommended Codecs for the RTP Profile for Audio and Video Conferences with Minimal Control (RTP/AVP)<br>[RFC 7160](https://tools.ietf.org/html/rfc7160) , Support for Multiple Clock Rates in an RTP Session<br>[RFC 7164](https://tools.ietf.org/html/rfc7164) , RTP and Leap Seconds<br>[Real-Time Transport Protocol (RTP) Parameters](http://www.iana.org/assignments/rtp-parameters/rtp-parameters.xhtml#rtp-parameters-1) | [jrtplib's github](https://github.com/j0r1/JRTPLIB)、[GoRTP's github](https://github.com/whtang/GoRTP)、[linephone ortp's github](https://github.com/dmonakhov/ortp)、[live555's github](https://github.com/cmberryau/live555) 
- 
+
 - ❀RTC信令控制、IM消息、WebRTC协议❀
   
   协议 | _ | _
@@ -116,18 +116,20 @@ Media as a Service, from codec to server architecture...✍
        6. Bob 调用 setLocalDescription 方法，将本端的 SDP 信息保存起来。
        7. Bob 将 anwser 消息通过信令服务器传给 Amy。
        8. Amy 收到 anwser 消息后，调用 setRemoteDescription 方法，将其保存起来。
-      ![](tools/liveserver/doc/signal_sdp.png)
+          ![](tools/liveserver/doc/signal_sdp.png)
   - **媒体服务器**
+    
     1. 为什么需要媒体服务器？
   - **[NAT穿透](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API/Protocols)**
+    
     1. 为什么需要NAT穿透及相关协议？
       - **ICE**，交互式连接设施Interactive Connectivity Establishment (ICE) 是一个允许你的浏览器和对端浏览器建立连接的协议框架。在实际的网络当中，有很多原因能导致简单的从A端到B端直连不能如愿完成。这需要绕过阻止建立连接的防火墙，给你的设备分配一个唯一可见的地址（通常情况下我们的大部分设备没有一个固定的公网地址），如果路由器不允许主机直连，还得通过一台服务器转发数据。ICE通过使用以下几种技术完成上述工作：
       - **STUN**，NAT的会话穿越功能Session Traversal Utilities for NAT (STUN) (缩略语的最后一个字母是NAT的首字母)是一个允许位于NAT后的客户端找出自己的公网地址，判断出路由器阻止直连的限制方法的协议。
       - **NAT**，网络地址转换协议Network Address Translation (NAT) 用来给你的（私网）设备映射一个公网的IP地址的协议。一般情况下，路由器的WAN口有一个公网IP，所有连接这个路由器LAN口的设备会分配一个私有网段的IP地址（例如192.168.1.3）。私网设备的IP被映射成路由器的公网IP和唯一的端口，通过这种方式不需要为每一个私网设备分配不同的公网IP，但是依然能被外网设备发现。一些路由器严格地限定了部分私网设备的对外连接。这种情况下，即使STUN服务器识别了该私网设备的公网IP和端口的映射，依然无法和这个私网设备建立连接。这种情况下就需要转向TURN协议。
       - **TURN**，一些路由器使用一种“对称型NAT”的NAT模型。这意味着路由器只接受和对端先前建立的连接（就是下一次请求建立新的连接映射）。NAT的中继穿越方式Traversal Using Relays around NAT (TURN) 通过TURN服务器中继所有数据的方式来绕过“对称型NAT”。你需要在TURN服务器上创建一个连接，然后告诉所有对端设备发包到服务器上，TURN服务器再把包转发给你。很显然这种方式是开销很大的，所以只有在没得选择的情况下采用。客户端通过给公网的STUN服务器发送请求获得自己的公网地址信息，以及是否能够被（穿过路由器）访问。
     2. ICE/STUN/TURN如何工作
-      ![](tools/liveserver/doc/turn.png)
-
+        ![](tools/liveserver/doc/turn.png)
+  
 - 实时通信技术RTC - Voip
   - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
   - [Real-Time Communications Quick Start Guide](http://rtcquickstart.org/guide/multi/index.html)
@@ -260,7 +262,7 @@ Media as a Service, from codec to server architecture...✍
   SimpleWebRTC | [github](https://github.com/simplewebrtc/SimpleWebRTC) | 
   EasyRTC | [github](https://github.com/priologic/easyrtc) |
   OpenWebRTC | [github](https://github.com/EricssonResearch/openwebrtc) |
-  ![](tools/liveserver/doc/mediasoup-logo.png) | [github](https://github.com/versatica/mediasoup) | ![](tools/liveserver/doc/Mediasoup_arch.png)
+  ![](tools/liveserver/doc/mediasoup-logo.png) | [github](https://github.com/versatica/mediasoup),[测试服务器](https://letsmeet.no/) | ![](tools/liveserver/doc/Mediasoup_arch.png)
   ant media server | [github](https://github.com/ant-media) | 
   ![](tools/liveserver/doc/licode-logo.png) | [github](https://github.com/lynckia/licode) | licode 从功能层面来讲分成三部分，即 Nuve 、ErizoController 和 ErizoAgent 三部分，它们之间通过消息队列进行通信。1. Nuve 是一个 Web 服务，用于管理用户、房间、产生 token 以及房间的均衡负载等相关工作。它使用 MangoDB 存储房间和 token 信息，但不存储用户信息。2. ErizoController，用于管理控制，信令和非音视频数据都通过它接收。它通过消息队列与 Nuve 进行通信，也就是说 Nuve 可以通过消息队列对 ErizoController 进行控制。3. ErizoAgent，用于音视频流媒体数据的传输，可以分布式布署。ErizoAgent 与 ErizoController 的通信也是通过消息队列，信令消息通过 ErizoController 接收到后，再通过消息队列发给 ErizoAgent，从而实现对 ErizoAgent 进行控制。<br>licode 不仅仅是一个 SFU 流媒体服务器，它还包括了与流媒体相关的业务管理系统、信令系统、流媒体服务器以及客户端 SDK 等等，可以说它是一个比较完善的产品。<br>![](tools/liveserver/doc/licode.jpeg)
   ![](tools/liveserver/doc/Intel-logo.jpeg)  | [github](https://github.com/open-webrtc-toolkit) | 英特尔开源WebRTC开发套件OWT，基于licode
