@@ -390,5 +390,6 @@ Media as a Service, from codec to server architecture...✍
 - hls，http://220.161.87.62:8800/hls/0/index.m3u8
 - hls，http://220.161.87.62:8800/hls/1/index.m3u8
 - mp4，http://www.w3school.com.cn/i/movie.mp4
+- av1/mp4, https://media.vued.vanthink.cn/video.av1.mp4
 ### 其他
 - [wireshark's Captures](https://wiki.wireshark.org/SampleCaptures)
