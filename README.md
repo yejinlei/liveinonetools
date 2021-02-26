@@ -50,6 +50,7 @@ Media as a Service, from codec to server architecture...✍
   _ |_ |**h264**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | | 1. [x264 github](https://code.videolan.org/videolan/x264.git)<br>2. [openh264 github](https://github.com/cisco/openh264)<br>3. [雷霄骅 / H264_Analysis](https://gitee.com/leixiaohua/H264_Analysis)
   _ |_ |**avc1**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | |
   _ |_ |**hevc**(H.265 / HEVC (High Efficiency Video Coding))    | | | 
+  _ |_ |**av1**(Alliance for Open Media Video 1)    | | H5 video标签原生支持(av1/mp4, 新版浏览器webrtc同样支持) | 
   _ |_ |**theora** | | |
   _ |_ |**vp8**(On2 VP8)) | | |
   _ |_ |**vorbis** | | |
@@ -96,14 +97,21 @@ Media as a Service, from codec to server architecture...✍
   media-server-go| [github](https://github.com/notedit/media-server-go) | webrtc媒体服务器，同时支持rtmp to webrtc、webrtc to rtmp、webrct to hls
 
 - 实时通信技术RTC - WebRTC
-  - **WebRTC技术**
-  *WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。WebRTC包含了若干相互关联的API和协议以达到这个目标。*
-  ![](tools/liveserver/doc/webrtc_arch.png)
+  - **[WebRTC一张图](tools/liveserver/webrtc/doc/有关WebRTC.xmind)**
+  ![](tools/liveserver/webrtc/doc/有关WebRTC.png)
+  
+  - **WebRTC概述**
+    *WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。WebRTC包含了若干相互关联的API和协议以达到这个目标。*
+    ![](tools/liveserver/doc/webrtc_arch.png)
+  
   - **WebRTC开发工具**
     ![](liveserver/doc/../../tools/liveserver/doc/WebRTC-Developer-Tools-Landscape-201904.png)
+    
   - **WebRTC涉及协议**
-    ![](tools/liveserver/doc/webrtc_pro.png)
+    ![](tools/liveserver/webrtc/doc/webrtc_stack.png)
+    
   - **信令服务器**
+    
     1. 为什么需要信令服务器？
       > 为了媒体协商交换SDP。会话描述协议Session Description Protocol (SDP) 是一个描述多媒体连接内容的协议，例如分辨率，格式，编码，加密算法等。所以在数据传输时两端都能够理解彼此的数据。本质上，这些描述内容的元数据并不是媒体流本身。从技术上讲，SDP并不是一个真正的协议，而是一种数据格式，用于描述在设备之间共享媒体的连接。
     2. WebRTC标准中没有规定信令服务具体实现以及交换方式
@@ -117,9 +125,11 @@ Media as a Service, from codec to server architecture...✍
        7. Bob 将 anwser 消息通过信令服务器传给 Amy。
        8. Amy 收到 anwser 消息后，调用 setRemoteDescription 方法，将其保存起来。
           ![](tools/liveserver/doc/signal_sdp.png)
+    
   - **媒体服务器**
     
     1. 为什么需要媒体服务器？
+    
   - **[NAT穿透](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API/Protocols)**
     
     1. 为什么需要NAT穿透及相关协议？
