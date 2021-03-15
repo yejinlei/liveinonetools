@@ -99,47 +99,10 @@ Media as a Service, from codec to server architecture...✍
 - 实时通信技术RTC - WebRTC
   - **[WebRTC一张图](tools/liveserver/webrtc/doc/有关WebRTC.xmind)**
   ![](tools/liveserver/webrtc/doc/有关WebRTC.png)
-  
+
   - **WebRTC概述**
-    *WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。WebRTC包含了若干相互关联的API和协议以达到这个目标。*
-    ![](tools/liveserver/doc/webrtc_arch.png)
-  
-  - **WebRTC开发工具**
-    ![](liveserver/doc/../../tools/liveserver/doc/WebRTC-Developer-Tools-Landscape-201904.png)
-    
-  - **WebRTC涉及协议**
-    ![](tools/liveserver/webrtc/doc/webrtc_stack.png)
-    
-  - **信令服务器**
-    
-    1. 为什么需要信令服务器？
-      > 为了媒体协商交换SDP。会话描述协议Session Description Protocol (SDP) 是一个描述多媒体连接内容的协议，例如分辨率，格式，编码，加密算法等。所以在数据传输时两端都能够理解彼此的数据。本质上，这些描述内容的元数据并不是媒体流本身。从技术上讲，SDP并不是一个真正的协议，而是一种数据格式，用于描述在设备之间共享媒体的连接。
-    2. WebRTC标准中没有规定信令服务具体实现以及交换方式
-    3. 媒体协商交换SDP过程:
-       1. Amy 调用 createOffer 方法创建 offer 消息。offer 消息中的内容是 Amy 的 SDP 信息。
-       2. Amy 调用 setLocalDescription 方法，将本端的 SDP 信息保存起来。
-       3. Amy 将 offer 消息通过信令服务器传给 Bob。
-       4. Bob 收到 offer 消息后，调用 setRemoteDescription 方法将其存储起来。
-       5. Bob 调用 createAnswer 方法创建 answer 消息， 同样，answer 消息中的内容是 Bob 的 SDP 信息。
-       6. Bob 调用 setLocalDescription 方法，将本端的 SDP 信息保存起来。
-       7. Bob 将 anwser 消息通过信令服务器传给 Amy。
-       8. Amy 收到 anwser 消息后，调用 setRemoteDescription 方法，将其保存起来。
-          ![](tools/liveserver/doc/signal_sdp.png)
-    
-  - **媒体服务器**
-    
-    1. 为什么需要媒体服务器？
-    
-  - **[NAT穿透](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API/Protocols)**
-    
-    1. 为什么需要NAT穿透及相关协议？
-      - **ICE**，交互式连接设施Interactive Connectivity Establishment (ICE) 是一个允许你的浏览器和对端浏览器建立连接的协议框架。在实际的网络当中，有很多原因能导致简单的从A端到B端直连不能如愿完成。这需要绕过阻止建立连接的防火墙，给你的设备分配一个唯一可见的地址（通常情况下我们的大部分设备没有一个固定的公网地址），如果路由器不允许主机直连，还得通过一台服务器转发数据。ICE通过使用以下几种技术完成上述工作：
-      - **STUN**，NAT的会话穿越功能Session Traversal Utilities for NAT (STUN) (缩略语的最后一个字母是NAT的首字母)是一个允许位于NAT后的客户端找出自己的公网地址，判断出路由器阻止直连的限制方法的协议。
-      - **NAT**，网络地址转换协议Network Address Translation (NAT) 用来给你的（私网）设备映射一个公网的IP地址的协议。一般情况下，路由器的WAN口有一个公网IP，所有连接这个路由器LAN口的设备会分配一个私有网段的IP地址（例如192.168.1.3）。私网设备的IP被映射成路由器的公网IP和唯一的端口，通过这种方式不需要为每一个私网设备分配不同的公网IP，但是依然能被外网设备发现。一些路由器严格地限定了部分私网设备的对外连接。这种情况下，即使STUN服务器识别了该私网设备的公网IP和端口的映射，依然无法和这个私网设备建立连接。这种情况下就需要转向TURN协议。
-      - **TURN**，一些路由器使用一种“对称型NAT”的NAT模型。这意味着路由器只接受和对端先前建立的连接（就是下一次请求建立新的连接映射）。NAT的中继穿越方式Traversal Using Relays around NAT (TURN) 通过TURN服务器中继所有数据的方式来绕过“对称型NAT”。你需要在TURN服务器上创建一个连接，然后告诉所有对端设备发包到服务器上，TURN服务器再把包转发给你。很显然这种方式是开销很大的，所以只有在没得选择的情况下采用。客户端通过给公网的STUN服务器发送请求获得自己的公网地址信息，以及是否能够被（穿过路由器）访问。
-    2. ICE/STUN/TURN如何工作
-        ![](tools/liveserver/doc/turn.png)
-  
+    *WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。WebRTC包含了若干相互关联的API和协议以达到这个目标。
+
 - 实时通信技术RTC - Voip
   - [Voice over IP protocol families](https://wiki.wireshark.org/VOIPProtocolFamily)
   - [Real-Time Communications Quick Start Guide](http://rtcquickstart.org/guide/multi/index.html)
@@ -314,28 +277,104 @@ Media as a Service, from codec to server architecture...✍
         - SrsEdgeUpstream::connect
       - edge边缘节点，推流到源站（SrsEdgeStatePublish标记）
         - SrsEdgeForwarder::start
+  
  - 实战living目录
    - Forward模式
      - start_srs_compose.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
      - start_srs_stack.sh，SRS Forward模式集群docker swarm/stack编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
      - start_srs_k8s.sh
     - edge模式
-- WebRTC生态
-   - [WebRTC-Developer-Tools-Landscape](https://bloggeek.me/download/11768/)
-   - [Comparative study of WebRTC SFUs for Video Conferencing](https://uploads-ssl.webflow.com/5c6853c495409838d874a0d2/5cbed66cae2b88609106befa_IPTComm_2018_LoadTesting-12%5B23229%5D.pdf)
-   - 媒体服务器
-     - 媒体中转架构
-     ![](tools/liveserver/doc/Mesh-MCU-SFU.png)
+   
+- WebRTC
+
+   - Web API
+
+   - Native API
+
+      - Google C/C++
+      - Pion
+      - WebRTC.rs
+
+   - Signaling
+
+   - Stun/Turn
+
+      - coturn及子项目
+
+         - turnserver, stun/turn服务器
+
+            ```shell
+            turnserver -c /usr/local/etc/turnserver.conf #使用配置文件或使用命令选型
+            turnserver 内网IP:PORT 外网
+            ```
+
+            ---
+
+            ```c++
+            //mainrelay.c
+            main
+                |
+            ```
+
+         - turnadmin, 用于管理账户
+
+            ```shell
+            ./turnadmin -k  -u yejinlei -p xxxxx -r hxdi.com #默认使用md5, 相当于md5("gorst:yejinlei.gov:xxxxx",32) => 0x7da2270ccfa49786e0115366d3a3d14d
+            ```
+
+            
+
+         - turnutils_natdiscovery使用及分析
+
+         - turnutils_oauth使用及分析
+
+         - turnutils_peer使用及分析
+
+         - turnutils_rfc5769check使用及分析
+
+         - turnutils_stunclient, 用于测试stun
+
+         - turnutils_uclient, 用于测试turn
+
+            ```shell
+            ./turnutils_uclient -v -u yejinlei -w xxxxx 121.37.143.208 -t -T #121.37.143.208为turn server ip；-t -T使用TCP协议,默认UDP
+            ```
+
+            
+
+   - Scheme
+
+      - Google AppRTC
+      - Licode
+      - Intel OWT
+      - Jitsi
+      - Janus
+
+   - 资料
+      
+      - [WebRTC-Developer-Tools-Landscape](https://bloggeek.me/download/11768/)
+      - [Comparative study of WebRTC SFUs for Video Conferencing](https://uploads-ssl.webflow.com/5c6853c495409838d874a0d2/5cbed66cae2b88609106befa_IPTComm_2018_LoadTesting-12%5B23229%5D.pdf)
+
 - pull_srs.sh，拉取srs版本库脚本
+
 - build_srs，编译srs release脚本，需放入srs版本库中
+
 - build_srs_gprof.sh，编译加入gprof性能工具
+
 - centos6.5_dev.sh，容器开发环境，已经集成了gcc、gdb等工具
+
 - gperf，google性能工具相关脚本
+
 - clangtools，Apple clang/llvm相关工具
+
 - valgrind，linux下valgring内存、cpu分析工具
+
 - install_livego.sh，纯go实现的支持rtmp、hls、httpflv协议的轻量级直播服务器
+
 - install_easydarwin，纯go实现的支持rtsp的直播服务器
+
 - install_live555.sh，c++实现的流媒体项目
+
 - ipc_sipserver，sip服务器
 
 ### livetools，多媒体工具
