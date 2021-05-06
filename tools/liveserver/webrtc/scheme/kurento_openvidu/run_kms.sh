@@ -1,4 +1,4 @@
-docker run -d -p 4443:4443 -p 8888:8888 --rm \
+docker run -d -p 8888:8888 --rm \
     -e DOMAIN_OR_PUBLIC_IP=192.168.1.14 \
     -e KMS_STUN_IP="121.37.143.208" \
     -e KMS_STUN_PORT="3478" \
