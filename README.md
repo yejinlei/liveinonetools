@@ -160,6 +160,10 @@ Media as a Service, from codec to server architecture...✍
     - [图像质量评估综述](https://zhuanlan.zhihu.com/p/32553977)
     - [Group MAD Competition - A New Methodology to Compare Objective Image Quality Models](https://ece.uwaterloo.ca/~zduanmu/cvpr16_gmad/)
     - [实时音视频质量评估方案](https://testerhome.com/topics/25127)
+    - [实时音视频质量评估方案](https://blog.csdn.net/u011608531/article/details/108012438#t9)
+    - [视频主观质量对比工具(Visual comparision tool based on ffplay)](https://blog.csdn.net/lrzkd/article/details/78809659?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control)
+    - [视频客观质量评价工具：MSU Video Quality Measurement Tool](https://blog.csdn.net/leixiaohua1020/article/details/11729257)
+    - [音视频技术：视频质量评价方法简介](https://blog.csdn.net/netease_im/article/details/83993239)
 ### liveaccels，多媒体加速
 - wasm，各种webassembly播放器、服务器等
     - livegowasm，livego wasm形式服务器
