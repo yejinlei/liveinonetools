@@ -151,8 +151,15 @@ Media as a Service, from codec to server architecture...✍
 	- ONVIF 检索服务WSDL [ONVIF 检索WSDL]
 	- ONVIF 主题XML 命名空间[ONV/IF 主题命名空间]
 
-### livesniff， 多媒体嗅探、压测
-- livesniff，多功能多媒体嗅探，压测工具
+### livesniff， 多媒体嗅探及质量评估
+- 多媒体嗅探
+  - livesniff工具
+- 图像/视频质量分析
+  - 参考资料
+    - [全参考图像质量评价方法整理与实用性探讨](https://zhuanlan.zhihu.com/p/24804170)
+    - [图像质量评估综述](https://zhuanlan.zhihu.com/p/32553977)
+    - [Group MAD Competition - A New Methodology to Compare Objective Image Quality Models](https://ece.uwaterloo.ca/~zduanmu/cvpr16_gmad/)
+    - [实时音视频质量评估方案](https://testerhome.com/topics/25127)
 ### liveaccels，多媒体加速
 - wasm，各种webassembly播放器、服务器等
     - livegowasm，livego wasm形式服务器
@@ -229,7 +236,7 @@ Media as a Service, from codec to server architecture...✍
   kamailio | [官网](https://www.kamailio.org) | 开源sip代理服务器<br>![](tools/liveserver/doc/kamailio-sip-ucp.png)
   oversip | [github](https://github.com/versatica/OverSIP) | OverSIP is a powerful and flexible SIP proxy & server by the authors of RFC 7118 (The WebSocket Protocol as a Transport for SIP)
   / | ***Signaling*** | /
-  opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器<br>![]()
+  opensips | [官网](https://www.opensips.org/) | 开源sip代理服务器 
   gnugk | [官网](https://www.gnugk.org) | 基于openh323开源voip服务器 
   / | ***Media Servers*** | /
   AppRTC | [github](https://github.com/webrtc/apprtc)<br>[webserver.cn](https://www.webrtcserver.cn/),[测试服务器](https://apprtc.webrtcserver.cn/) | ![](tools/liveserver/webrtc/doc/apprtc.png)
