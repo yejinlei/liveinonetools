@@ -53,8 +53,7 @@
   - [Introducing WebSockets: Bringing Sockets to the Web](https://www.html5rocks.com/en/tutorials/websockets/basics/)
   - [WebSockets 简介：将套接字引入网络](https://www.html5rocks.com/zh/tutorials/websockets/basics/)
   - [WebSocket 教程](https://www.ruanyifeng.com/blog/2017/05/websocket.html)
-  - [html5rocks tutorials]( http://www.html5rocks.
-    com/en/tutorials/websockets/basics/)
+  - [html5rocks tutorials]( http://www.html5rocks.com/en/tutorials/websockets/basics/)
   - <<HTML5 WebSocket权威指南>>
 
 #### 1.1.2 SSE(服务器发送事件, 服务器“push”模式, 长连接)
@@ -62,14 +61,13 @@
 - 参考资料
   - [MDN Server-sent events](https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events)
   - [MDN 使用服务器发送事件](https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events/Using_server-sent_events)
-  - [html5rocks tutorials](http://www.html5rocks.com/en/
-    tutorials/eventsource/basics/[)
+  - [html5rocks tutorials](http://www.html5rocks.com/en/tutorials/eventsource/basics/[)
 
 #### 1.1.3 XHR(AJAX XMLHttpRequest, 客户端“pull”模式, polling)
 ​         **XMLHttpRequest**(XHR) 是一种创建 AJAX请求的JavaScript API。它的方法提供了在浏览器和服务器之间发送请求的能力。
 
 - 参考资料
-  - [MDN XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Glossary/XHR_(XMLHttpRequest)
+  - [MDN XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Glossary/XHR_(XMLHttpRequest))
 
 #### 1.1.5 Comet彗星技术(混合技术, 服务器“push”模式)
 
