@@ -79,9 +79,6 @@
   - [Comet技术详解：基于HTTP长连接的Web端实时通信技术](http://www.52im.net/thread-334-1-1.html)
   - [开源Comet服务器iComet：支持百万并发的Web端即时通讯方案](http://www.52im.net/thread-330-1-1.html)
 
-#### 1.1.6 BOSH(同步HTTP双向流, 本质上也是Comet)
-​         **BOSH(Bidirectional-streams Over Synchronous HTTP)**是一种在客户端和服务器端之间通过HTTP的请求/响应进行客户端和服务器双向通信的技术，BOSH在XMPP系列规范中的XEP-0124中定义，应用场合为基于浏览器的客户端访问XMPP服务器。
-
 #### 1.2 SDP会话描述协议
 
 - 标准SDP/planB/unifiedPlan
@@ -139,9 +136,14 @@
 
 - XMPP/WS(XMPP over WebSocket)
 
-- XMPP over BOSH
+- XMPP over HTTP(BOSH)
+
+  ​		BOSH(Bidirectional-streams Over Synchronous HTTP)是一种在客户端和服务器端之间通过HTTP的请求/响应进行客户端和服务器双向通信的技术，BOSH在XMPP系列规范中的XEP-0124中定义，应用场合为基于浏览器的客户端访问XMPP服务器。
+
+  ![](doc/bosh.png)
 
 - 参考资料
+  - [xep-0124](https://xmpp.org/extensions/xep-0124.html)
   - [xep-0340](https://xmpp.org/extensions/xep-0340.html)
   - [jitsi/strophejs](https://github.com/jitsi/strophejs), XMPP JS Client
   - [jitsi/Smack](https://github.com/jitsi/Smack),  XMPP Java Client
@@ -150,6 +152,8 @@
   - Openfire, XMPP Server Written in Java
   - Tigase, XMPP Server Written in Java
   - ejabberd, XMPP Server Written in Erlang
+  - [strophe/strophejs](https://github.com/strophe/strophejs/) 及 [plugins](https://github.com/metajack/strophejs-plugins)
+  - [xmpp-ftw/xmpp-ftw-demo](https://github.com/xmpp-ftw/xmpp-ftw-demo)
 
 #### 1.4 HTTP
 
@@ -826,26 +830,57 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
 
 > 总入口: https://gitee.com/yejinlei/jitsi-meet-all,  下载所有子项目 git clone --recurse-submodules https://gitee.com/yejinlei/jitsi-meet-all 
 >
-> ​	| 目录docker-jitsi-meet:   https://gitee.com/yejinlei/docker-jitsi-meet.git   #容器工程
+> |目录docker-jitsi-meet:   https://gitee.com/yejinlei/docker-jitsi-meet.git   #容器制作及部署工程
 >
-> ​    |目录jitsi-meet: https://gitee.com/yejinlei/docker-jitsi-meet.git                     #对应Web服务
+> ​		|base,  rootfs/usr/bin/debs/*.deb 含制作容器时需要用到的包, 即包仓库
 >
-> ​    |目录jitsi-videobridge: https://gitee.com/yejinlei/jitsi-videobridge.git          #Video  SFU服务
+> ​		|web, web服务容器制作
 >
-> ​    |目录jicofo: https://gitee.com/yejinlei/jicofo.git                                                      #会议服务
+> ​		|prosody, xmpp服务容器制作
+>
+> ​		|jvb, sfu服务容器制作
+>
+> ​		|jicofo, 会议服务容器制作
+>
+> |目录jitsi-meet: https://gitee.com/yejinlei/jitsi-meet.git                                    # web服务的统一构建工程, 最终生成deb需要放入docker-jitsi-meet
+>
+> |目录lib-jitsi-meet: https://gitee.com/yejinlei/lib-jitsi-meet.git                     #Web服务核心代码 , 最终生成结果文件需要放入jitsi-meet
+>
+> |目录jitsi-videobridge: https://gitee.com/yejinlei/jitsi-videobridge.git          #Video  SFU服务 , 最终生成结果文件需要放入docker-jitsi-meet
+>
+> |目录jicofo: https://gitee.com/yejinlei/jicofo.git                                                      #会议服务, 最终生成结果文件需要放入docker-jitsi-meet
 
 ##### 2.3.1.1 Web, 内置web服务器及Web网页含WebRTC Client服务
-###### 1) web服务器
-###### 2) Web业务
+###### 1) Web业务构建
 
-###### 3) 工程化
+- Web核心业务源码构建(目录lib-jitsi-meet)
+  - ```shell
+    nvm use v15.0.1
+    npm install -g npm
+    npm install webpack -g
+    npm install --save-dev webpack-cli -g
+    npm i
+    ```
+  
+- 统一源码构建(目录jitsi-meet)
 
-- 源码构建, 最终生成jitsi-meet-web.deb包, 替换官方deb包
-  - 使用Webpack打包web工程
-  - 构建软件包
-- 容器制作, 参考Dockerfiler
-  - 安装cron, nginx-extras
-  - 安装官方jitsi-meet-web, jitsi-meet-web-config #web业务及nginx配置
+  - ```shell
+    nvm use v15.0.1
+    npm install -g npm
+    npm install --save webpack webpack-cli
+    make all
+    ```
+  
+ - 原库中缺少deploy-local.sh文件, 用于拷贝文件到deb制作目录
+
+    - 拷贝jitsi-meet-web包所需文件
+    - 拷贝jitsi-meet-web-config包所需文件
+    - 拷贝prosody-plugins包所需文件
+
+###### 2) Web服务打包及容器化
+
+- 制作deb(目录jitsi-meet)
+  - 准备文件
     - jitsi-meet-web包主要文件
       - index.html
       - interface_config.js
@@ -858,9 +893,15 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
       - static
         - close.js
         - close3.js
-    - jitsi-meet-web-config包主要文件
+    - jitsi-meet-web-config包文件
+      - config.js
+      - jitsi-meet.example #nginx的站点配置, 对接jvb服务
+    - dpkg制作deb
+- 容器制作(目录docker-jitsi-meet/web), 参考Dockerfiler
+  - 安装cron, nginx-extras
+  - 安装官方jitsi-meet-web, jitsi-meet-web-config #web业务及nginx配置
   - 安装socat  #acme.sh脚本中会用到, acme.sh用于申请免费ssl证书-let's encrypt
-  - 
+
 - 容器运行
   - 容器中的PID1程序, s6
     - rootfs/etc/**cont-init.d**/10-config     #初始化阶段
@@ -878,21 +919,21 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
       - NGINX_WORKER_CONNECTIONS, 默认: 768
       - NGINX_RESOLVER, 默认:127.0.0.11
     - **default**, 所有站点默认配置
-      - DISABLE_HTTPS
-      - ENABLE_HTTP_REDIRECT
-      - ENABLE_IPV6
+      - [x] DISABLE_HTTPS
+      - [x] ENABLE_HTTP_REDIRECT
+      - [x] ENABLE_IPV6
     - **meet.conf**, 站点配置文件
-      - ENABLE_COLIBRI_WEBSOCKET, 默认: 1
-      - ENABLE_XMPP_WEBSOCKET, 默认: 1
-      - DEPLOYMENTINFO_SHARD, 默认: 1
-      - ENABLE_FLOC, 默认: 0
-      - XMPP_BOSH_URL_BASE
-      - XMPP_DOMAIN 
-      - ETHERPAD_URL_BASE
+      - [x] ENABLE_COLIBRI_WEBSOCKET, 默认: 1
+      - [x] ENABLE_XMPP_WEBSOCKET, 默认: 1
+      - [ ] DEPLOYMENTINFO_SHARD, 默认: 1
+      - [ ] ENABLE_FLOC, 默认: 0
+      - [x] XMPP_BOSH_URL_BASE
+      - [x] XMPP_DOMAIN 
+      - [ ] ETHERPAD_URL_BASE
     - **ssl.conf**, nginx支持https配置文件
-      - ENABLE_LETSENCRYPT, 默认: 0
-      - LETSENCRYPT_DOMAIN
-      - ENABLE_HSTS, 默认: 1
+      - [x] ENABLE_LETSENCRYPT, 默认: 0
+      - [ ] LETSENCRYPT_DOMAIN
+      - [ ] ENABLE_HSTS, 默认: 1
 
 ###### 4) 参考资料
 
@@ -903,63 +944,279 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
 - [构建软件包](https://www.debian.org/doc/manuals/maint-guide/build.zh-cn.html)
 - [Debian 新维护者手册](https://www.debian.org/doc/manuals/maint-guide/index.zh-cn.html)
 
-##### 2.3.1.2 Prosody, 提供XMPP信令交换服务
+##### 2.3.1.2 Prosody, 提供XMPP信令交换及认证服务
 ###### 1) Prosody, XMPP服务器
 
-###### 2) 工程化
+- **prosody core plugins**, [doc](https://prosody.im/doc/modules), [code](https://github.com/bjc/prosody/tree/master/plugins)
+
+  - [pubsub](https://prosody.im/doc/modules/mod_pubsub)模块
+
+  - [ping](https://prosody.im/doc/modules/mod_ping)模块
+
+  - roster模块
+
+  - saslauth模块
+
+  - tls模块
+
+  - dialback模块
+
+  - disco模块
+
+  - private模块
+
+  - vcard模块
+
+  - limits模块
+
+  - version模块
+
+  - uptime模块
+
+  - time模块
+
+  - pep模块
+
+  - register模块
+
+  - websocket模块
+
+    - nginx方向代理
+
+    - ```nginx
+      location /xmpp-websocket {
+          proxy_pass http://localhost:5280/xmpp-websocket;
+          proxy_http_version 1.1;
+          proxy_set_header Connection "Upgrade";
+          proxy_set_header Upgrade $http_upgrade;
+
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 900s;
+      }
+      ```
+
+    - 参考资料
+
+      - [prosody WebSockets](https://prosody.im/doc/websocket)
+    
+  - [bosh](https://prosody.im/doc/modules/mod_bosh)模块
+
+    - nginx反向代理
+
+    - ```nginx
+      location /http-bind {
+          proxy_pass  http://localhost:5280/http-bind;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_buffering off;
+          tcp_nodelay on;
+      }
+      ```
+
+    - 参考资料
+
+      - [Setting up a BOSH server](https://prosody.im/doc/setting_up_bosh)
+
+- **jitsi plugins**([jitsi-meet/resources/prosody-plugins](https://gitee.com/yejinlei/jitsi-meet/tree/HXDI/resources/prosody-plugins))
+
+  - ├── ext_events.lib.lua
+    ├── mod_auth_jitsi-anonymous.lua
+    ├── mod_auth_token.lua
+    ├── mod_av_moderation.lua
+    ├── mod_av_moderation_component.lua
+    ├── mod_client_proxy.lua
+    ├── mod_conference_duration.lua
+    ├── mod_conference_duration_component.lua
+    ├── mod_external_services.lua
+    ├── mod_filter_iq_jibri.lua
+    ├── mod_filter_iq_rayo.lua
+    ├── mod_jiconop.lua
+    ├── mod_jitsi_session.lua
+    ├── mod_limits_exception.lua
+    ├── mod_muc_allowners.lua
+    ├── mod_muc_call.lua
+    ├── mod_muc_domain_mapper.lua
+    ├── mod_muc_lobby_rooms.lua
+    ├── mod_muc_max_occupants.lua
+    ├── mod_muc_meeting_id.lua
+    ├── mod_muc_poltergeist.lua
+    ├── mod_muc_size.lua
+    ├── mod_muc_transcription_filter.lua
+    ├── mod_polls.lua
+    ├── mod_poltergeist_component.lua
+    ├── mod_presence_identity.lua
+    ├── mod_reservations.lua
+    ├── mod_roster_command.lua
+    ├── mod_roster_command.patch
+    ├── mod_smacks.lua
+    ├── mod_speakerstats.lua
+    ├── mod_speakerstats_component.lua
+    ├── mod_token_verification.lua
+    ├── mod_turncredentials.lua
+    ├── mod_websocket_session_event.patch
+    ├── muc_owner_allow_kick.patch
+    ├── poltergeist.lib.lua
+    ├── token
+    │   └── util.lib.lua
+    └── util.lib.lua
+
+###### 2) SASL认证(Simple Authentication and Security Layer, 简单验证和安全层, 一种用来扩充C/S模式验证能力的机制)
+###### 3) 容器化
 
 - 容器制作, 参考Dockerfile
   - 安装lua5.2及lua相关库
   - 安装jitsi-meet-prosody*.deb
+    - 用户管理, 使用 “prosodyctl adduser”
 - 容器运行
   - 容器中的PID1程序, s6
-    - rootfs/etc/**cont-init.d**/10-config     #初始化阶段
+    - rootfs/etc/**cont-init.d**/10-config     #初始化阶段, 结合环境变量及tpl模板, 配置prosody
       - tpl /defaults/saslauthd.conf > /etc/saslauthd.conf
       - tpl /defaults/prosody.cfg.lua > /config/prosody.cfg.lua
       - tpl /defaults/conf.d/jitsi-meet.cfg.lua > /config/conf.d/jitsi-meet.cfg.lua
+    - rootfs/etc/**services.d**/prosody                      #运行阶段
+    - rootfs/etc/**services.d**/10-saslauthd           #运行阶段
   - 环境变量
     - **prosody.cfg.lua**
       - LOG_LEVEL
       - GLOBAL_MODULES
       - GLOBAL_CONFIG
     - **saslauthd.conf**
-      - AUTH_TYPE, 默认: internal
-      - LDAP_URL
-      - LDAP_BASE
-      - LDAP_BINDDN
-      - LDAP_BINDPW
-      - LDAP_FILTER
-      - LDAP_VERSION, 默认: 3
-      - LDAP_AUTH_METHOD, 默认: bind
-      - LDAP_USE_TLS, 默认: 0
-      - XMPP_DOMAIN, 共用
-      - LDAP_TLS_CHECK_PEER, 默认: 0
-      - LDAP_TLS_CACERT_FILE, 默认: /etc/ssl/certs/ca-certificates.crt
-      - LDAP_TLS_CACERT_DIR, 默认: /etc/ssl/certs
-      - LDAP_TLS_CIPHERS
-      - LDAP_START_TLS, 默认: 0
+      - [ ] AUTH_TYPE, 默认: internal, 其他还有ldap, jwt
+      - [ ] LDAP_URL
+      - [ ] LDAP_BASE
+      - [ ] LDAP_BINDDN
+      - [ ] LDAP_BINDPW
+      - [ ] LDAP_FILTER
+      - [ ] LDAP_VERSION, 默认: 3
+      - [ ] LDAP_AUTH_METHOD, 默认: bind
+      - [ ] LDAP_USE_TLS, 默认: 0
+      - [x] XMPP_DOMAIN, 共用
+      - [ ] LDAP_TLS_CHECK_PEER, 默认: 0
+      - [ ] LDAP_TLS_CACERT_FILE, 默认: /etc/ssl/certs/ca-certificates.crt
+      - [ ] LDAP_TLS_CACERT_DIR, 默认: /etc/ssl/certs
+      - [ ] LDAP_TLS_CIPHERS
+      - [ ] LDAP_START_TLS, 默认: 0
     - **jitsi-meet.cfg.lua**
-      - ENABLE_AUTH, 默认: 0
-      - ENABLE_GUESTS. 默认: 0
-      - AUTH_TYPE, 默认: internal, 共用
-      - JWT_ASAP_KEYSERVER, 默认:
-      - JWT_ALLOW_EMPTY, 默认: 0
-      - JWT_AUTH_TYPE, 默认: token
-      - 
+      - [x] XMPP_MODULES
+      - [x] ENABLE_AUTH, 默认: 0, 身份认证开关
+      - [ ] ENABLE_GUESTS. 默认: 0
+      - [ ] AUTH_TYPE, 默认: internal, 共用
+      - [ ] JWT_ASAP_KEYSERVER, 默认:
+      - [ ] JWT_ALLOW_EMPTY, 默认: 0
+      - [ ] JWT_AUTH_TYPE, 默认: token
+      - [ ] JWT_TOKEN_AUTH_MODULE, 默认: token_verification
+      - [ ] JWT_ACCEPTED_ISSUERS
+      - [ ] JWT_ACCEPTED_AUDIENCES
+      - [ ] JWT_APP_ID
+      - [ ] JWT_APP_SECRET
+      - [ ] JWT_ASAP_KEYSERVER
+      - [x] ENABLE_LOBBY, 默认: 0
+      - [ ] ENABLE_AV_MODERATION, 默认: 0
+      - [ ] DISABLE_POLLS, 默认: false
+      - [x] ENABLE_XMPP_WEBSOCKET, 默认: 1
+      - [x] PUBLIC_URL, 默认: https://localhost:8443
+      - [x] TURNS_HOST
+      - [x] TURN_PORT, 默认: 443
+      - [x] TURNS_PORT, 默认: 443
+      - [x] JICOFO_AUTH_USER
+      - [x] JVB_AUTH_USER
+      - [x] JVB_AUTH_USER
+      - [x] TURN_CREDENTIALS
+      - [x] XMPP_MUC_DOMAIN
+      - [x] XMPP_CROSS_DOMAIN, 默认: “”
+      - [x] XMPP_DOMAIN
+      - [x] XMPP_AUTH_DOMAIN
+      - [x] XMPP_GUEST_DOMAIN
+      - [x] XMPP_RECORDER_DOMAIN
+      - [x] XMPP_INTERNAL_MUC_DOMAIN, 默认: muc
+      - [x] XMPP_INTERNAL_MUC_MODULES
 
 ###### 3) 参考资料
 
+- [xmpp clients](https://xmpp.org/software/clients/)
+- [Real-Time Communications Quick Start Guide](http://rtcquickstart.org/guide/multi/)
 - [prosody webSockets](https://prosody.im/doc/websocket)
 - [prosody  bosh](https://prosody.im/doc/setting_up_bosh)
+- [简单验证和安全层 (Simple Authentication and Security Layer, SASL) 介绍](https://docs.oracle.com/cd/E26926_01/html/E25912/sasl.intro.20.html)
+- ‹‹XMPP权威指南›› book
+- ‹‹Practical Protocols XMPP›› book
+- [xmpp-ftw/xmpp-ftw](https://github.com/xmpp-ftw/xmpp-ftw)
 
 ##### 2.3.1.3 jicofo, 提供会议管理服务
 
-###### 1) 工程化
+###### 1) 容器化
+- 容器运行
+  - 环境变量
+    - [ ] SENTRY_DSN, 默认: 0
+    - [x] ENABLE_AUTH, 默认: 0
+    - [x] ENABLE_SCTP, 默认: 0
+    - [x] AUTH_TYPE, 默认: internal
+    - [ ] ENABLE_RECORDING, 默认: 0
+    - [ ] ENABLE_OCTO, 默认: 0
+    - [ ] ENABLE_AUTO_LOGIN, 默认: 1
+    - [x] XMPP_DOMAIN
+    - [x] XMPP_AUTH_DOMAIN
+    - [ ] MAX_BRIDGE_PARTICIPANTS
+    - [ ] BRIDGE_AVG_PARTICIPANT_STRESS
+    - [ ] BRIDGE_STRESS_THRESHOLD
+    - [ ] OCTO_BRIDGE_SELECTION_STRATEGY
+    - [ ] JICOFO_ENABLE_BRIDGE_HEALTH_CHECKS
+    - [x] JVB_BREWERY_MUC, brewery-jid = "{{ .Env.JVB_BREWERY_MUC }}@{{ .Env.XMPP_INTERNAL_MUC_DOMAIN }}"
+    - [x] XMPP_INTERNAL_MUC_DOMAIN
+    - [x] ENABLE_CODEC_VP8 
+    - [x] ENABLE_CODEC_VP9
+    - [x] ENABLE_CODEC_H264
+    - [ ] ENABLE_AUTO_OWNER 
+    - [ ] JICOFO_CONF_INITIAL_PARTICIPANT_WAIT_TIMEOUT
+    - [ ] JICOFO_CONF_SINGLE_PARTICIPANT_TIMEOUT 
+    - [x] JICOFO_ENABLE_HEALTH_CHECKS
+    - [ ] JIBRI_REQUEST_RETRIES
+    - [ ] JIBRI_PENDING_TIMEOUT
+    - [ ] JIGASI_SIP_URI
+    - [ ] JICOFO_SHORT_ID, 默认: 1
+    - [x] JICOFO_AUTH_USER
+    - [x] JICOFO_AUTH_PASSWORD
+    - [x] XMPP_MUC_DOMAIN
+    - [x] JICOFO_RESERVATION_ENABLED, 默认: false
+    - [ ] JICOFO_RESERVATION_ENABLED
+    - [ ] JICOFO_RESERVATION_REST_BASE_URL
+
 ###### 2) 参考资料
 
 ##### 2.3.1.4 JVB, 提供SFU服务
 
-###### 1) 工程化
+###### 1) 容器化
+
+- 容器运行
+  - 环境变量
+    - [ ] ENABLE_COLIBRI_WEBSOCKET, 默认: 1
+    - [ ] ENABLE_OCTO, 默认: 0
+    - [ ] JVB_TCP_PORT, 默认: 4443
+    - [ ] JVB_TCP_MAPPED_PORT, 默认: JVB_TCP_PORT
+    - [x] PUBLIC_URL, 默认: https://localhost:8443
+    - [ ] JVB_WS_DOMAIN, 默认: PUBLIC_URL_DOMAIN
+    - [ ] JVB_WS_SERVER_ID, 默认: LOCAL_ADDRESS
+    - [ ] JVB_PORT
+    - [ ] JVB_TCP_HARVESTER_DISABLED, 默认: true
+    - [x] XMPP_SERVER
+    - [x] XMPP_AUTH_DOMAIN
+    - [x] JVB_AUTH_USER
+    - [x] JVB_AUTH_PASSWORD
+    - [x] JVB_BREWERY_MUC,  MUC_JIDS = "{{ .Env.JVB_BREWERY_MUC }}@{{ .Env.XMPP_INTERNAL_MUC_DOMAIN }}"
+    - [x] XMPP_INTERNAL_MUC_DOMAIN
+    - [ ]  HOSTNAME
+    - [ ] JVB_OCTO_BIND_ADDRESS, 默认: 0.0.0.0
+    - [ ] JVB_OCTO_PUBLIC_ADDRESS
+    - [ ] JVB_OCTO_BIND_PORT, 默认: 4096
+    - [ ] JVB_OCTO_REGION, 默认: europe
+    - [x] JVB_STUN_SERVERS
+    - [ ] SENTRY_DSN, 默认: 0
+    - [x] DOCKER_HOST_ADDRESS
+    - [x] LOCAL_ADDRES
+
 ###### 2) 参考资料
 
 ## 三. RFC汇总及参考资料
