@@ -979,6 +979,10 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
 
   - register模块
 
+  - admin_adhoc模块
+
+  - posix模块
+
   - websocket模块
 
     - nginx方向代理
@@ -1080,8 +1084,8 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
     - rootfs/etc/**services.d**/10-saslauthd           #运行阶段
   - 环境变量
     - **prosody.cfg.lua**
-      - LOG_LEVEL
-      - GLOBAL_MODULES
+      - LOG_LEVEL, 默认: info
+      - GLOBAL_MODULES, 用于设置prosody插件, 例如: bosh, http_files
       - GLOBAL_CONFIG
     - **saslauthd.conf**
       - [ ] AUTH_TYPE, 默认: internal, 其他还有ldap, jwt
@@ -1122,7 +1126,6 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
       - [x] TURN_PORT, 默认: 443
       - [x] TURNS_PORT, 默认: 443
       - [x] JICOFO_AUTH_USER
-      - [x] JVB_AUTH_USER
       - [x] JVB_AUTH_USER
       - [x] TURN_CREDENTIALS
       - [x] XMPP_MUC_DOMAIN
@@ -1181,7 +1184,6 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
     - [x] JICOFO_AUTH_PASSWORD
     - [x] XMPP_MUC_DOMAIN
     - [x] JICOFO_RESERVATION_ENABLED, 默认: false
-    - [ ] JICOFO_RESERVATION_ENABLED
     - [ ] JICOFO_RESERVATION_REST_BASE_URL
 
 ###### 2) 参考资料
