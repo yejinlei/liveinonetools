@@ -215,44 +215,11 @@
 
 | 图示                                               | 说明                                                         |
 | -------------------------------------------------- | ------------------------------------------------------------ |
-| <img src="doc/full_cone.jpg" style="zoom:200%;" /> | **Full Cone NAT - 完全锥型NAT:**<br />所有从同一内网IP和端口号发送过来的请求都会被映射成同一个外网IP和端口号，并且任何一个外网主机都可以通过这个映射的外网IP和端口号向这台内网主机发送包。。由于对外部请求的来源无任何限制，因此这种方式虽然足够简单，但却不安全。<br />{<br/>     内网IP ， <br/>     内网端口， <br/>     映射的外网IP， <br/>     映射的外网端口<br />} |
-| ![ ](doc/Address_Restricted_cone.jpg)              | **Restricted Cone NAT - IP限制锥型NAT:**<br />所有从同一个内网IP和端口号发送的过来的请求都会被映射成同一个外网IP和端口号。与完全锥型不同的是，外网主机只能够向先前已经向它发送过数据包的内网主机发送包。这意味着，NAT设备只向内转发那些来自于当前已知的外部主机的数据包，从而保障了外部请求来源的安全性。<br />{<br/>    内网IP ， <br/>    内网端口， <br/>    映射的外网IP， <br/>    映射的外网端口，<br/>   [ <br />       **被访问主机的IP ， … <br />**   ]<br />} |
-| ![](doc/Port_Restricted_cone.jpg)                  | **Port Restricted Cone NAT - 端口限制锥型NAT:**<br />与限制锥型NAT很相似，只不过它包括端口号。也就是说，一台IP地址X和端口P的外网主机想给内网主机发送包，必须是这台内网主机先前已经给这个IP地址X和端口号P发送过数据包。端口号P这一要求进一步强化了对外部报文请求来源的限制，从而较Restrictd Cone更具安全性。<br />{<br/>     内网IP ， <br/>     内网端口， <br/>     映射的外网IP， <br/>     映射的外网端口，<br/>     [ <br/>         **{ 被访问主机的IP , 被访问主机的端口} ，  … <br/>**     ]<br />} |
-| <img src="doc/Symmetric.jpg" style="zoom:200%;" /> | **Symmetric NAT - 对称NAT:**<br />所有从同一个内网IP和端口号发送到一个特定目的IP和端口号的请求，都会被映射到同一个IP和端口号，如果同一台主机使用相同的源地址和端口号发送包，但是发往不同的目的地，NAT将会使用不同的映射。此外，只有收到的数据的外网主机才可以反过来向内网主机发送包。<br />{<br/>     内网IP ， <br/>     内网端口， <br/>     **//不仅访问地址变化了， 映射IP也要发生变化** <br/>     映射的外网IP ， <br/>     **// 不仅访问端口变化了， 映射端口也要发生变化** <br/>     映射的外网端口，<br/>     被访问主机的IP, <br/>     被访问主机的端口<br/>} |
+| <img src="doc/full_cone.jpg" style="zoom:200%;" /> | **Full Cone NAT - 完全锥型NAT:**<br />所有从同一内网主机IP和端口号发送过来的请求都会被映射成同一个外网IP和端口号，并且任何一个外网主机都可以通过这个映射的外网IP和端口号向这台内网主机发送包。由于对外部请求的来源无任何限制，因此这种方式虽然足够简单，但却不安全。<br /><br />流量out, 根据Key生成一个 “洞” 记录<br />key: (内网主机IP, 内网主机Port)<br />value: (<br/>     (NAT主机IP，NAT主机Port)<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if (remote.dst.ip, remote.dst.port)  == (NAT主机IP，NAT主机Port):<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
+| ![ ](doc/Address_Restricted_cone.jpg)              | **Restricted Cone NAT - IP限制锥型NAT:**<br />所有从同一个内网主机IP和端口号发送的过来的请求都会被映射成同一个外网IP和端口号。与完全锥型不同的是，外网主机只能够向先前已经向它发送过数据包的内网主机发送包。这意味着，NAT设备只向内转发那些来自于当前已知的外部主机的数据包，从而保障了外部请求来源的安全性。<br /><br />流量out, 根据Key生成一个 “洞” 记录<br />key: (内网主机IP, 内网主机Port)<br />value: (<br/>     (NAT主机IP，NAT主机Port)<br /><br />     //远程主机IP插入列表<br />     **[(远程主机IP), ...]**<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if (remote.dst.ip, remote.dst.port)  == (NAT主机IP，NAT主机Port) && remote.ip in **[远程主机IP, ...]**:<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
+| ![](doc/Port_Restricted_cone.jpg)                  | **Port Restricted Cone NAT - 端口限制锥型NAT:**<br />与限制锥型NAT很相似，只不过它包括端口号。也就是说，一台IP地址X和端口P的外网主机想给内网主机发送包，必须是这台内网主机先前已经给这个IP地址X和端口号P发送过数据包。端口号P这一要求进一步强化了对外部报文请求来源的限制，从而较Restrictd Cone更具安全性。<br /><br />流量out, 根据Key生成一个 “洞” 记录<br />key: (内网主机IP, 内网主机Port)<br />value: (<br/>      (NAT主机IP，NAT主机Port)<br /><br />     //远程主机IP和Port插入列表<br />     **[(远程主机IP, 远程主机Port), ...]**<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if (remote.dst.ip, remote.dst.port)  == (NAT主机IP，NAT主机Port) && (remote.ip, remote.port) in **[(远程主机IP, 远程主机Port), ...]**:<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
+| <img src="doc/Symmetric.jpg" style="zoom:200%;" /> | **Symmetric NAT - 对称NAT:**<br />所有从同一个内网主机IP和端口号发送到一个特定目的IP和端口号的请求，都会被映射到同一个IP和端口号，如果同一台主机使用相同的源地址和端口号发送包，但是发往不同的目的地，NAT将会使用不同的映射。此外，只有收到的数据的外网主机才可以反过来向内网主机发送包。<br /><br />流量out, Key相比端口限制锥型NAT更严格, 因此会生成更多的“洞”<br />key: (内网主机IP, 内网主机Port, 远程主机IP, 远程主机Port)<br />value: (<br/>      (NAT主机IP，NAT主机Port)<br /><br />      (远程主机IP, 远程主机Port)<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if (remote.dst.ip, remote.dst.port)  == (NAT主机IP，NAT主机Port) && (remote..src.ip, remote.src.port) == (远程主机IP, 远程主机Port):<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
 |                                                    |                                                              |
-
-- RFC5780中的NAT类型
-
-  | Mapping | Filtering |
-  | ---- | ---- |
-  | ![](doc/端点无关的隐射NAT.png)     |  ![](doc/端点无关的过滤NAT.png)    |
-  | | |
-  | ![](doc/地址相关的隐射NAT.png)     |  ![](doc/地址相关的过滤NAT.png)    |
-  | | |
-  | ![](doc/地址和端口相关的隐射NAT.png)     | ![](doc/地址和端口相关的过滤NAT.png)     |
-  
-- RFC3489与RFC5780 NAT对应关系
-
-  ![](doc/rfc3489_rfc5780.png)
-
-- 不同NAT组合的穿透性
-
-
-
-![](doc/NAT_NAT.png)
-
-- 具体分析
-
-  | 图示及说明                                                   |
-  | ------------------------------------------------------------ |
-  | ![](doc/Full_Cone-Full_Cone.png)<br />**在ICE/STUN协助下, 打过“洞”之后, 任意全锥型发起都可通信** |
-  | ![](doc/Full_Cone-Port_Restricted_Cone.png)<br />**在ICE/STUN协助下, 打过“洞”之后, 端口受限锥型发起可通信** |
-  | ![](doc/Full_Cone-Symmetric_NAT.png)<br />**在ICE/STUN协助下,  打过“洞”之后, 对称型发起可通信** |
-  | ![](doc/Port_Restricted_Cone-Port_Restricted_Cone.png)<br />**在ICE/STUN协助下,  打过“洞”之后, 任意端口受限锥型发起可通信** |
-  | ![](doc/Restricted_Cone-Symmetric_NAT.png)<br />**在ICE/STUN协助下,  打过“洞”之后, 对称型发起可通信** |
-  | ![](doc/Symmetric_NAT-Symmetric_NAT.png)<br />**即使打过“洞”, 任何发起都无法通信** |
-
-
 - NAT类型检测
 
   ![](doc/Binding_Lifetime_Discovery.png)
@@ -385,6 +352,38 @@ External Port: None
 #pystun检测代码, https://github1s.com/jtriley/pystun/blob/HEAD/stun/__init__.py#L105-L182
 ```
 
+- RFC5780中的NAT类型
+
+  | Mapping | Filtering |
+  | ---- | ---- |
+  | ![](doc/端点无关的隐射NAT.png)     |  ![](doc/端点无关的过滤NAT.png)    |
+  | | |
+  | ![](doc/地址相关的隐射NAT.png)     |  ![](doc/地址相关的过滤NAT.png)    |
+  | | |
+  | ![](doc/地址和端口相关的隐射NAT.png)     | ![](doc/地址和端口相关的过滤NAT.png)     |
+  
+- RFC3489与RFC5780 NAT对应关系
+
+  ![](doc/rfc3489_rfc5780.png)
+
+- 不同NAT组合的穿透性
+
+
+
+![](doc/NAT_NAT.png)
+
+- 具体分析
+
+  | 图示及说明                                                   |
+  | ------------------------------------------------------------ |
+  | ![](doc/Full_Cone-Full_Cone.png)<br />**在ICE/STUN协助下, 打过“洞”之后, 任意全锥型发起都可通信** |
+  | ![](doc/Full_Cone-Port_Restricted_Cone.png)<br />**在ICE/STUN协助下, 打过“洞”之后, 端口受限锥型发起可通信** |
+  | ![](doc/Full_Cone-Symmetric_NAT.png)<br />**在ICE/STUN协助下,  打过“洞”之后, 对称型发起可通信** |
+  | ![](doc/Port_Restricted_Cone-Port_Restricted_Cone.png)<br />**在ICE/STUN协助下,  打过“洞”之后, 任意端口受限锥型发起可通信** |
+  | ![](doc/Restricted_Cone-Symmetric_NAT.png)<br />**在ICE/STUN协助下,  打过“洞”之后, 对称型发起可通信** |
+  | ![](doc/Symmetric_NAT-Symmetric_NAT.png)<br />**即使打过“洞”, 任何发起都无法通信** |
+
+
 ###### 3) stund
 
 
@@ -431,14 +430,14 @@ External Port: None
 
 ##### 2.1.5  参考资料
 
-- [RFC 3489: STUN - Simple Traversal of User Datagram Protocol (UDP) Through Network Address Translators (NATs)](https://datatracker.ietf.org/doc/html/rfc3489)
+- [RFC 3489: STUN - Simple Traversal of User Datagram Protocol (UDP) Through Network Address Translators (NATs)](https://datatracker.ietf.org/doc/html/rfc3489), [CN](rfc/RFC3489_CN.pdf)
 - [RFC 4787: Network Address Translation (NAT) Behavioral Requirements for Unicast UDP](https://datatracker.ietf.org/doc/html/rfc4787)
-- [RFC 5389: Session Traversal Utilities for NAT (STUN)](https://tools.ietf.org/html/rfc5389)
+- [RFC 5389: Session Traversal Utilities for NAT (STUN)](https://tools.ietf.org/html/rfc5389), [CN](rfc/RFC5389_CN.pdf)
 - [RFC 5769: Test Vectors for Session Traversal Utilities for NAT (STUN)](https://datatracker.ietf.org/doc/html/rfc5769)
 - [RFC 5780: NAT Behavior Discovery Using STUN](https://tools.ietf.org/html/rfc5780)
 - [RFC 7064: URI Scheme for STUN](https://tools.ietf.org/html/rfc7064)
 - [RFC 5766: TURN: Relay Extensions to STUN](https://tools.ietf.org/html/rfc5766)
-- [RFC 5245: ICE: A Protocol for NAT for Offer/Answer Protocols](https://tools.ietf.org/html/rfc5245)
+- [RFC 5245: ICE: A Protocol for NAT for Offer/Answer Protocols](https://tools.ietf.org/html/rfc5245), [CN](rfc/RFC5245_CN.pdf)
 - [RFC 6062: TURN Extensions for TCP Allocations](https://tools.ietf.org/html/rfc6062)
 - [RFC 7065: TURN URI](https://tools.ietf.org/html/rfc7065)
 - [RFC 6544: TCP Candidates with ICE](https://tools.ietf.org/html/rfc6544)
@@ -535,7 +534,7 @@ External Port: None
 
     - host, 浏览器所在本机IP
     - srflx, 浏览器所在外网IP, reflexive
-    - relay, turn服务器所在内网IP
+    - relay, turn服务器所在内网主机IP
     - udp/tcp,  stun协议同时支持udp和tcp, 上述结果表明tcp协议只获取host IP, udp可以获取所有IP
 
   - turnserver -n -o -u user:userpassword -a -r 121.37.143.208:3478 **--stun-only**    #只开启stun
@@ -551,7 +550,7 @@ relay-device=eth0
 listening-port=3478
 tls-listening-port=5349
 relay-ip=192.168.0.52
-#公网IP/内网IP
+#公网IP/内网主机IP
 external-ip=121.37.143.208/192.168.0.52
 #relay-threads=1
 #fingerprint
@@ -682,7 +681,7 @@ Address: 2600:1f16:8c5:101::108
 turnutils_stunclient 121.37.143.208        
 ========================================
 RFC 5780 response 1
-0: IPv4. Response origin: : 192.168.0.52:3478       #192.168.0.52是内网IP, 121.37.143.208是映射地址
+0: IPv4. Response origin: : 192.168.0.52:3478       #192.168.0.52是内网主机IP, 121.37.143.208是映射地址
 0: IPv4. Other addr: : 192.168.0.52:3479
 0: IPv4. UDP reflexive addr: 202.101.191.36:5028
 ```
@@ -744,7 +743,7 @@ turnutils_uclient -u user -w userpassword -L 172.22.61.84 -v 121.37.143.208
 ./turnutils_peer -v 121.37.143.208
 
 #在机器B上, 使用turnutils_uclient, 地址172.22.61.84, 与A建立连接后, 会收到A发送的消息
-turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 10.13.4.102  #-e 10.13.4.102, 此处为A内网IP
+turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 10.13.4.102  #-e 10.13.4.102, 此处为A内网主机IP
 ========================================
 0: IPv4. Connected from: 172.22.61.84:50104                               
 0: IPv4. Connected to: 121.37.143.208:3478                               
