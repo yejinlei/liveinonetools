@@ -180,6 +180,8 @@
 
 #### 2.1 STUN/TURN/ICE
 
+​	
+
 ##### 2.1.1  STUN
 
 ​		这里介绍STUN两种用法: 1. 获取服务器反射地址srflx；  2. 借助STUN获取NAT类型以及不同NAT的穿透性；
@@ -215,59 +217,17 @@
 
 | 图示                                               | 说明                                                         |
 | -------------------------------------------------- | ------------------------------------------------------------ |
-| <img src="doc/full_cone.jpg" style="zoom:200%;" /> | **Full Cone NAT - 完全锥型NAT:**<br />所有从同一内网主机IP和端口号发送过来的请求都会被映射成同一个外网IP和端口号，并且任何一个外网主机都可以通过这个映射的外网IP和端口号向这台内网主机发送包。由于对外部请求的来源无任何限制，因此这种方式虽然足够简单，但却不安全。<br /><br />流量out, 根据Key生成一个 “洞” 记录<br />key: (内网主机IP, 内网主机Port)<br />value: (<br/>     (NAT主机IP，NAT主机Port)<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if (remote.dst.ip, remote.dst.port)  == (NAT主机IP，NAT主机Port):<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
-| ![ ](doc/Address_Restricted_cone.jpg)              | **Restricted Cone NAT - IP限制锥型NAT:**<br />所有从同一个内网主机IP和端口号发送的过来的请求都会被映射成同一个外网IP和端口号。与完全锥型不同的是，外网主机只能够向先前已经向它发送过数据包的内网主机发送包。这意味着，NAT设备只向内转发那些来自于当前已知的外部主机的数据包，从而保障了外部请求来源的安全性。<br /><br />流量out, 根据Key生成一个 “洞” 记录<br />key: (内网主机IP, 内网主机Port)<br />value: (<br/>     (NAT主机IP，NAT主机Port)<br /><br />     //远程主机IP插入列表<br />     **[(远程主机IP), ...]**<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if (remote.dst.ip, remote.dst.port)  == (NAT主机IP，NAT主机Port) && remote.ip in **[远程主机IP, ...]**:<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
-| ![](doc/Port_Restricted_cone.jpg)                  | **Port Restricted Cone NAT - 端口限制锥型NAT:**<br />与限制锥型NAT很相似，只不过它包括端口号。也就是说，一台IP地址X和端口P的外网主机想给内网主机发送包，必须是这台内网主机先前已经给这个IP地址X和端口号P发送过数据包。端口号P这一要求进一步强化了对外部报文请求来源的限制，从而较Restrictd Cone更具安全性。<br /><br />流量out, 根据Key生成一个 “洞” 记录<br />key: (内网主机IP, 内网主机Port)<br />value: (<br/>      (NAT主机IP，NAT主机Port)<br /><br />     //远程主机IP和Port插入列表<br />     **[(远程主机IP, 远程主机Port), ...]**<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if (remote.dst.ip, remote.dst.port)  == (NAT主机IP，NAT主机Port) && (remote.ip, remote.port) in **[(远程主机IP, 远程主机Port), ...]**:<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
-| <img src="doc/Symmetric.jpg" style="zoom:200%;" /> | **Symmetric NAT - 对称NAT:**<br />所有从同一个内网主机IP和端口号发送到一个特定目的IP和端口号的请求，都会被映射到同一个IP和端口号，如果同一台主机使用相同的源地址和端口号发送包，但是发往不同的目的地，NAT将会使用不同的映射。此外，只有收到的数据的外网主机才可以反过来向内网主机发送包。<br /><br />流量out, Key相比端口限制锥型NAT更严格, 因此会生成更多的“洞”<br />key: (内网主机IP, 内网主机Port, 远程主机IP, 远程主机Port)<br />value: (<br/>      (NAT主机IP，NAT主机Port)<br /><br />      (远程主机IP, 远程主机Port)<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if (remote.dst.ip, remote.dst.port)  == (NAT主机IP，NAT主机Port) && (remote..src.ip, remote.src.port) == (远程主机IP, 远程主机Port):<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
+| <img src="doc/full_cone.jpg" style="zoom:200%;" /> | **Full Cone NAT - 完全锥型NAT:**<br />所有从同一内网主机IP和端口号发送过来的请求都会被映射成同一个外网IP和端口号，并且任何一个外网主机都可以通过这个映射的外网IP和端口号向这台内网主机发送包。由于对外部请求的来源无任何限制，因此这种方式虽然足够简单，但却不安全。<br /><br />流量out, 根据Key生成一个 “洞” 记录<br />key: (内网主机IP, 内网主机Port)<br />value: (<br/>     NAT主机Port<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if remote.dst.port) == NAT主机Port:<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
+| ![ ](doc/Address_Restricted_cone.jpg)              | **Restricted Cone NAT - IP限制锥型NAT:**<br />所有从同一个内网主机IP和端口号发送的过来的请求都会被映射成同一个外网IP和端口号。与完全锥型不同的是，外网主机只能够向先前已经向它发送过数据包的内网主机发送包。这意味着，NAT设备只向内转发那些来自于当前已知的外部主机的数据包，从而保障了外部请求来源的安全性。<br /><br />流量out, 根据Key生成一个 “洞” 记录<br />key: (内网主机IP, 内网主机Port)<br />value: (<br/>     NAT主机Port<br /><br />     //远程主机IP插入列表<br />     **[(远程主机IP), ...]**<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if remote.dst.port  == NAT主机Port && remote.ip in **[远程主机IP, ...]**:<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
+| ![](doc/Port_Restricted_cone.jpg)                  | **Port Restricted Cone NAT - 端口限制锥型NAT:**<br />与限制锥型NAT很相似，只不过它包括端口号。也就是说，一台IP地址X和端口P的外网主机想给内网主机发送包，必须是这台内网主机先前已经给这个IP地址X和端口号P发送过数据包。端口号P这一要求进一步强化了对外部报文请求来源的限制，从而较Restrictd Cone更具安全性。<br /><br />流量out, 根据Key生成一个 “洞” 记录<br />key: (内网主机IP, 内网主机Port)<br />value: (<br/>      NAT主机Port<br /><br />     //远程主机IP和Port插入列表<br />     **[(远程主机IP, 远程主机Port), ...]**<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if remote.dst.port  == NAT主机Port && (remote.ip, remote.port) in **[(远程主机IP, 远程主机Port), ...]**:<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
+| <img src="doc/Symmetric.jpg" style="zoom:200%;" /> | **Symmetric NAT - 对称NAT:**<br />所有从同一个内网主机IP和端口号发送到一个特定目的IP和端口号的请求，都会被映射到同一个IP和端口号，如果同一台主机使用相同的源地址和端口号发送包，但是发往不同的目的地，NAT将会使用不同的映射。此外，只有收到的数据的外网主机才可以反过来向内网主机发送包。<br /><br />流量out, Key相比端口限制锥型NAT更严格, 因此会生成更多的“洞”<br />key: (内网主机IP, 内网主机Port, 远程主机IP, 远程主机Port)<br />value: (<br/>      NAT主机Port<br /><br />      (远程主机IP, 远程主机Port)<br /> )<br /><br />流量in<br />for  洞  in 所有洞:<br />         if remote.dst.port  == NAT主机Port && (remote..src.ip, remote.src.port) == (远程主机IP, 远程主机Port):<br />                   NAT主机 转发流量  (内网主机IP ，内网主机Port) |
 |                                                    |                                                              |
 - NAT类型检测
 
-  ![](doc/Binding_Lifetime_Discovery.png)
+  ![](doc/nat_test_rfc3478.jpg)
 
-​															*NAT检测原理 摘自: https://datatracker.ietf.org/doc/html/rfc3489#page-22*
+​															*NAT检测原理 : https://datatracker.ietf.org/doc/html/rfc3489#page-22*
 
-```sh
-turnutils_natdiscovery -m -f -= Mapping Behavior Discovery =-
-
--= Mapping Behavior Discovery =-
-
-========================================
-RFC 5780 response 1
-No ALG: Mapped == XOR-Mapped
-0: IPv4. Response origin: : 123.60.88.103:3478
-0: IPv4. Other addr: : 123.60.88.103:3479
-0: IPv4. UDP reflexive addr: 112.17.99.6:4961
-0: IPv4. Local addr: : 0.0.0.0:32872
-
-========================================
-RFC 5780 response 2
-No ALG: Mapped == XOR-Mapped
-0: IPv4. Response origin: : 123.60.88.103:3478
-0: IPv4. Other addr: : 123.60.88.103:3479
-0: IPv4. UDP reflexive addr: 112.17.99.6:4961
-0: IPv4. Local addr: : 0.0.0.0:32872
-
-========================================
-NAT with Endpoint Independent Mapping!
-========================================
-
--= Filtering Behavior Discovery =-
-
-========================================
-RFC 5780 response 3
-No ALG: Mapped == XOR-Mapped
-0: IPv4. Response origin: : 123.60.88.103:3478
-0: IPv4. Other addr: : 123.60.88.103:3479
-0: IPv4. UDP reflexive addr: 112.17.99.6:4962
-0: IPv4. Local addr: : 0.0.0.0:32826
-STUN receive timeout..
-STUN receive timeout..
-
-========================================
-NAT with Address and Port Dependent Filtering!
-========================================
-
-```
 
 ```sh
 ➜  bin git:(master) ✗ sudo pystun -H stun.voipbuster.com -d
@@ -352,6 +312,18 @@ External Port: None
 #pystun检测代码, https://github1s.com/jtriley/pystun/blob/HEAD/stun/__init__.py#L105-L182
 ```
 
+- 不同NAT组合的穿透性
+
+![](doc/NAT_NAT.png)
+
+- 具体分析
+
+  | 图示及说明                                                   |
+  | ------------------------------------------------------------ |
+  | ![](doc/Full_Cone-Full_Cone.png)<br />**借助第三方Proxy,  Full Cone-Full Cone, 可以通信** |
+  | ![](doc/Port_Restricted_Cone-Port_Restricted_Cone.png)<br />**借助第三方Proxy,  Full cone/restricted-restricted, 可以通信** |
+  | ![](doc/Full_Cone-Symmetric_NAT.png)<br />**借助第三方Proxy, Full cone/IP restricted-symmetric, 可以通信** |
+  
 - RFC5780中的NAT类型
 
   | Mapping | Filtering |
@@ -365,23 +337,6 @@ External Port: None
 - RFC3489与RFC5780 NAT对应关系
 
   ![](doc/rfc3489_rfc5780.png)
-
-- 不同NAT组合的穿透性
-
-
-
-![](doc/NAT_NAT.png)
-
-- 具体分析
-
-  | 图示及说明                                                   |
-  | ------------------------------------------------------------ |
-  | ![](doc/Full_Cone-Full_Cone.png)<br />**在ICE/STUN协助下, 打过“洞”之后, 任意全锥型发起都可通信** |
-  | ![](doc/Full_Cone-Port_Restricted_Cone.png)<br />**在ICE/STUN协助下, 打过“洞”之后, 端口受限锥型发起可通信** |
-  | ![](doc/Full_Cone-Symmetric_NAT.png)<br />**在ICE/STUN协助下,  打过“洞”之后, 对称型发起可通信** |
-  | ![](doc/Port_Restricted_Cone-Port_Restricted_Cone.png)<br />**在ICE/STUN协助下,  打过“洞”之后, 任意端口受限锥型发起可通信** |
-  | ![](doc/Restricted_Cone-Symmetric_NAT.png)<br />**在ICE/STUN协助下,  打过“洞”之后, 对称型发起可通信** |
-  | ![](doc/Symmetric_NAT-Symmetric_NAT.png)<br />**即使打过“洞”, 任何发起都无法通信** |
 
 
 ###### 3) stund
