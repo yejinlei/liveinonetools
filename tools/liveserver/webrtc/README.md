@@ -4,7 +4,7 @@
 
 1. 信令部分
    1. WebSocket/SSE/XHR/Other
-   2. 会话描述协议SDP
+   2. SDP/Javsscript会话描述协议JSEP
    3. XMPP/SIP
    4. HTTP
    
@@ -79,7 +79,7 @@
   - [Comet技术详解：基于HTTP长连接的Web端实时通信技术](http://www.52im.net/thread-334-1-1.html)
   - [开源Comet服务器iComet：支持百万并发的Web端即时通讯方案](http://www.52im.net/thread-330-1-1.html)
 
-#### 1.2 SDP会话描述协议
+#### 1.2 SDP/Javsscript会话描述协议JSEP
 
 - 标准SDP/planB/unifiedPlan
 
@@ -180,9 +180,31 @@
 
 #### 2.1 STUN/TURN/ICE
 
-​	
+##### 2.1.1  ICE
 
-##### 2.1.1  STUN
+​         交互式连通性建立（Interactive Connectivity Establishment - ICE）是一个允许实时对等端发现对方并且彼此连接的**框架**。ICE可以找到媒体传输的最短路径, 同时允许我们穿过防火墙和NAT进行工作.
+
+1. ICE 代理向操作系统查询本地 IP 地址；
+2. 如果有配置,ICE 代理会查询外部 STUN 服务器,以取得本地端的公共 IP 和端口号；
+3. 如果有配置,ICE 代理会将 TURN 服务器追加为最后一个候选项；假如端到端的连接失败,数据将通过指定的中间设备转发。
+
+###### 1) ICE流程
+
+![](./doc/ice流程.png)
+
+###### 2) ICE candidate类型
+
+| 类型             | 别名  | 如何传给对端     | 用法                                                         |
+| ---------------- | ----- | ---------------- | ------------------------------------------------------------ |
+| 主机候选项       | host  | 信令服务器       | 从网卡中获取的本地传输地址，如果此地址位于NAT之后，则为内网地址 |
+| 服务器反射候选项 | srflx | 信令服务器       | 从发送给Stun服务器的Binding检查中获取的传输地址。如果此地址位于NAT之后，则为最外层NAT的公网地址 |
+| 对端反射候选项   | prflx | Stun Binding请求 | 从对端发送的Stun Binding请求获取的传输地址。这是一种在连接检查期间新发生的候选项 |
+| 中继候选项       | relay | 信令服务器       | 媒体中继服务器的传输地址。通过使用TURN Allocate请求获取      |
+
+###### 3) 参考资料
+- [jitsi/ice4j](https://github.com/jitsi/ice4j)	
+
+##### 2.1.2  STUN
 
 ​		这里介绍STUN两种用法: 1. 获取服务器反射地址srflx；  2. 借助STUN获取NAT类型以及不同NAT的穿透性；
 
@@ -212,7 +234,7 @@
 
 
 
-###### 2) NAT类型及穿透性
+###### 2) RFC3489中NAT类型, 检测及穿透性
 - RFC3489中的NAT类型
 
 | 图示                                               | 说明                                                         |
@@ -225,67 +247,52 @@
 - NAT类型检测
 
   ![](doc/nat_test_rfc3478.jpg)
+  ![](doc/Binding_Lifetime_Discovery.png)
 
 ​															*NAT检测原理 : https://datatracker.ietf.org/doc/html/rfc3489#page-22*
 
 
-```sh
-➜  bin git:(master) ✗ sudo pystun -H stun.voipbuster.com -d
-DEBUG:pystun:Do Test1
-DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:recvfrom: ('77.72.169.212', 3478)
-DEBUG:pystun:Result: {'ExternalIP': '124.160.115.189', 'Resp': True, 'ExternalPort': 62357, 'ChangedPort': 3479, 'SourcePort': 3478, 'SourceIP': '77.72.169.212', 'ChangedIP': '77.72.169.213'}
-DEBUG:pystun:Do Test2
-DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:Result: {'ExternalIP': None, 'Resp': False, 'ExternalPort': None, 'ChangedPort': None, 'SourcePort': None, 'SourceIP': None, 'ChangedIP': None}
-DEBUG:pystun:Do Test1
-DEBUG:pystun:sendto: ('77.72.169.213', 3479)
-DEBUG:pystun:sendto: ('77.72.169.213', 3479)
-DEBUG:pystun:recvfrom: ('77.72.169.213', 3479)
-DEBUG:pystun:Result: {'ExternalIP': '23.90.145.69', 'Resp': True, 'ExternalPort': 2100, 'ChangedPort': 3478, 'SourcePort': 3479, 'SourceIP': '77.72.169.213', 'ChangedIP': '77.72.169.212'}
-NAT Type: Symmetric NAT
-External IP: 23.90.145.69
-External Port: 2100
 
-➜  bin git:(master) ✗ sudo pystun -H stun.voipbuster.com -d
+NAT类型判断算法整体流程大至是，先判断防火墙是否阻止所有udp包进来，再判断是否是公网ip，再判断是否为全锥型，然后判断是否是对称型，最后判断是否是端口或地址限制型。
+
+下面描述详细的判断过程,过程中需要与3台具有不同IP的服务器交互辅助。我们把这3台服务器称之为“协调服务器”,分别称为s1,s2,s3。
+
+判断路由器防火墙是否防止所有UDP包进入 客户端向s1:30017发送一UDP包，s1收到后直接返回一udp数据包，如果客记端收不到s1的回包，那么判定为阻止所有udp,判断结束,否则进入一下判断。为了降低udp在网络中丢失，此过程可以重复多次。
+
+判断主机是否直连公网 客户端收到s1回复，s1在处理时取出客户端的ip放入回复包里，客户商解析出数据区的ip与本机本地取出的所有ip对比，看是否存在匹配。存在匹配即认定当前主机是直接连接在公网上的，中间没有经过任何网关路由器,判断结束,否则进入一下判断。
+
+判断当前网络的网关路由器是否为全锥型 客户端向s1:30017端口发送消息请求s1通知s3从不同于30017端口回一个udp消息包，如果客户端能收到s3的回复。那判定为全锥型nat，否则进入下一步判断。
+
+判断是否为对称型nat 客户端分别向s1:30018,s2:30018发送udp消息，s1,s2收到包后，取出客户端的ip:port放入数据包发送回给客户端。客户端这样就取回自己的两份公网ip:port数据,客户端对比这两个地址，如果这两ip:port不一样那么就是客户端网关就是对称型。否则就是锥型，要么是地址限制型，要么是端口限制型。就需要继续向下判断了。
+
+判断是地址限制型还是端口限制型nat 客户端向s1:30018发消息，请求s1从另一个端口回复一个消息比如端口6000。如果客户端收到了s1所回复的消息，那么判定为地址限制型而非端口限制型。否则收不到回复就判定为端口限制型。因为s1从非30018端口回复消息补路由器阻止了。
+
+
+```sh
+➜  webrtc git:(master) ✗ pystun -H stun.voipbuster.com -d
 DEBUG:pystun:Do Test1
 DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:recvfrom: ('77.72.169.211', 3478)
-DEBUG:pystun:Result: {'ExternalIP': '23.90.145.69', 'Resp': True, 'ExternalPort': 9395, 'ChangedPort': 3479, 'SourcePort': 3478, 'SourceIP': '77.72.169.211', 'ChangedIP': '77.72.169.210'}
+DEBUG:pystun:recvfrom: ('77.72.169.210', 3478)
+DEBUG:pystun:Result: {'ExternalIP': '154.18.175.68', 'Resp': True, 'ExternalPort': 45598, 'ChangedPort': 3479, 'SourcePort': 3478, 'SourceIP': '77.72.169.210', 'ChangedIP': '77.72.169.211'}
 DEBUG:pystun:Do Test2
+DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
+DEBUG:pystun:recvfrom: ('77.72.169.210', 3478)
+DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
+DEBUG:pystun:recvfrom: ('77.72.169.210', 3478)
+DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
+DEBUG:pystun:recvfrom: ('77.72.169.210', 3478)
 DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
 DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
 DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
 DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
 DEBUG:pystun:Result: {'ExternalIP': None, 'Resp': False, 'ExternalPort': None, 'ChangedPort': None, 'SourcePort': None, 'SourceIP': None, 'ChangedIP': None}
 DEBUG:pystun:Do Test1
-DEBUG:pystun:sendto: ('77.72.169.210', 3479)
-DEBUG:pystun:recvfrom: ('77.72.169.210', 3479)
-DEBUG:pystun:Result: {'ExternalIP': '23.90.145.69', 'Resp': True, 'ExternalPort': 10238, 'ChangedPort': 3478, 'SourcePort': 3479, 'SourceIP': '77.72.169.210', 'ChangedIP': '77.72.169.211'}
+DEBUG:pystun:sendto: ('77.72.169.211', 3479)
+DEBUG:pystun:recvfrom: ('77.72.169.211', 3479)
+DEBUG:pystun:Result: {'ExternalIP': '91.240.163.98', 'Resp': True, 'ExternalPort': 46085, 'ChangedPort': 3478, 'SourcePort': 3479, 'SourceIP': '77.72.169.211', 'ChangedIP': '77.72.169.210'}
 NAT Type: Symmetric NAT
-External IP: 23.90.145.69
-External Port: 10238                                                                                                                                                  
-pystun -H stun.voipbuster.com -d
-DEBUG:pystun:Do Test1
-DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:recvfrom: ('77.72.169.211', 3478)
-DEBUG:pystun:Result: {'ExternalIP': '23.90.145.69', 'Resp': True, 'ExternalPort': 9395, 'ChangedPort': 3479, 'SourcePort': 3478, 'SourceIP': '77.72.169.211', 'ChangedIP': '77.72.169.210'}
-DEBUG:pystun:Do Test2
-DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:sendto: ('stun.voipbuster.com', 3478)
-DEBUG:pystun:Result: {'ExternalIP': None, 'Resp': False, 'ExternalPort': None, 'ChangedPort': None, 'SourcePort': None, 'SourceIP': None, 'ChangedIP': None}
-DEBUG:pystun:Do Test1
-DEBUG:pystun:sendto: ('77.72.169.210', 3479)
-DEBUG:pystun:recvfrom: ('77.72.169.210', 3479)
-DEBUG:pystun:Result: {'ExternalIP': '23.90.145.69', 'Resp': True, 'ExternalPort': 10238, 'ChangedPort': 3478, 'SourcePort': 3479, 'SourceIP': '77.72.169.210', 'ChangedIP': '77.72.169.211'}
-NAT Type: Symmetric NAT
-External IP: 23.90.145.69
-External Port: 10238
+External IP: 91.240.163.98
+External Port: 46085
 
 ➜  bin git:(master) ✗ sudo pystun -H 123.60.88.103 -d      
 DEBUG:pystun:Do Test1
@@ -324,53 +331,28 @@ External Port: None
   | ![](doc/Port_Restricted_Cone-Port_Restricted_Cone.png)<br />**借助第三方Proxy,  Full cone/restricted-restricted, 可以通信** |
   | ![](doc/Full_Cone-Symmetric_NAT.png)<br />**借助第三方Proxy, Full cone/IP restricted-symmetric, 可以通信** |
   
-- RFC5780中的NAT类型
+###### 3) RFC5389/5780中的NAT类型, 检测及穿透性
 
-  | Mapping | Filtering |
-  | ---- | ---- |
-  | ![](doc/端点无关的隐射NAT.png)     |  ![](doc/端点无关的过滤NAT.png)    |
-  | | |
-  | ![](doc/地址相关的隐射NAT.png)     |  ![](doc/地址相关的过滤NAT.png)    |
-  | | |
-  | ![](doc/地址和端口相关的隐射NAT.png)     | ![](doc/地址和端口相关的过滤NAT.png)     |
-  
+| Mapping | Filtering |
+| ---- | ---- |
+| ![](doc/端点无关的隐射NAT.png)     |  ![](doc/端点无关的过滤NAT.png)    |
+| | |
+| ![](doc/地址相关的隐射NAT.png)     |  ![](doc/地址相关的过滤NAT.png)    |
+| | |
+| ![](doc/地址和端口相关的隐射NAT.png)     | ![](doc/地址和端口相关的过滤NAT.png)     |
+
 - RFC3489与RFC5780 NAT对应关系
 
   ![](doc/rfc3489_rfc5780.png)
 
 
-###### 3) stund
 
 
-##### 2.1.2  TURN
+##### 2.1.3  TURN
 
 1. 参考资料
    - [jitsi/turnserver](https://github.com/jitsi/turnserver)
    - [TURN REST Server API](https://www.ietf.org/proceedings/87/slides/slides-87-behave-10.pdf)
-
-##### 2.1.3  ICE
-
-​         交互式连通性建立（Interactive Connectivity Establishment - ICE）是一个允许实时对等端发现对方并且彼此连接的**框架**。ICE可以找到媒体传输的最短路径, 同时允许我们穿过防火墙和NAT进行工作.
-
-1. ICE 代理向操作系统查询本地 IP 地址；
-2. 如果有配置,ICE 代理会查询外部 STUN 服务器,以取得本地端的公共 IP 和端口号；
-3. 如果有配置,ICE 代理会将 TURN 服务器追加为最后一个候选项；假如端到端的连接失败,数据将通过指定的中间设备转发。
-
-###### 1) ICE流程
-
-![](./doc/ice流程.png)
-
-###### 2) ICE candidate类型
-
-| 类型             | 别名  | 如何传给对端     | 用法                                                         |
-| ---------------- | ----- | ---------------- | ------------------------------------------------------------ |
-| 主机候选项       | host  | 信令服务器       | 从网卡中获取的本地传输地址，如果此地址位于NAT之后，则为内网地址 |
-| 服务器反射候选项 | srflx | 信令服务器       | 从发送给Stun服务器的Binding检查中获取的传输地址。如果此地址位于NAT之后，则为最外层NAT的公网地址 |
-| 对端反射候选项   | prflx | Stun Binding请求 | 从对端发送的Stun Binding请求获取的传输地址。这是一种在连接检查期间新发生的候选项 |
-| 中继候选项       | relay | 信令服务器       | 媒体中继服务器的传输地址。通过使用TURN Allocate请求获取      |
-
-###### 3) 参考资料
-- [jitsi/ice4j](https://github.com/jitsi/ice4j)
 
 ##### 2.1.4  coturn搭建及测试
 
@@ -415,12 +397,53 @@ External Port: None
 
 ### 5 浏览器侧API
 
+- 浏览器组件
+
 ![](doc/browser_webrtc.png)
+
+- 简单呼叫流程
+![](doc/ladder-2party-simple.png)
 
 #### 5.1 Web API
 
-#### 5.1.1  getUserMedia
+#### 5.1.1  MediaStream API
+
+```javascript
+interface MediaDevices extends EventTarget {
+    ondevicechange: ((this: MediaDevices, ev: Event) => any) | null;
+    enumerateDevices(): Promise<MediaDeviceInfo[]>;
+    getDisplayMedia(constraints?: DisplayMediaStreamConstraints): Promise<MediaStream>;
+    getSupportedConstraints(): MediaTrackSupportedConstraints;
+    getUserMedia(constraints?: MediaStreamConstraints): Promise<MediaStream>;
+    addEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+```
+
 #### 5.1.2  RTCPeerConnection
+##### 1) 连接状态
+##### 2) ICE收集状态
+
+- RTCIceCandidateType 代表ICE候选地址的类型
+
+- RTCIceParameters
+
+  - usernameFragment, 用户名
+  - password, 密码
+
+- RTCIceCandidatePair, 候选地址对
+
+  - RTCIceCandidate local,  本地
+  - RTCIceCandidate remote, 远端
+
+- RTCIceGathererState, 收集状态
+
+##### 3) ICE连接状态
+
+- RTCIceTransportState, 连接状态
+
 #### 5.1.3  RTCDataChannel
 
 ### 5.2 Native API
@@ -430,15 +453,228 @@ External Port: None
 ### 5.3 参考资料
 
 - [MDN WebRTC API](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API)
+- [Media Capture and Streams](https://w3c.github.io/mediacapture-main/)
 - [webrtc samples](https://yejinlei.gitee.io/webrtc-samples/)
 
 
 
 ---
 
+## 二. [WebRTC Samples](https://yejinlei.gitee.io/webrtc-samples/)核心代码
 
+### 1. [getUserMedia](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getUserMedia), 本地媒体流
 
-## 二. 各种解决方案
+#### 1) [Basic getUserMedia demo](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/gum/)
+
+ - ```javascript
+   //
+   //getUserMedia函数基本用法
+   //
+   
+   //约束: 视频打开, 音频关闭
+   const constraints = window.constraints = {
+     audio: false,
+     video: true
+   };
+   
+   //init函数中创建Media对象
+   const stream = await navigator.mediaDevices.getUserMedia(constraints);
+   handleSuccess(stream);
+   
+   //handleSuccess函数主要给video.srcObject附上Media对象
+   window.stream = stream;
+   video.srcObject = stream;
+   
+   //添加click监听事件函数init
+   document.querySelector('#showVideo').addEventListener('click', e => init(e));
+   ```
+
+#### 2) [Use getUserMedia with canvas](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/canvas/)
+
+- ```javascript
+  //
+  //从video对象中截图
+  //
+  
+  //video对象长宽赋给canvas对象, 调用drawImage截图
+  const button = document.querySelector('button');
+  button.onclick = function() {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+  };
+  
+  //直接调用getUserMedia
+  navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+  ```
+
+#### 3) [Use getUserMedia with canvas and CSS filters](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/filter/)
+
+- ```javascript
+  //
+  //从video对象中截图, 再通过canvas.classname设置过滤样式
+  //
+  
+  const filterSelect = document.querySelector('select#filter');
+  
+  //通过canvas.classname来设置截图样式
+  snapshotButton.onclick = function() {
+    canvas.className = filterSelect.value;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+  };
+  ```
+
+#### 4) [Choose camera resolution](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/resolution/)
+
+#### 5) [Audio-only getUserMedia() output to local audio element](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/audio/)
+
+#### 6) [Audio-only getUserMedia() displaying volume](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/volume/)
+
+#### 7) [Record stream](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/record/)
+
+- ```javascript
+  //
+  //视频流录制
+  //
+  
+  //录制
+  function startRecording() {
+      //调用MediaRecorder创建媒体录制对象, options用于设置编解码格式
+      mediaRecorder = new MediaRecorder(window.stream, options);
+      //设置事件触发函数
+      mediaRecorder.onstop
+      mediaRecorder.ondataavailable = handleDataAvailable;
+      mediaRecorder.start();
+  }
+  //recordedBlobs用于存放音视频数据
+  function handleDataAvailable(event) {
+    console.log('handleDataAvailable', event);
+    if (event.data && event.data.size > 0) {
+      recordedBlobs.push(event.data);
+    }
+  }
+      
+  //播放
+  const playButton = document.querySelector('button#play');
+  playButton.addEventListener('click', () => {
+    const superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
+    //const recordedVideo = document.querySelector('video#recorded');  recordedVideo是video对象
+    recordedVideo.src = null;
+    recordedVideo.srcObject = null;
+    //创建内存url,赋值给video.src
+    recordedVideo.src = window.URL.createObjectURL(superBuffer);
+    recordedVideo.controls = true;
+    recordedVideo.play();
+  });
+  
+  //下载
+  downloadButton.addEventListener('click', () => {
+    const blob = new Blob(recordedBlobs, {type: 'video/webm'});
+    const url = window.URL.createObjectURL(blob);
+    //创建<a>超链接对象, 挂载到<body>
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'test.webm';
+    document.body.appendChild(a);
+    //模拟点击下载
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 100);
+  });
+  ```
+
+#### 8) [Screensharing with getDisplayMedia](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/getdisplaymedia/)
+
+#### 9) [Control camera pan, tilt, and zoom](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/pan-tilt-zoom/)
+
+### 2. Devices, 设备
+
+#### 1) [Choose camera, microphone and speaker](https://yejinlei.gitee.io/webrtc-samples/src/content/devices/input-output/)
+
+#### 2) [Choose media source and audio output](https://yejinlei.gitee.io/webrtc-samples/src/content/devices/multi/)
+
+### 3. Stream capture
+
+#### 1) [Stream from a video element to a video element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-video/)
+
+#### 2) [Stream from a video element to a peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-pc/)
+
+#### 3) [Stream from a canvas element to a video element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/canvas-video/)
+
+#### 4) [Stream from a canvas element to a peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/canvas-pc/)
+
+#### 5) [Record a stream from a canvas element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/canvas-record/)
+
+#### 6) [Guiding video encoding with content hints](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-contenthint/)
+
+### 4. [RTCPeerConnection](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection), 对等连接
+
+#### 1) [Basic peer connection demo](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/pc1/)
+
+#### 2) [Peer connection using Perfect Negotiation](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/perfect-negotiation/)
+
+#### 3) [Audio-only peer connection demo](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/audio/)
+
+#### 4) [Change bandwidth on the fly](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/bandwidth/)
+
+#### 5) [Change codecs before the call](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/change-codecs/)
+
+#### 6) [Upgrade a call and turn video on](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/upgrade/)
+
+#### 7) [Multiple peer connections at once](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/multiple/)
+
+#### 8) [Forward the output of one PC into another](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/multiple-relay/)
+
+#### 9) [Munge SDP parameters](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/munge-sdp/)
+
+#### 10) [Use pranswer when setting up a peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/pr-answer/)
+
+#### 11) [Constraints and stats](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/constraints/)
+
+#### 12) [More constraints and stats](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/old-new-stats/)
+
+#### 13) [Display createOffer output for various scenarios](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/create-offer/)
+
+#### 14) [Use RTCDTMFSender](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/dtmf/)
+
+#### 15) [Display peer connection states](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/states/)
+
+#### 16) [ICE candidate gathering from STUN/TURN servers](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/trickle-ice/)
+
+#### 17) [Do an ICE restart](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/restart-ice/)
+
+#### 18) [Web Audio output as input to peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/webaudio-input/)
+
+#### 19) [Peer connection as input to Web Audio](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/webaudio-output/)
+
+#### 20) [Measure how long renegotation takes](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/negotiate-timing/)
+
+### 5. [RTCDataChannel](https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel), 数据通道
+
+#### 1) [Transmit text](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/basic/)
+
+#### 2) [Transfer a file](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/filetransfer/)
+
+#### 3) [Transfer data](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/datatransfer/)
+
+#### 4) [Messaging](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/messaging/)
+
+### 6. Insertable Streams
+
+#### 1) [End to end encryption using WebRTC Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/endtoend-encryption)
+
+#### 2) [Video analyzer using WebRTC Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/video-analyzer)
+
+#### 3) [Video processing using MediaStream Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/video-processing)
+
+#### 4) [Audio processing using MediaStream Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/audio-processing)
+
+---
+
+## 三. 各种解决方案
 
 ### 1 Stun/Turn服务器 - coturn(TODO)
 
