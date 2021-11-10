@@ -596,7 +596,7 @@ interface MediaDevices extends EventTarget {
 
 #### 2) [Choose media source and audio output](https://yejinlei.gitee.io/webrtc-samples/src/content/devices/multi/)
 
-### 3. Stream capture
+### 3. Stream capture, 视频捕获
 
 #### 1) [Stream from a video element to a video element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-video/)
 
@@ -662,7 +662,7 @@ interface MediaDevices extends EventTarget {
 
 #### 4) [Messaging](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/messaging/)
 
-### 6. Insertable Streams
+### 6. Insertable Streams, 可插入流
 
 #### 1) [End to end encryption using WebRTC Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/endtoend-encryption)
 
