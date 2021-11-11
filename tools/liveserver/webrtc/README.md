@@ -690,6 +690,32 @@ interface MediaDevices extends EventTarget {
 
 #### 1) [Stream from a video element to a video element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-video/)
 
+- ```javascript
+  //
+  //从已有视频流中捕获
+  //
+  
+  const leftVideo = document.getElementById('leftVideo');
+  const rightVideo = document.getElementById('rightVideo');
+  
+  leftVideo.addEventListener('canplay', () => {
+    let stream;
+    const fps = 0;
+    
+    if (leftVideo.captureStream) {
+      stream = leftVideo.captureStream(fps);
+    } else if (leftVideo.mozCaptureStream) {
+      stream = leftVideo.mozCaptureStream(fps);
+    } else {
+      console.error('Stream capture is not supported');
+      stream = null;
+    }
+    
+    //从video.captureStream/mozCaptureStream捕获中获取视频流对象, 重新赋值给新的video对象
+    rightVideo.srcObject = stream;
+  });
+  ```
+
 #### 2) [Stream from a video element to a peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-pc/)
 
 #### 3) [Stream from a canvas element to a video element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/canvas-video/)
