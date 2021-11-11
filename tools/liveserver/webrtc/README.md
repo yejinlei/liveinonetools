@@ -661,7 +661,7 @@ interface MediaDevices extends EventTarget {
     //还是要赋值给video对象, 本地才可显示
     video.srcObject = stream;
   
-    //监听track的停止按钮
+    //track对象设置"ended"监听事件,用于停止共享
     stream.getVideoTracks()[0].addEventListener('ended', () => {
       errorMsg('The user has ended sharing the screen');
       startButton.disabled = false;
