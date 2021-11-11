@@ -526,6 +526,60 @@ interface MediaDevices extends EventTarget {
 
 #### 4) [Choose camera resolution](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/resolution/)
 
+- ```javascript
+  //
+  //改变视频流分辨率
+  //
+  
+  //预设分辨率
+  function getMedia(constraints) {
+    //通过track对象停止视频流
+    if (stream) {
+      stream.getTracks().forEach(track => {
+        track.stop();
+      });
+    }
+  
+    clearErrorMessage();
+    videoblock.style.display = 'none';
+    //通过预设constraints重新创建本地视频流
+    navigator.mediaDevices.getUserMedia(constraints)
+        //gotStream函数中, stream赋值给video对象
+        .then(gotStream)
+        .catch(e => {
+          errorMessage('getUserMedia', e.message, e.name);
+        });
+  }
+  
+  //调整分辨率
+  function constraintChange(e) {
+    widthOutput.textContent = e.target.value;
+    const track = window.stream.getVideoTracks()[0];
+    let constraints;
+    if (aspectLock.checked) {
+      constraints = {
+        width: {exact: e.target.value},
+        aspectRatio: {
+          exact: video.videoWidth / video.videoHeight
+        }
+      };
+    } else {
+      constraints = {width: {exact: e.target.value}};
+    }
+    clearErrorMessage();
+    console.log('applying ' + JSON.stringify(constraints));
+    //track轨道对象直接应用约束, 没有重新创建视频流
+    track.applyConstraints(constraints)
+        .then(() => {
+          console.log('applyConstraint success');
+          displayVideoDimensions('applyConstraints');
+        })
+        .catch(err => {
+          errorMessage('applyConstraints', err.name);
+        });
+  }
+  ```
+
 #### 5) [Audio-only getUserMedia() output to local audio element](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/audio/)
 
 #### 6) [Audio-only getUserMedia() displaying volume](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/volume/)
@@ -588,11 +642,47 @@ interface MediaDevices extends EventTarget {
 
 #### 8) [Screensharing with getDisplayMedia](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/getdisplaymedia/)
 
+- ```javascript
+  //
+  //共享桌面及应用界面
+  //
+  
+  const startButton = document.getElementById('startButton');
+  startButton.addEventListener('click', () => {
+    //创建视频流共享对象
+    navigator.mediaDevices.getDisplayMedia({video: true})
+        .then(handleSuccess, handleError);
+  });
+  
+  
+  function handleSuccess(stream) {
+    startButton.disabled = true;
+    const video = document.querySelector('video');
+    //还是要赋值给video对象, 本地才可显示
+    video.srcObject = stream;
+  
+    //监听track的停止按钮
+    stream.getVideoTracks()[0].addEventListener('ended', () => {
+      errorMsg('The user has ended sharing the screen');
+      startButton.disabled = false;
+    });
+  }
+  ```
+
 #### 9) [Control camera pan, tilt, and zoom](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/pan-tilt-zoom/)
 
 ### 2. Devices, 设备
 
 #### 1) [Choose camera, microphone and speaker](https://yejinlei.gitee.io/webrtc-samples/src/content/devices/input-output/)
+
+- ```javascript
+  //
+  //枚举设备
+  //
+  
+  //枚举设备
+  navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
+  ```
 
 #### 2) [Choose media source and audio output](https://yejinlei.gitee.io/webrtc-samples/src/content/devices/multi/)
 
@@ -1411,7 +1501,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
 
 ###### 2) 参考资料
 
-## 三. RFC汇总及参考资料
+## 四. RFC汇总及参考资料
 
 1. [RFC2119] Bradner, S., "Key words for use in RFCs to Indicate Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997, <https://www.rfc-editor.org/info/rfc2119>.
 2. [RFC3261] Rosenberg, J., Schulzrinne, H., Camarillo, G., Johnston, A., Peterson, J., Sparks, R., Handley, M., and E. Schooler, "SIP: Session Initiation Protocol", RFC 3261, DOI 10.17487/RFC3261, June 2002, <https://www.rfc-editor.org/info/rfc3261>.
