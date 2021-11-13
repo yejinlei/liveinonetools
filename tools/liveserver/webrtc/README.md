@@ -408,19 +408,25 @@ External Port: None
 
 #### 5.1.1  MediaStream API
 
-```javascript
-interface MediaDevices extends EventTarget {
-    ondevicechange: ((this: MediaDevices, ev: Event) => any) | null;
-    enumerateDevices(): Promise<MediaDeviceInfo[]>;
-    getDisplayMedia(constraints?: DisplayMediaStreamConstraints): Promise<MediaStream>;
-    getSupportedConstraints(): MediaTrackSupportedConstraints;
-    getUserMedia(constraints?: MediaStreamConstraints): Promise<MediaStream>;
-    addEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-```
+##### 1) 获取媒体流方式
+
+- 摄像头/话筒
+- 屏幕共享
+- canvas
+- 媒体元素
+
+##### 2) 媒体流MediaStream定义
+##### 3) 媒体流属性
+##### 4) 媒体流Events
+
+- addtrack事件
+- removetrack事件
+
+##### 5) 媒体轨道MediaStreamTrack定义
+##### 6) 媒体轨道属性
+##### 7) 媒体轨道Events
+
+- 
 
 #### 5.1.2  RTCPeerConnection
 ##### 1) 连接状态
