@@ -174,7 +174,40 @@
 
 #### 1.4.2 HTTPS
 #### 1.4.3 HTTP2
+
+- 参考资料
+  - rfc7540: Hypertext Transfer Protocol version 2
+  - rfc7541: HPACK - Header Compression for HTTP/2
+  - rfc6797: HPACK - HTTP Strict Transport Security
+  - http1.1 vs http2, https://http2.akamai.com/demo
+  - HTTP2详解, https://http2-explained.haxx.se/zh
+  - HTTP 2.0 协议详解, https://github.com/zqjflash/http2-protocol
+  - Better HTTP/2 Prioritization for a Faster Web, https://blog.cloudflare.com/better-http-2-prioritization-for-a-faster-web/
+  - http2支持清单, https://github.com/httpwg/http2-spec/wiki/Implementations
+  - NGINX_HTTP2_White_Paper_v4, https://www.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf
+  - 使用HTTP/2提升性能的7个建议, https://www.w3ctech.com/topic/1563
+  - HTTP性能极限优化, https://taohui.blog.csdn.net/article/details/103952639
+  - HTTP/2资料汇总, https://imququ.com/post/http2-resource.html
+  - The HTTP/2 Module in NGINX, https://www.nginx.com/blog/http2-module-nginx/
+  - HTTP/2 in GO系列, https://github.com/DigDeeply/http2-in-go
+  - http2-go, https://github.com/Jxck/http2
+  - Nginx实现HTTP/2——原理、实践与数据分析, https://blog.csdn.net/zhuyiquan/article/details/52585941
+
 #### 1.4.4 HTTP3
+
+- http/1 vs https vs http/2 vs http/3
+
+   ![](./doc/http1_3.png)
+
+- 参考资料
+
+  - QUIC RFC: https://tools.ietf.org/html/draft-ietf-quic-transport-24
+  - QUIC with TLS RFC: https://quicwg.org/base-drafts/draft-ietf-quic-tls.html#name-introduction
+  - 中文QUIC RFC: http://docs.wxclimb.top/draft-ietf-quic-transport-zh.html#fc-credit
+  - HTTP3详解, https://http3-explained.haxx.se/zh/
+  - QUIC & HTTP/3 Support：主流浏览器和服务端对 HTTP/3 的支持情况, https://sysin.org/article/QUIC-HTTP3-Support/
+  - HTTP/HTTPS/HTTP2/HTTP3/QUIC/WebSocket协议详解, https://segmentfault.com/a/1190000021390130?utm_source=tag-newest
+  - HTTP/3：起源, https://github.com/xitu/gold-miner/blob/master/TODO1/http-3-from-root-to-tip.md
 
 ### 2 通信部分
 
@@ -426,8 +459,6 @@ External Port: None
 ##### 6) 媒体轨道属性
 ##### 7) 媒体轨道Events
 
-- 
-
 #### 5.1.2  RTCPeerConnection
 ##### 1) 连接状态
 ##### 2) ICE收集状态
@@ -453,15 +484,21 @@ External Port: None
 #### 5.1.3  RTCDataChannel
 
 ### 5.2 Native API
-#### 5.2.1 Native API之Chromium实现
-#### 5.2.2 Native API之Pion纯Go实现
+#### 5.2.1 Chromium C/C++实现
+#### 5.2.2 Golang实现
+
+- [pion/example-webrtc-applications](https://github.com/pion/example-webrtc-applications) and more [examples](https://github.com/pion/webrtc/tree/master/examples)
+
+#### 5.2.3 Rust实现
+
+- [webrtc-rs/crate webrtc](https://docs.rs/webrtc/0.3.0/webrtc/)
+- [webrtc-rs/examples](https://github.com/webrtc-rs/examples/tree/main/examples)
 
 ### 5.3 参考资料
 
 - [MDN WebRTC API](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API)
 - [Media Capture and Streams](https://w3c.github.io/mediacapture-main/)
 - [webrtc samples](https://yejinlei.gitee.io/webrtc-samples/)
-
 
 
 ---
@@ -1276,14 +1313,14 @@ External Port: None
 
 - 命令行方式
 
-  - turnserver -n -o -u **user:userpassword** -a -r **121.37.143.208:3478** #-n 不使用配置文件；-o 后台运行；-u 用户名:密码； -a 长期验证；  -r 公网IP:协议端口
+  - turnserver -n -o -u **user:userpassword** -a -r **123.60.88.103:3478** #-n 不使用配置文件；-o 后台运行；-u 用户名:密码； -a 长期验证；  -r 公网IP:协议端口
 
     ```shell
     #打开浏览器
     chromium-browser --no-sandbox https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/trickle-ice/
     
     #人工输入
-    STUN or TURN URI: turn:121.37.143.208:3478    #这里使用turn:xxx.xxx.xxx.xxx & IceTransports value: 选择all, 会同时测试stun和turn协议, 如果使用stun, 只测试stun 
+    STUN or TURN URI: turn:123.60.88.103:3478    #这里使用turn:xxx.xxx.xxx.xxx & IceTransports value: 选择all, 会同时测试stun和turn协议, 如果使用stun, 只测试stun 
     TURN username:user
     TURN password:userpassword
     
@@ -1302,23 +1339,22 @@ External Port: None
     - relay, turn服务器所在内网主机IP
     - udp/tcp,  stun协议同时支持udp和tcp, 上述结果表明tcp协议只获取host IP, udp可以获取所有IP
 
-  - turnserver -n -o -u user:userpassword -a -r 121.37.143.208:3478 **--stun-only**    #只开启stun
+  - turnserver -n -o -u user:userpassword -a -r 123.60.88.103:3478 **--stun-only**    #只开启stun
 
-  - turnserver -n -o -u user:userpassword -a -r 121.37.143.208:3478 **--no-stun**        #只开启turn
+  - turnserver -n -o -u user:userpassword -a -r 123.60.88.103:3478 **--no-stun**        #只开启turn
 
 - 使用turnserver.conf配置文件方式
 
 ```shell
 #网络接口设备
 relay-device=eth0
+listening-ip=192.168.0.188
 #stun/turn监听端口
 listening-port=3478
 tls-listening-port=5349
-relay-ip=192.168.0.52
 #公网IP/内网主机IP
-external-ip=121.37.143.208/192.168.0.52
-#relay-threads=1
-#fingerprint
+external-ip=123.60.88.103/192.168.0.188
+#webrtc必须
 lt-cred-mech
 #openssl req -x509 -newkey rsa:2048 -keyout /etc/turn_server_pkey.pem -out /etc/turn_server_cert.pem -days 99999 -nodes
 cert=/etc/turn_server_cert.pem
@@ -1326,7 +1362,8 @@ pkey=/etc/turn_server_pkey.pem
 pidfile=”/var/run/turnserver.pid”
 mobility
 #帐号/密码
-user=username:userpassword
+user=hxdi:pass
+#webrtc必须, 任意设置
 realm=hxdi
 ```
 
@@ -1385,7 +1422,7 @@ NAT with Address and Port Dependent Filtering!
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-turnutils_natdiscovery -m -f 121.37.143.208 -L 172.22.61.84       
+turnutils_natdiscovery -m -f 123.60.88.103 -L 172.22.61.84       
 
 -= Mapping Behavior Discovery =-
 
@@ -1443,10 +1480,10 @@ Address: 2600:1f16:8c5:101::108
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-turnutils_stunclient 121.37.143.208        
+turnutils_stunclient 123.60.88.103        
 ========================================
 RFC 5780 response 1
-0: IPv4. Response origin: : 192.168.0.52:3478       #192.168.0.52是内网主机IP, 121.37.143.208是映射地址
+0: IPv4. Response origin: : 192.168.0.52:3478       #192.168.0.52是内网主机IP, 123.60.88.103是映射地址
 0: IPv4. Other addr: : 192.168.0.52:3479
 0: IPv4. UDP reflexive addr: 202.101.191.36:5028
 ```
@@ -1456,10 +1493,10 @@ RFC 5780 response 1
 ##### turn客户端工具 - turnutils_uclient
 
 ```sh
-turnutils_uclient -u user -w userpassword -L 172.22.61.84 -v 121.37.143.208
+turnutils_uclient -u user -w userpassword -L 172.22.61.84 -v 123.60.88.103
 ========================================
 0: IPv4. Connected from: 172.22.61.84:45169
-0: IPv4. Connected to: 121.37.143.208:3478
+0: IPv4. Connected to: 123.60.88.103:3478
 0: allocate sent
 0: allocate response received: 
 0: allocate sent
@@ -1471,9 +1508,9 @@ turnutils_uclient -u user -w userpassword -L 172.22.61.84 -v 121.37.143.208
 0: refresh response received: 
 0: success
 0: IPv4. Connected from: 172.22.61.84:43969
-0: IPv4. Connected to: 121.37.143.208:3478
+0: IPv4. Connected to: 123.60.88.103:3478
 0: IPv4. Connected from: 172.22.61.84:44946
-0: IPv4. Connected to: 121.37.143.208:3478
+0: IPv4. Connected to: 123.60.88.103:3478
 0: allocate sent
 0: allocate response received: 
 0: allocate sent
@@ -1502,25 +1539,25 @@ turnutils_uclient -u user -w userpassword -L 172.22.61.84 -v 121.37.143.208
 ##### turn回显工具 - turnutils_peer,  需要turnutils_uclient配合
 
 ```sh
-#开启turn服务器, 参考turnserver, 地址121.37.143.208 
+#开启turn服务器, 参考turnserver, 地址123.60.88.103 
 
 #在机器A上, 开启turnutils_peer, 地址10.13.4.102
-./turnutils_peer -v 121.37.143.208
+./turnutils_peer -v 123.60.88.103
 
 #在机器B上, 使用turnutils_uclient, 地址172.22.61.84, 与A建立连接后, 会收到A发送的消息
-turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 10.13.4.102  #-e 10.13.4.102, 此处为A内网主机IP
+turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10.13.4.102  #-e 10.13.4.102, 此处为A内网主机IP
 ========================================
 0: IPv4. Connected from: 172.22.61.84:50104                               
-0: IPv4. Connected to: 121.37.143.208:3478                               
+0: IPv4. Connected to: 123.60.88.103:3478                               
 0: allocate sent                                                         
 0: allocate response received:             
 0: allocate sent                                                         
 0: allocate response received:
 0: success
 0: IPv4. Connected from: 172.22.61.84:56766
-0: IPv4. Connected to: 121.37.143.208:3478
+0: IPv4. Connected to: 123.60.88.103:3478
 0: IPv4. Connected from: 172.22.61.84:41803
-0: IPv4. Connected to: 121.37.143.208:3478
+0: IPv4. Connected to: 123.60.88.103:3478
 0: allocate sent
 0: allocate response received: 
 0: allocate sent
@@ -1582,7 +1619,32 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
 15: Average jitter -nan ms； min = 4294967295 ms, max = 0 ms
 ```
 
-### 2 Kurent分析与实践(已部署成功, 文档待补充)
+### 2 Kurent分析与实践
+#### 2.1 部署
+
+- 部署stun/turn
+
+- 启动kms服务
+
+  ```sh
+  #运行KMS, run_kms.sh, 开启ws端口8888
+  sudo docker run --privileged --network=host --rm \                                                          
+      -e DOMAIN_OR_PUBLIC_IP=123.60.88.103 \
+      -e KMS_STUN_IP="123.60.88.103" \
+      -e KMS_STUN_PORT="3478" \
+      -e CERTIFICATE_TYPE=selfsigned \
+      -e KMS_TURN_URL=hxdi:pass@123.60.88.103:3478 \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+  yejinlei/kurento-media-server
+  ```
+  
+- 启动web服务
+
+  ```sh
+//kurento-group-call, 开启https端口8443
+  sudo mvn -U clean spring-boot:run -Dkms.url=ws://127.0.0.1:8888/kurento -DKMS_STUN_IP=123.60.88.103 -DKMS_STUN_PORT=3478 -DKMS_TURN_URL=hxdi:pass@123.60.88.103:3478
+  ```
+
 
 ### 3 Jitsi分析与实践
 ![](./scheme/jitsi/doc/JitsiNetworkDes.png)
@@ -1590,7 +1652,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
 
 
 
-#### 2.3.1 分析与定制
+#### 3.1 分析与定制
 
 > 总入口: https://gitee.com/yejinlei/jitsi-meet-all,  下载所有子项目 git clone --recurse-submodules https://gitee.com/yejinlei/jitsi-meet-all 
 >
@@ -1614,7 +1676,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
 >
 > |目录jicofo: https://gitee.com/yejinlei/jicofo.git                                                      #会议服务, 最终生成结果文件需要放入docker-jitsi-meet
 
-##### 2.3.1.1 Web, 内置web服务器及Web网页含WebRTC Client服务
+##### 3.1.1 Web, 内置web服务器及Web网页含WebRTC Client服务
 ###### 1) Web业务构建
 
 - Web核心业务源码构建(目录lib-jitsi-meet)
@@ -1708,7 +1770,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
 - [构建软件包](https://www.debian.org/doc/manuals/maint-guide/build.zh-cn.html)
 - [Debian 新维护者手册](https://www.debian.org/doc/manuals/maint-guide/index.zh-cn.html)
 
-##### 2.3.1.2 Prosody, 提供XMPP信令交换及认证服务
+##### 3.1.2 Prosody, 提供XMPP信令交换及认证服务
 ###### 1) Prosody, XMPP服务器
 
 - **prosody core plugins**, [doc](https://prosody.im/doc/modules), [code](https://github.com/bjc/prosody/tree/master/plugins)
@@ -1912,7 +1974,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
 - ‹‹Practical Protocols XMPP›› book
 - [xmpp-ftw/xmpp-ftw](https://github.com/xmpp-ftw/xmpp-ftw)
 
-##### 2.3.1.3 jicofo, 提供会议管理服务
+##### 3.1.3 jicofo, 提供会议管理服务
 
 ###### 1) 容器化
 - 容器运行
@@ -1952,7 +2014,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 121.37.143.208 -e 1
 
 ###### 2) 参考资料
 
-##### 2.3.1.4 JVB, 提供SFU服务
+##### 3.1.4 JVB, 提供SFU服务
 
 ###### 1) 容器化
 
