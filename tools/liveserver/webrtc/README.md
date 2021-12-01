@@ -33,7 +33,12 @@
       2. Native C++ API
    2. Pion纯Go实现
 
+---
+
+## 二. WebRTC原理
 ![](./doc/webrtc_stack.png)
+
+**WebRTC协议栈**
 
 ### 1 信令部分
 
@@ -165,14 +170,29 @@
   - 明确了连接管理，允许长连接；
   - 允许响应数据分块（chunked），利于传输大文件；
   - 强制要求 Host 头，让互联网主机托管成为可能；
-- 轮询(polling) vs 长轮询(long polling)
-- 短连接 vs 长连接
-- 跨域技术
 - 参考资料
   - [WEB端即时通讯：HTTP长连接、长轮询（long polling）详解](http://www.52im.net/thread-224-1-1.html)
   - [WEB端即时通讯：不用WebSocket也一样能搞定消息的即时性](http://www.52im.net/thread-296-1-1.html)
 
 #### 1.4.2 HTTPS
+
+- Openssl使用
+- Let's Encrypt使用, https://letsencrypt.org/zh-cn/docs/
+  - 免费申请证书
+  - nginx配置证书
+
+- wireshark分析https
+  - #配置浏览器导出SSL Key
+    export SSLKEYLOGFILE="$HOME/keylog.log"
+    #wireshark中配置SSL Key
+    首选项->协议->TLS(Master-Secret log filename), 指定SSL Key文件路径
+  - ![](doc/wireshark_https_chrome_tcp.png)
+
+- 参考资料
+  - <<HTTPS权威指南>>
+  - <<深入浅出HTTPS>>
+  - rfc2818: HTTP Over TLS
+
 #### 1.4.3 HTTP2
 
 - 参考资料
@@ -426,7 +446,33 @@ External Port: None
 
 ### 4 安全部分
 #### 4.1 TLS
+
+- 参考资料
+  - rfc2246: The TLS Protocol Version 1.0
+  - rfc4346: The Transport Layer Security (TLS) Protocol Version 1.1
+  - rfc5246: The Transport Layer Security (TLS) Protocol Version 1.2
+  - rfc5746: Transport Layer Security (TLS) Renegotiation Indication Extension
+  - rfc8446: The Transport Layer Security (TLS) Protocol Version 1.3
+  - rfc7507: TLS Fallback Signaling Cipher Suite Value (SCSV) for Preventing Protocol Downgrade Attacks
+  - TLS协议分析 与 现代加密通信协议设计, https://blog.helong.info/blog/2015/09/06/tls-protocol-analysis-and-crypto-protocol-design/
+  - TLS 握手优化详解, https://imququ.com/post/optimize-tls-handshake.html
+  - 图解SSL/TLS协议, http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html
+  - SSL/TLS协议运行机制的概述, http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html
+  - SSL/TLS发展历史和SSLv3.0协议详解, http://www.bewindoweb.com/271.html
+
 #### 4.2 DTLS
+
+- DTLS图示
+  - ![](doc/handshake_over_DTLS.png)
+    - 通信双方：通过DTLS握手，协商生成一对密钥；
+    - 发送方：对数据进行加密；
+    - 发送方：通过UDP传输加密数据；
+    - 接收方：对加密数据进行解密；
+- 参考资料
+  - rfc4347: Datagram Transport Layer Security
+  - rfc5763: Framework for Establishing a Secure Real-time Transport Protocol (SRTP) Security Context Using Datagram Transport Layer Security (DTLS)
+  - rfc5764: Datagram Transport Layer Security (DTLS) Extension to Establish Keys for the Secure Real-time Transport Protocol (SRTP)
+  - rfc6347: Datagram Transport Layer Security Version 1.2
 
 ### 5 浏览器侧API
 
@@ -502,12 +548,13 @@ External Port: None
 
 
 ---
+## 三. WebRTC例子
 
-## 二. [WebRTC Samples](https://yejinlei.gitee.io/webrtc-samples/)核心代码
+### ☞ [WebRTC Samples](https://yejinlei.gitee.io/webrtc-samples/)官方例子
 
-### 1. [getUserMedia](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getUserMedia), 本地媒体流
+#### 1. [getUserMedia](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getUserMedia), 本地媒体流
 
-#### 1) [Basic getUserMedia demo](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/gum/)
+##### 1) [Basic getUserMedia demo](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/gum/)
 
  - ```javascript
    //
@@ -532,7 +579,7 @@ External Port: None
    document.querySelector('#showVideo').addEventListener('click', e => init(e));
    ```
 
-#### 2) [Use getUserMedia with canvas](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/canvas/)
+##### 2) [Use getUserMedia with canvas](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/canvas/)
 
 - ```javascript
   //
@@ -551,7 +598,7 @@ External Port: None
   navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
   ```
 
-#### 3) [Use getUserMedia with canvas and CSS filters](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/filter/)
+##### 3) [Use getUserMedia with canvas and CSS filters](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/filter/)
 
 - ```javascript
   //
@@ -567,7 +614,7 @@ External Port: None
   };
   ```
 
-#### 4) [Choose camera resolution](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/resolution/)
+##### 4) [Choose camera resolution](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/resolution/)
 
 - ```javascript
   //
@@ -623,11 +670,11 @@ External Port: None
   }
   ```
 
-#### 5) [Audio-only getUserMedia() output to local audio element](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/audio/)
+##### 5) [Audio-only getUserMedia() output to local audio element](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/audio/)
 
-#### 6) [Audio-only getUserMedia() displaying volume](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/volume/)
+##### 6) [Audio-only getUserMedia() displaying volume](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/volume/)
 
-#### 7) [Record stream](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/record/)
+##### 7) [Record stream](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/record/)
 
 - ```javascript
   //
@@ -683,7 +730,7 @@ External Port: None
   });
   ```
 
-#### 8) [Screensharing with getDisplayMedia](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/getdisplaymedia/)
+##### 8) [Screensharing with getDisplayMedia](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/getdisplaymedia/)
 
 - ```javascript
   //
@@ -712,11 +759,11 @@ External Port: None
   }
   ```
 
-#### 9) [Control camera pan, tilt, and zoom](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/pan-tilt-zoom/)
+##### 9) [Control camera pan, tilt, and zoom](https://yejinlei.gitee.io/webrtc-samples/src/content/getusermedia/pan-tilt-zoom/)
 
-### 2. Devices, 设备
+#### 2. Devices, 设备
 
-#### 1) [Choose camera, microphone and speaker](https://yejinlei.gitee.io/webrtc-samples/src/content/devices/input-output/)
+##### 1) [Choose camera, microphone and speaker](https://yejinlei.gitee.io/webrtc-samples/src/content/devices/input-output/)
 
 - ```javascript
   //
@@ -727,11 +774,11 @@ External Port: None
   navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
   ```
 
-#### 2) [Choose media source and audio output](https://yejinlei.gitee.io/webrtc-samples/src/content/devices/multi/)
+##### 2) [Choose media source and audio output](https://yejinlei.gitee.io/webrtc-samples/src/content/devices/multi/)
 
-### 3. Stream capture, 视频捕获
+#### 3. Stream capture, 视频捕获
 
-#### 1) [Stream from a video element to a video element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-video/)
+##### 1) [Stream from a video element to a video element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-video/)
 
 - ```javascript
   //
@@ -759,7 +806,7 @@ External Port: None
   });
   ```
 
-#### 2) [Stream from a video element to a peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-pc/)
+##### 2) [Stream from a video element to a peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-pc/)
 
 - ```javascript
   //
@@ -778,33 +825,33 @@ External Port: None
 
   
 
-#### 3) [Stream from a canvas element to a video element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/canvas-video/)
+##### 3) [Stream from a canvas element to a video element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/canvas-video/)
 
-#### 4) [Stream from a canvas element to a peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/canvas-pc/)
+##### 4) [Stream from a canvas element to a peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/canvas-pc/)
 
-#### 5) [Record a stream from a canvas element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/canvas-record/)
+##### 5) [Record a stream from a canvas element](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/canvas-record/)
 
-#### 6) [Guiding video encoding with content hints](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-contenthint/)
+##### 6) [Guiding video encoding with content hints](https://yejinlei.gitee.io/webrtc-samples/src/content/capture/video-contenthint/)
 
-### 4. [RTCPeerConnection](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection), 对等连接
+#### 4. [RTCPeerConnection](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection), 对等连接
 
-#### 1) [Basic peer connection demo](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/pc1/)
+##### 1) [Basic peer connection demo](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/pc1/)
 
-#### 2) [Peer connection using Perfect Negotiation](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/perfect-negotiation/)
+##### 2) [Peer connection using Perfect Negotiation](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/perfect-negotiation/)
 
-#### 3) [Audio-only peer connection demo](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/audio/)
+##### 3) [Audio-only peer connection demo](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/audio/)
 
-#### 4) [Change bandwidth on the fly](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/bandwidth/)
+##### 4) [Change bandwidth on the fly](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/bandwidth/)
 
-#### 5) [Change codecs before the call](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/change-codecs/)
+##### 5) [Change codecs before the call](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/change-codecs/)
 
-#### 6) [Upgrade a call and turn video on](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/upgrade/)
+##### 6) [Upgrade a call and turn video on](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/upgrade/)
 
-#### 7) [Multiple peer connections at once](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/multiple/)
+##### 7) [Multiple peer connections at once](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/multiple/)
 
-#### 8) [Forward the output of one PC into another](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/multiple-relay/)
+##### 8) [Forward the output of one PC into another](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/multiple-relay/)
 
-#### 9) [Munge SDP parameters](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/munge-sdp/)
+##### 9) [Munge SDP parameters](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/munge-sdp/)
 
 - ```ini
   //Create offer按钮, 生成Offer SDP
@@ -1107,13 +1154,13 @@ External Port: None
   ```
 
 
-#### 10) [Use pranswer when setting up a peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/pr-answer/)
+##### 10) [Use pranswer when setting up a peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/pr-answer/)
 
-#### 11) [Constraints and stats](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/constraints/)
+##### 11) [Constraints and stats](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/constraints/)
 
-#### 12) [More constraints and stats](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/old-new-stats/)
+##### 12) [More constraints and stats](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/old-new-stats/)
 
-#### 13) [Display createOffer output for various scenarios](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/create-offer/)
+##### 13) [Display createOffer output for various scenarios](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/create-offer/)
 
 - ```ini
   //
@@ -1249,43 +1296,47 @@ External Port: None
   a=rtpmap:123 ulpfec/90000
   ```
 
-#### 14) [Use RTCDTMFSender](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/dtmf/)
+##### 14) [Use RTCDTMFSender](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/dtmf/)
 
-#### 15) [Display peer connection states](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/states/)
+##### 15) [Display peer connection states](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/states/)
 
-#### 16) [ICE candidate gathering from STUN/TURN servers](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/trickle-ice/)
+##### 16) [ICE candidate gathering from STUN/TURN servers](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/trickle-ice/)
 
-#### 17) [Do an ICE restart](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/restart-ice/)
+##### 17) [Do an ICE restart](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/restart-ice/)
 
-#### 18) [Web Audio output as input to peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/webaudio-input/)
+##### 18) [Web Audio output as input to peer connection](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/webaudio-input/)
 
-#### 19) [Peer connection as input to Web Audio](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/webaudio-output/)
+##### 19) [Peer connection as input to Web Audio](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/webaudio-output/)
 
-#### 20) [Measure how long renegotation takes](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/negotiate-timing/)
+##### 20) [Measure how long renegotation takes](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/negotiate-timing/)
 
-### 5. [RTCDataChannel](https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel), 数据通道
+#### 5. [RTCDataChannel](https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel), 数据通道
 
-#### 1) [Transmit text](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/basic/)
+##### 1) [Transmit text](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/basic/)
 
-#### 2) [Transfer a file](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/filetransfer/)
+##### 2) [Transfer a file](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/filetransfer/)
 
-#### 3) [Transfer data](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/datatransfer/)
+##### 3) [Transfer data](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/datatransfer/)
 
-#### 4) [Messaging](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/messaging/)
+##### 4) [Messaging](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/messaging/)
 
-### 6. Insertable Streams, 可插入流
+#### 6. Insertable Streams, 可插入流
 
-#### 1) [End to end encryption using WebRTC Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/endtoend-encryption)
+##### 1) [End to end encryption using WebRTC Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/endtoend-encryption)
 
-#### 2) [Video analyzer using WebRTC Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/video-analyzer)
+##### 2) [Video analyzer using WebRTC Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/video-analyzer)
 
-#### 3) [Video processing using MediaStream Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/video-processing)
+##### 3) [Video processing using MediaStream Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/video-processing)
 
-#### 4) [Audio processing using MediaStream Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/audio-processing)
+##### 4) [Audio processing using MediaStream Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/audio-processing)
+
+### ☞ [Pion examples](https://github.com/pion/example-webrtc-applications)
+
+### ☞ [WebRTC.rs examples](https://github.com/webrtc-rs/examples)
 
 ---
 
-## 三. 各种解决方案
+## 四. 各种解决方案
 
 ### 1 Stun/Turn服务器 - coturn(TODO)
 
@@ -1622,7 +1673,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 ### 2 Kurent分析与实践
 #### 2.1 部署
 
-- 部署stun/turn
+- 部署stun/turn(略)
 
 - 启动kms服务
 
@@ -1638,10 +1689,20 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
   yejinlei/kurento-media-server
   ```
   
+- 设置java环境
+
+  ```sh
+  #curl -s "https://get.sdkman.io" | zsh
+  #source ~/.sdkman/bin/sdkman-init.sh
+  #sdk install java 8.0.302-open
+  #sudo apt install maven
+  sdk use java 8.0.302-open
+  ```
+  
 - 启动web服务
 
   ```sh
-//kurento-group-call, 开启https端口8443
+  //kurento-group-call, 开启https端口8443
   sudo mvn -U clean spring-boot:run -Dkms.url=ws://127.0.0.1:8888/kurento -DKMS_STUN_IP=123.60.88.103 -DKMS_STUN_PORT=3478 -DKMS_TURN_URL=hxdi:pass@123.60.88.103:3478
   ```
 
@@ -1819,7 +1880,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
           proxy_http_version 1.1;
           proxy_set_header Connection "Upgrade";
           proxy_set_header Upgrade $http_upgrade;
-
+      
           proxy_set_header Host $host;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Proto $scheme;
@@ -2047,7 +2108,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
 ###### 2) 参考资料
 
-## 四. RFC汇总及参考资料
+## 五. RFC汇总及参考资料
 
 1. [RFC2119] Bradner, S., "Key words for use in RFCs to Indicate Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997, <https://www.rfc-editor.org/info/rfc2119>.
 2. [RFC3261] Rosenberg, J., Schulzrinne, H., Camarillo, G., Johnston, A., Peterson, J., Sparks, R., Handley, M., and E. Schooler, "SIP: Session Initiation Protocol", RFC 3261, DOI 10.17487/RFC3261, June 2002, <https://www.rfc-editor.org/info/rfc3261>.
