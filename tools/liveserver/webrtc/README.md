@@ -1737,7 +1737,12 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 >
 > |目录jicofo: https://gitee.com/yejinlei/jicofo.git                                                      #会议服务, 最终生成结果文件需要放入docker-jitsi-meet
 
+##### 3.1.0 容器编排(docker-jitsi-meet)
+
+![](doc/docker-jitsimeet-build.png)
+
 ##### 3.1.1 Web, 内置web服务器及Web网页含WebRTC Client服务
+
 ###### 1) Web业务构建
 
 - Web核心业务源码构建(目录lib-jitsi-meet)
