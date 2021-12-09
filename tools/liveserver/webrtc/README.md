@@ -2,43 +2,40 @@
 
 ## 一. WebRTC概述及索引
 
+### 1 WebRTC协议栈
+
+![](./doc/webrtc_stack.png)
+涉及协议:
+
 1. 信令部分
    1. WebSocket/SSE/XHR/Other
-   2. SDP/Javsscript会话描述协议JSEP
-   3. XMPP/SIP
+   2. XMPP/SIP
    4. HTTP
-   
+   4. SDP/JSEP
 2. 通信部分
    1. ICE/STUN/TURN
    2. mDNS
-   
 3. 数据部分
    1. SRTP/SRTCP
    2. SCTP
    3. Codec
       1. 视频编解码
       2. 音频编解码
-   
 4. 安全部分
    
    1. TLS/DTLS
-   
-5. 浏览器侧(Pion Stack)
-   
-   1. Chromium实现
-   
-      1. Web API
-         1. PeerConnection
-         2. DataChannel
-      2. Native C++ API
-   2. Pion纯Go实现
+
+### 2 WebRTC简化流程
+
+![](doc/webrtc_call.jpg)
+- Call方
+- Called方
+- Signal服务器
+- STUN/TURN服务器
 
 ---
 
 ## 二. WebRTC原理
-![](./doc/webrtc_stack.png)
-
-**WebRTC协议栈**
 
 ### 1 信令部分
 
@@ -46,9 +43,11 @@
 
 ![](doc/server_push.png)
 
-#### 1.1.1 WebSocket(Web套接口, 服务器“push”模式, 长连接)
+#### 1.1.1 WebSocket(Web套接口, 服务器“push”模式, 长连接)及Socket.IO
 
 ​         **WebSockets** 是一种先进的技术。它可以在用户的浏览器和服务器之间打开交互式通信会话。使用此API，您可以向服务器发送消息并接收事件驱动的响应，而无需通过轮询服务器的方式以获得响应。
+
+​		**Socket.io**是一个[WebSocket](https://www.w3cschool.cn/websocket_protocol/)库，包括了客户端的js和服务器端的[nodejs](https://www.w3cschool.cn/nodejs/)，它的目标是构建可以在不同浏览器和移动设备上使用的实时应用。它会自动根据浏览器从WebSocket、[AJAX](https://www.w3cschool.cn/ajax/)长轮询、Iframe流等等各种方式中选择最佳的方式来实现网络实时应用。但注意: **Socket.IO不是原生的WebSockets**。
 
 - 参考资料
   - [MDN WebSockets](https://developer.mozilla.org/zh-CN/docs/Web/API/WebSockets_API)
@@ -59,6 +58,8 @@
   - [WebSockets 简介：将套接字引入网络](https://www.html5rocks.com/zh/tutorials/websockets/basics/)
   - [WebSocket 教程](https://www.ruanyifeng.com/blog/2017/05/websocket.html)
   - [html5rocks tutorials]( http://www.html5rocks.com/en/tutorials/websockets/basics/)
+  - [JS实时通信三把斧系列之一: websocket](https://blog.5udou.cn/#/blog/detail/JSShi-Shi-Tong-Xin-San-Ba-Fu-Xi-Lie-Zhi-Yi-websocket62)
+  - [JS实时通信三把斧系列之二: socket.io](https://blog.5udou.cn/#/blog/detail/JSShi-Shi-Tong-Xin-San-Ba-Fu-Xi-Lie-Zhi-Er-socketio40)
   - <<HTML5 WebSocket权威指南>>
 
 #### 1.1.2 SSE(服务器发送事件, 服务器“push”模式, 长连接)
@@ -67,8 +68,10 @@
   - [MDN Server-sent events](https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events)
   - [MDN 使用服务器发送事件](https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events/Using_server-sent_events)
   - [html5rocks tutorials](http://www.html5rocks.com/en/tutorials/eventsource/basics/[)
+  - [JS实时通信三把斧系列之三: eventsource](https://blog.5udou.cn/#/blog/detail/JSShi-Shi-Tong-Xin-San-Ba-Fu-Xi-Lie-Zhi-San-eventsource55)
 
 #### 1.1.3 XHR(AJAX XMLHttpRequest, 客户端“pull”模式, polling)
+
 ​         **XMLHttpRequest**(XHR) 是一种创建 AJAX请求的JavaScript API。它的方法提供了在浏览器和服务器之间发送请求的能力。
 
 - 参考资料
@@ -84,11 +87,109 @@
   - [Comet技术详解：基于HTTP长连接的Web端实时通信技术](http://www.52im.net/thread-334-1-1.html)
   - [开源Comet服务器iComet：支持百万并发的Web端即时通讯方案](http://www.52im.net/thread-330-1-1.html)
 
-#### 1.2 SDP/Javsscript会话描述协议JSEP
+#### 1.2 XMPP/SIP
 
-- 标准SDP/planB/unifiedPlan
+##### 1.2.1 XMPP(可扩展消息处理和现场协议)
+​         XMPP(Extensible Messaging and Presence Protocol,可扩展消息处理和现场协议) 是一种网络即时通讯协议或者说是开放消息协议，它基于XML，具有很强的扩展性，被广泛使用在即时通讯软件、网络游戏聊天、Web聊天及Web消息推送、联网的实时文档协作工具、移动设备的消息推送等场景。
 
-- JESP State Machine
+- XMPP/WS(XMPP over WebSocket)
+
+- XMPP over HTTP(BOSH)
+
+  ​		BOSH(Bidirectional-streams Over Synchronous HTTP)是一种在客户端和服务器端之间通过HTTP的请求/响应进行客户端和服务器双向通信的技术，BOSH在XMPP系列规范中的XEP-0124中定义，应用场合为基于浏览器的客户端访问XMPP服务器。
+
+  ![](doc/bosh.png)
+
+- 参考资料
+  - [xep-0124](https://xmpp.org/extensions/xep-0124.html)
+  - [xep-0340](https://xmpp.org/extensions/xep-0340.html)
+  - [jitsi/strophejs](https://github.com/jitsi/strophejs), XMPP JS Client
+  - [jitsi/Smack](https://github.com/jitsi/Smack),  XMPP Java Client
+  - XMPP.js, XMPP JS Client
+  - Prosody, XMPP Server Written in Lua
+  - Openfire, XMPP Server Written in Java
+  - Tigase, XMPP Server Written in Java
+  - ejabberd, XMPP Server Written in Erlang
+  - [strophe/strophejs](https://github.com/strophe/strophejs/) 及 [plugins](https://github.com/metajack/strophejs-plugins)
+  - [xmpp-ftw/xmpp-ftw-demo](https://github.com/xmpp-ftw/xmpp-ftw-demo)
+
+#### 1.3 HTTP
+
+#### 1.3.1 HTTP及REST
+
+- HTTP/1.0 vs HTTP/1.1
+  - 增加了 PUT、DELETE 等新的方法；
+  - 增加了缓存管理和控制；
+  - 明确了连接管理，允许长连接；
+  - 允许响应数据分块（chunked），利于传输大文件；
+  - 强制要求 Host 头，让互联网主机托管成为可能；
+- REST成熟度
+  - <img src="doc/REST_Maturity_Model.jpeg" style="zoom:50%;" />
+
+- 参考资料
+  - [WEB端即时通讯：HTTP长连接、长轮询（long polling）详解](http://www.52im.net/thread-224-1-1.html)
+  - [WEB端即时通讯：不用WebSocket也一样能搞定消息的即时性](http://www.52im.net/thread-296-1-1.html)
+
+#### 1.3.2 HTTPS
+
+- Openssl使用
+- Let's Encrypt使用, https://letsencrypt.org/zh-cn/docs/
+  - 免费申请证书
+  - nginx配置证书
+
+- wireshark分析https
+  - #配置浏览器导出SSL Key
+    export SSLKEYLOGFILE="$HOME/keylog.log"
+    #wireshark中配置SSL Key
+    首选项->协议->TLS(Master-Secret log filename), 指定SSL Key文件路径
+  - ![](doc/wireshark_https_chrome_tcp.png)
+
+- 参考资料
+  - <<HTTPS权威指南>>
+  - <<深入浅出HTTPS>>
+  - rfc2818: HTTP Over TLS
+
+#### 1.3.3 HTTP2
+
+- 参考资料
+  - rfc7540: Hypertext Transfer Protocol version 2
+  - rfc7541: HPACK - Header Compression for HTTP/2
+  - rfc6797: HPACK - HTTP Strict Transport Security
+  - http1.1 vs http2, https://http2.akamai.com/demo
+  - HTTP2详解, https://http2-explained.haxx.se/zh
+  - HTTP 2.0 协议详解, https://github.com/zqjflash/http2-protocol
+  - Better HTTP/2 Prioritization for a Faster Web, https://blog.cloudflare.com/better-http-2-prioritization-for-a-faster-web/
+  - http2支持清单, https://github.com/httpwg/http2-spec/wiki/Implementations
+  - NGINX_HTTP2_White_Paper_v4, https://www.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf
+  - 使用HTTP/2提升性能的7个建议, https://www.w3ctech.com/topic/1563
+  - HTTP性能极限优化, https://taohui.blog.csdn.net/article/details/103952639
+  - HTTP/2资料汇总, https://imququ.com/post/http2-resource.html
+  - The HTTP/2 Module in NGINX, https://www.nginx.com/blog/http2-module-nginx/
+  - HTTP/2 in GO系列, https://github.com/DigDeeply/http2-in-go
+  - http2-go, https://github.com/Jxck/http2
+  - Nginx实现HTTP/2——原理、实践与数据分析, https://blog.csdn.net/zhuyiquan/article/details/52585941
+
+#### 1.3.4 HTTP3
+
+- http/1 vs https vs http/2 vs http/3
+
+   ![](./doc/http1_3.png)
+
+- 参考资料
+
+  - QUIC RFC: https://tools.ietf.org/html/draft-ietf-quic-transport-24
+  - QUIC with TLS RFC: https://quicwg.org/base-drafts/draft-ietf-quic-tls.html#name-introduction
+  - 中文QUIC RFC: http://docs.wxclimb.top/draft-ietf-quic-transport-zh.html#fc-credit
+  - HTTP3详解, https://http3-explained.haxx.se/zh/
+  - QUIC & HTTP/3 Support：主流浏览器和服务端对 HTTP/3 的支持情况, https://sysin.org/article/QUIC-HTTP3-Support/
+  - HTTP/HTTPS/HTTP2/HTTP3/QUIC/WebSocket协议详解, https://segmentfault.com/a/1190000021390130?utm_source=tag-newest
+  - HTTP/3：起源, https://github.com/xitu/gold-miner/blob/master/TODO1/http-3-from-root-to-tip.md
+
+#### 1.4 SDP/JSEP
+
+#### 1.4.1 JSEP-Javascript会话描述协议
+
+- JSEP State Machine
 
   ```shell
                       setRemote(OFFER)               setLocal(PRANSWER)
@@ -131,103 +232,13 @@
   ```
 
 - 参考资料
-  
+
   - [RFC 8829 JavaScript Session Establishment Protocol (JSEP)](https://www.rfc-editor.org/rfc/rfc8829.html), JavaScript会话建立协议
 
-#### 1.3 XMPP/SIP
+#### 1.4.2 SDP
 
-##### 1.3.1 XMPP(可扩展消息处理和现场协议)
-​         XMPP(Extensible Messaging and Presence Protocol,可扩展消息处理和现场协议) 是一种网络即时通讯协议或者说是开放消息协议，它基于XML，具有很强的扩展性，被广泛使用在即时通讯软件、网络游戏聊天、Web聊天及Web消息推送、联网的实时文档协作工具、移动设备的消息推送等场景。
-
-- XMPP/WS(XMPP over WebSocket)
-
-- XMPP over HTTP(BOSH)
-
-  ​		BOSH(Bidirectional-streams Over Synchronous HTTP)是一种在客户端和服务器端之间通过HTTP的请求/响应进行客户端和服务器双向通信的技术，BOSH在XMPP系列规范中的XEP-0124中定义，应用场合为基于浏览器的客户端访问XMPP服务器。
-
-  ![](doc/bosh.png)
-
-- 参考资料
-  - [xep-0124](https://xmpp.org/extensions/xep-0124.html)
-  - [xep-0340](https://xmpp.org/extensions/xep-0340.html)
-  - [jitsi/strophejs](https://github.com/jitsi/strophejs), XMPP JS Client
-  - [jitsi/Smack](https://github.com/jitsi/Smack),  XMPP Java Client
-  - XMPP.js, XMPP JS Client
-  - Prosody, XMPP Server Written in Lua
-  - Openfire, XMPP Server Written in Java
-  - Tigase, XMPP Server Written in Java
-  - ejabberd, XMPP Server Written in Erlang
-  - [strophe/strophejs](https://github.com/strophe/strophejs/) 及 [plugins](https://github.com/metajack/strophejs-plugins)
-  - [xmpp-ftw/xmpp-ftw-demo](https://github.com/xmpp-ftw/xmpp-ftw-demo)
-
-#### 1.4 HTTP
-
-#### 1.4.1 HTTP
-
-- HTTP/1.0 vs HTTP/1.1
-  - 增加了 PUT、DELETE 等新的方法；
-  - 增加了缓存管理和控制；
-  - 明确了连接管理，允许长连接；
-  - 允许响应数据分块（chunked），利于传输大文件；
-  - 强制要求 Host 头，让互联网主机托管成为可能；
-- 参考资料
-  - [WEB端即时通讯：HTTP长连接、长轮询（long polling）详解](http://www.52im.net/thread-224-1-1.html)
-  - [WEB端即时通讯：不用WebSocket也一样能搞定消息的即时性](http://www.52im.net/thread-296-1-1.html)
-
-#### 1.4.2 HTTPS
-
-- Openssl使用
-- Let's Encrypt使用, https://letsencrypt.org/zh-cn/docs/
-  - 免费申请证书
-  - nginx配置证书
-
-- wireshark分析https
-  - #配置浏览器导出SSL Key
-    export SSLKEYLOGFILE="$HOME/keylog.log"
-    #wireshark中配置SSL Key
-    首选项->协议->TLS(Master-Secret log filename), 指定SSL Key文件路径
-  - ![](doc/wireshark_https_chrome_tcp.png)
-
-- 参考资料
-  - <<HTTPS权威指南>>
-  - <<深入浅出HTTPS>>
-  - rfc2818: HTTP Over TLS
-
-#### 1.4.3 HTTP2
-
-- 参考资料
-  - rfc7540: Hypertext Transfer Protocol version 2
-  - rfc7541: HPACK - Header Compression for HTTP/2
-  - rfc6797: HPACK - HTTP Strict Transport Security
-  - http1.1 vs http2, https://http2.akamai.com/demo
-  - HTTP2详解, https://http2-explained.haxx.se/zh
-  - HTTP 2.0 协议详解, https://github.com/zqjflash/http2-protocol
-  - Better HTTP/2 Prioritization for a Faster Web, https://blog.cloudflare.com/better-http-2-prioritization-for-a-faster-web/
-  - http2支持清单, https://github.com/httpwg/http2-spec/wiki/Implementations
-  - NGINX_HTTP2_White_Paper_v4, https://www.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf
-  - 使用HTTP/2提升性能的7个建议, https://www.w3ctech.com/topic/1563
-  - HTTP性能极限优化, https://taohui.blog.csdn.net/article/details/103952639
-  - HTTP/2资料汇总, https://imququ.com/post/http2-resource.html
-  - The HTTP/2 Module in NGINX, https://www.nginx.com/blog/http2-module-nginx/
-  - HTTP/2 in GO系列, https://github.com/DigDeeply/http2-in-go
-  - http2-go, https://github.com/Jxck/http2
-  - Nginx实现HTTP/2——原理、实践与数据分析, https://blog.csdn.net/zhuyiquan/article/details/52585941
-
-#### 1.4.4 HTTP3
-
-- http/1 vs https vs http/2 vs http/3
-
-   ![](./doc/http1_3.png)
-
-- 参考资料
-
-  - QUIC RFC: https://tools.ietf.org/html/draft-ietf-quic-transport-24
-  - QUIC with TLS RFC: https://quicwg.org/base-drafts/draft-ietf-quic-tls.html#name-introduction
-  - 中文QUIC RFC: http://docs.wxclimb.top/draft-ietf-quic-transport-zh.html#fc-credit
-  - HTTP3详解, https://http3-explained.haxx.se/zh/
-  - QUIC & HTTP/3 Support：主流浏览器和服务端对 HTTP/3 的支持情况, https://sysin.org/article/QUIC-HTTP3-Support/
-  - HTTP/HTTPS/HTTP2/HTTP3/QUIC/WebSocket协议详解, https://segmentfault.com/a/1190000021390130?utm_source=tag-newest
-  - HTTP/3：起源, https://github.com/xitu/gold-miner/blob/master/TODO1/http-3-from-root-to-tip.md
+- SDP整体结构
+  - ![](doc/sdp_all.jpg)
 
 ### 2 通信部分
 
@@ -445,6 +456,9 @@ External Port: None
 - [jitsi/jitsi-sctp](https://github.com/jitsi/jitsi-sctp)
 
 ### 4 安全部分
+
+![](doc/webrtc_safe.jpg)
+
 #### 4.1 TLS
 
 - 参考资料
@@ -529,18 +543,20 @@ External Port: None
 
 #### 5.1.3  RTCDataChannel
 
-### 5.2 Native API
-#### 5.2.1 Chromium C/C++实现
-#### 5.2.2 Golang实现
+### 6 Native API
+
+#### 6.1 Chromium C/C++实现
+
+#### 6.2 Golang实现
 
 - [pion/example-webrtc-applications](https://github.com/pion/example-webrtc-applications) and more [examples](https://github.com/pion/webrtc/tree/master/examples)
 
-#### 5.2.3 Rust实现
+#### 6.3 Rust实现
 
 - [webrtc-rs/crate webrtc](https://docs.rs/webrtc/0.3.0/webrtc/)
 - [webrtc-rs/examples](https://github.com/webrtc-rs/examples/tree/main/examples)
 
-### 5.3 参考资料
+### 7 参考资料
 
 - [MDN WebRTC API](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API)
 - [Media Capture and Streams](https://w3c.github.io/mediacapture-main/)
@@ -548,9 +564,9 @@ External Port: None
 
 
 ---
-## 三. WebRTC例子
+## 三. WebRTC例子解读及DIY
 
-### ☞ [WebRTC Samples](https://yejinlei.gitee.io/webrtc-samples/)官方例子
+### 1 [WebRTC Samples](https://yejinlei.gitee.io/webrtc-samples/)官方例子
 
 #### 1. [getUserMedia](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getUserMedia), 本地媒体流
 
@@ -1295,12 +1311,16 @@ External Port: None
   a=fmtp:120 apt=124
   a=rtpmap:123 ulpfec/90000
   ```
+  
+  
 
 ##### 14) [Use RTCDTMFSender](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/dtmf/)
 
 ##### 15) [Display peer connection states](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/states/)
 
 ##### 16) [ICE candidate gathering from STUN/TURN servers](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/trickle-ice/)
+
+- ![](doc/trickle_ice.png)
 
 ##### 17) [Do an ICE restart](https://yejinlei.gitee.io/webrtc-samples/src/content/peerconnection/restart-ice/)
 
@@ -1330,13 +1350,49 @@ External Port: None
 
 ##### 4) [Audio processing using MediaStream Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/audio-processing)
 
-### ☞ [Pion examples](https://github.com/pion/example-webrtc-applications)
+### 2 Pion examples
 
-### ☞ [WebRTC.rs examples](https://github.com/webrtc-rs/examples)
+#### 1. Media API
+
+```go
+//准备Config
+config := webrtc.Configuration{
+ICEServers: []webrtc.ICEServer{
+		{
+        	URLs: []string{"stun:stun.l.google.com:19302"},
+    	},
+	},
+}
+
+
+//创建PeerConnection
+peerConnection, err := webrtc.NewPeerConnection(config)
+if err != nil {
+    panic(err)
+}
+defer func() {
+    if cErr := peerConnection.Close(); cErr != nil {
+        fmt.Printf("cannot close peerConnection: %v\n", cErr)
+    }
+}()
+```
+
+#### 2. Data Channel API
+
+##### 1) [Pion to Pion](https://github.com/pion/webrtc/blob/master/examples/pion-to-pion)
+
+#### 3. Miscellaneous
+#### 4. 参考资料
+
+1. [pion/webrtc examples](https://github.com/pion/webrtc/tree/master/examples)
+2. [pion/example-webrtc-applications](https://github.com/pion/example-webrtc-applications)
+
+### 3 [WebRTC.rs examples](https://github.com/webrtc-rs/examples)
+### 4 [node-webrtc examples](https://github.com/node-webrtc/node-webrtc-examples)
 
 ---
 
-## 四. 各种解决方案
+## 四. 开源解决方案
 
 ### 1 Stun/Turn服务器 - coturn(TODO)
 
@@ -1670,12 +1726,22 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 15: Average jitter -nan ms； min = 4294967295 ms, max = 0 ms
 ```
 
-### 2 Kurent分析与实践
-#### 2.1 部署
+
+### 2 [webRTC.io](https://github.com/webRTC-io)
+
+### 3 [SimpleWebRTC](https://github.com/simplewebrtc/SimpleWebRTC)
+
+### 4 Kurent分析与实践
+
+#### 4.1 源码分析
+
+![](../doc/kurento.png)
+
+#### 4.2 部署
 
 - 部署stun/turn(略)
 
-- 启动kms服务
+- 启动KMS服务, 容器方式
 
   ```sh
   #运行KMS, run_kms.sh, 开启ws端口8888
@@ -1699,21 +1765,21 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
   sdk use java 8.0.302-open
   ```
   
-- 启动web服务
+- 启动KAS服务
 
   ```sh
   //kurento-group-call, 开启https端口8443
   sudo mvn -U clean spring-boot:run -Dkms.url=ws://127.0.0.1:8888/kurento -DKMS_STUN_IP=123.60.88.103 -DKMS_STUN_PORT=3478 -DKMS_TURN_URL=hxdi:pass@123.60.88.103:3478
   ```
 
+### 5 Jitsi分析与实践
 
-### 3 Jitsi分析与实践
 ![](./scheme/jitsi/doc/JitsiNetworkDes.png)
 ![](./scheme/jitsi/doc/JitsiArchitectureDiagram.png)
 
 
 
-#### 3.1 分析与定制
+#### 5.1 分析与定制
 
 > 总入口: https://gitee.com/yejinlei/jitsi-meet-all,  下载所有子项目 git clone --recurse-submodules https://gitee.com/yejinlei/jitsi-meet-all 
 >
@@ -1737,11 +1803,11 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 >
 > |目录jicofo: https://gitee.com/yejinlei/jicofo.git                                                      #会议服务, 最终生成结果文件需要放入docker-jitsi-meet
 
-##### 3.1.0 容器编排(docker-jitsi-meet)
+##### 5.1.0 容器编排(docker-jitsi-meet)
 
 ![](doc/docker-jitsimeet-build.png)
 
-##### 3.1.1 Web, 内置web服务器及Web网页含WebRTC Client服务
+##### 5.1.1 Web, 内置web服务器及Web网页含WebRTC Client服务
 
 ###### 1) Web业务构建
 
@@ -1836,7 +1902,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 - [构建软件包](https://www.debian.org/doc/manuals/maint-guide/build.zh-cn.html)
 - [Debian 新维护者手册](https://www.debian.org/doc/manuals/maint-guide/index.zh-cn.html)
 
-##### 3.1.2 Prosody, 提供XMPP信令交换及认证服务
+##### 5.1.2 Prosody, 提供XMPP信令交换及认证服务
 ###### 1) Prosody, XMPP服务器
 
 - **prosody core plugins**, [doc](https://prosody.im/doc/modules), [code](https://github.com/bjc/prosody/tree/master/plugins)
@@ -2040,7 +2106,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 - ‹‹Practical Protocols XMPP›› book
 - [xmpp-ftw/xmpp-ftw](https://github.com/xmpp-ftw/xmpp-ftw)
 
-##### 3.1.3 jicofo, 提供会议管理服务
+##### 5.1.3 jicofo, 提供会议管理服务
 
 ###### 1) 容器化
 - 容器运行
@@ -2080,7 +2146,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
 ###### 2) 参考资料
 
-##### 3.1.4 JVB, 提供SFU服务
+##### 5.1.4 JVB, 提供SFU服务
 
 ###### 1) 容器化
 
@@ -2112,6 +2178,144 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
     - [x] LOCAL_ADDRES
 
 ###### 2) 参考资料
+
+### 6 Janus分析与实践
+
+#### 6.1 源码分析
+
+##### 6.1.1 核心代码
+
+- Janus组件及架构
+  - ![](doc/janus_arch.png)
+
+- 源码关系(By Doxygen)
+  - <img src="doc/janus_8c__incl.png"  />
+- 重要流程和机制
+  - main函数入口流程, [janus.c](https://github1s.com/meetecho/janus-gateway/blob/master/janus.c)
+    - cmdline_parser函数, 解析命令参数
+    - janus_config_parse函数, 解析配置文件
+    - janus_config_get_create函数, 创建categories大分类
+    - janus_events_init函数, 初始化事件
+    - janus_log_init函数
+    - janus_auth_init函数
+    - janus_ice_init函数
+    - SSL_library_init函数
+    - janus_dtls_srtp_init函数
+    - janus_sctp_init函数
+    - janus_events_init函数
+  - 配置管理
+    - janus_config_get_create函数, 创建categories大分类: “general”, “certificates”, “nat”, “media”, “transports”, “plugins”, “events”, “loggers”
+  - Event事件处理机制, [doc](https://janus.conf.meetecho.com/docs/eventhandlers.html)
+    - 事件类型
+    - 事件格式
+  - Transports信令传输机制, [doc](https://janus.conf.meetecho.com/docs/rest.html)
+    - *struct* janus_transport数据结构
+    - struct janus_transport_callbacks数据结构
+    - struct janus_transport_session数据结构
+    - [WebSockets Interface doc](https://janus.conf.meetecho.com/docs/rest.html#WS)
+    - [RabbitMQ interface doc](https://janus.conf.meetecho.com/docs/rest.html#rabbit)
+    - [MQTT interface doc](https://janus.conf.meetecho.com/docs/rest.html#apimqtt)
+    - [Nanomsg interface doc](https://janus.conf.meetecho.com/docs/rest.html#apinanomsg)
+    - [UnixSockets interface doc](https://janus.conf.meetecho.com/docs/rest.html#unix) 
+  - Plugin插件机制
+    - *struct* janus_plugin数据结构
+      - init(): 该函数是插件的初始化函数，像读取配置文件等操作都应该在这个函数中实现。
+      - destroy(): 插件被关闭的时候调用
+      - get_api_compatibility(): 该方法只需要返回Janus的API版本即可，用于控制不同Janus版本是否兼容
+      - get_version(): 返回版本号(例如 3)
+      - get_version_string(): 返回[字符串)格式的版本号(例如, "v1.0.1")格式的版本号(例如, "v1.0.1")格式的版本号(例如, "v1.0.1")
+      - get_description(): 返回插件的详细信息
+      - get_name(): 返回插件的短名子
+      - get_package():返回插件的唯一包标识 (例如., "janus.plugin.myplugin");
+      - create_session(): 在你和对端之间创建一个session
+      - handle_message(): 对方发送给你的消息
+      - handle_admin_message(): 来自Admin API的消息
+      - setup_media(): 告诉你对端的peerConnection已经准备好了
+      - incoming_rtp(): 对端发过来的 rtp 包
+      - incoming_rtcp(): 对端发过来的 rtcp 消息
+      - incoming_data(): 对端通过 SCTP DataChannel 发过来的数据
+      - data_ready(): 数据可以通过 SCTP DataChannel 发送了
+      - slow_link(): 对端发过来很多 NACKs ，网络路径延迟很大。
+      - hangup_media(): 对端的 PeerConnection 关闭了
+      - query_session(): 在你与对端的 session中查询指定信息
+      - destroy_session(): 消息session
+    - 插件管理相关,  [auth.c](https://github1s.com/meetecho/janus-gateway/blob/master/auth.c)
+      - janus_auth_allow_plugin函数
+- 其他函数
+  - janus_config_get, 获取配置参数
+  - *struct* janus_ice_handle
+    - app, 存放janus_plugin指针
+
+  - janus_ice_handle_create, [ice.c](https://github1s.com/meetecho/janus-gateway/blob/master/ice.c)
+
+
+##### 6.1.2 demo分析
+
+###### 1) video call [demo](https://janus.conf.meetecho.com/videocalltest.html), [doc](https://janus.conf.meetecho.com/docs/videocall.html)
+
+###### 2) Streaming [demo](https://janus.conf.meetecho.com/streamingtest.html)
+
+###### 3) video room [demo](https://janus.conf.meetecho.com/videoroomtest.html)
+
+### 7 Licode分析与实践
+
+##### 7.1 安装与部署, 参考[Dockerfile](https://github1s.com/lynckia/licode/blob/HEAD/Dockerfile)
+
+1. installUbuntuDeps.sh安装运行环境
+   1. check_sudo, 安装sudo命令
+   2. install_apt_deps
+   3. install_nvm_node, 通过nvm安装指定版本nodejs
+   4. apt install python gcc, 通过apt安装python及gcc编译环境等
+   5. install_mongodb, 安装mongodb数据库
+   6. install_conan, 安装C++包管理器
+   7. check_proxy, 为npm检查代理
+   8. install_openssl, 安装node匹配的openssl
+   9. install_libsrtp, 安装编译libsrtp
+   10. install_opus, 安装编译opus
+   11. install_libnice, 安装编译libnice
+   12. install_cpplint, 安装cpplint
+2. [installErizo.sh](https://github1s.com/lynckia/licode/blob/HEAD/scripts/installErizo.sh), 最小安装
+   1. install_erizo, 通过conan安装[erizo/utils/conan-include-paths/conanfile.py](https://github1s.com/lynckia/licode/blob/HEAD/erizo/utils/conan-include-paths/conanfile.py)
+   2. install_erizo_api, 通过npm安装node-gyp
+      1. node-gyp根据配置[binding.gyp](https://github1s.com/lynckia/licode/blob/HEAD/erizoAPI/binding.gyp)编译C/C++代码
+   3. install_erizo_controller
+      1. erizo_controller/installErizo_controller.sh
+         1. npm install, 为[erizoController.js](https://github1s.com/lynckia/licode/blob/HEAD/erizo_controller/erizoController/erizoController.js)安装依赖, 例如socket.io等
+         2. cd erizoClient, 切换目录
+            1. gulp erizo, gulp使用[gulpfile.js](https://github1s.com/lynckia/licode/blob/HEAD/erizo_controller/erizoClient/gulpfile.js)**构建erizo.js**
+   4. install_spine, 构建NativeClient **erizofc.js**
+3. installNuve.sh
+   1. install_nuve
+      1. nuve/installNuve.sh
+         1. npm install, 安装依赖
+         2. nuveClient/tools/compile.sh
+            1. ../../node_modules/google-closure-compiler-js/cmd.js ../src/N.js ../src/N.API.js > ../build/nuve.js, **构建nuve.js**
+   2. populate_mongo
+4. installBasicExample.sh
+   1. extras/basic_example目录下, npm install
+   2. copy erizo_controller/erizoClient/dist/assets public/
+5. [initDockerLicode.sh](https://github1s.com/lynckia/licode/blob/HEAD/extras/docker/initDockerLicode.sh)
+   1. run_nuve
+      1. node nuve/nuveAPI/nuve.js. **启动Nuve服务**
+   2. run_erizoController
+      1. node erizo_controller/erizoController/[erizoController.js](https://github1s.com/lynckia/licode/blob/HEAD/erizo_controller/erizoController/erizoController.js), **启动EC服务**
+   3. run_erizoAgent
+      1. node erizo_controller/erizoAgent/[erizoAgent.js](https://github1s.com/lynckia/licode/blob/HEAD/erizo_controller/erizoAgent/erizoAgent.js), **启动EA服务**
+   4. run_basicExample
+      1. copy nuve/nuveClient/dist/nuve.js到extras/basic_example/basicServer.js目录下
+      2. node [basicServer.js](https://github1s.com/lynckia/licode/blob/HEAD/extras/basic_example/basicServer.js), **启动Web服务, 提供Nuve API**
+
+##### 7.2 源码分析
+
+![](doc/licode.png)
+
+###### 7.2.1 Nuve(业务管理服务)
+
+###### 7.2.2 Erizo Cntroller(简称EC, 信令服务)
+
+###### 7.2.3 ErizoAgent(简称EA, 媒体服务) / ErizoJS(简称EJ, 媒体转发实体)
+
+###### 7.2.4 Erizo.js
 
 ## 五. RFC汇总及参考资料
 
@@ -2180,4 +2384,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
 1. [Real-time Communication Between Browsers 1.0](https://w3c.github.io/webrtc-pc/), 中文 <<WebRTC 1.0浏览器间实时通讯>>
 2. [Get Started with WebRTC](https://www.html5rocks.com/en/tutorials/webrtc/basics/)
+2. [Real-Time Communication in WEB-browsers (rtcweb)](https://datatracker.ietf.org/wg/rtcweb/documents/)
+2. [Build the backend services needed for a WebRTC app](https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/)
+2. [leggetter/realtime-web-technologies-guide](https://github.com/leggetter/realtime-web-technologies-guide)
 
