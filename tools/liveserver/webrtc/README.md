@@ -488,9 +488,9 @@ External Port: None
   - 传输层必须实现流量和拥塞控制机制
   - 传输层必须保证数据的机密性和完整性
 - SCTP格式
-  - ![](/home/yee/src/liveinonetools/tools/liveserver/webrtc/doc/sctp_head.png)
-  - ![](/home/yee/src/liveinonetools/tools/liveserver/webrtc/doc/sctp_format.gif)
-  - <img src="/home/yee/src/liveinonetools/tools/liveserver/webrtc/doc/sctp_chunk_type.png" style="zoom: 200%;" />
+  - ![](doc/sctp_head.png)
+  - ![](doc/sctp_format.gif)
+  - <img src="doc/sctp_chunk_type.png" style="zoom: 200%;" />
 
 - 参考资料
   - <<UNIX网络编程>> 3rd, 第9, 10, 23章
