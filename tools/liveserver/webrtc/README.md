@@ -624,6 +624,18 @@ External Port: None
 
 #### 6.1 Chromium C/C++实现
 
+##### 6.1.1 WebRTC数据流
+
+- ![](doc/WebRTC数据流图.jpg)
+
+##### 6.1.2 WebRTC线程模型
+
+![](doc/WebRTC线程模型图.jpg)
+
+##### 6.1.3 WebRTC网络传输
+
+![](doc/WebRTC网络传输图.jpg)
+
 #### 6.2 Golang实现
 
 - [pion/example-webrtc-applications](https://github.com/pion/example-webrtc-applications) and more [examples](https://github.com/pion/webrtc/tree/master/examples)
