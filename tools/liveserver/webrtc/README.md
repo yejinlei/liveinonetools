@@ -1,3 +1,5 @@
+
+
 # 有关WebRTC
 
 ## 一. WebRTC概述及索引
@@ -5,33 +7,28 @@
 ### 1 WebRTC协议栈
 
 ![](./doc/webrtc_stack.png)
-涉及协议:
-
-1. 信令部分
-   1. WebSocket/SSE/XHR/Other
-   2. XMPP/SIP
-   4. HTTP
-   4. SDP/JSEP
-2. 通信部分
-   1. ICE/STUN/TURN
-   2. mDNS
-3. 数据部分
-   1. SRTP/SRTCP
-   2. SCTP
-   3. Codec
-      1. 视频编解码
-      2. 音频编解码
-4. 安全部分
-   
-   1. TLS/DTLS
 
 ### 2 WebRTC简化流程
 
 ![](doc/webrtc_call.jpg)
-- Call方
-- Called方
-- Signal服务器
-- STUN/TURN服务器
+涉及主体:
+1. Call方
+1. Called方
+1. Signal服务器
+1. STUN/TURN服务器
+
+### 3 浏览器WebRTC组件
+
+![](doc/arch.png)
+
+核心组件:
+
+1. Web API
+2. WebRTC C++ API
+2. JSEP
+3. Transport
+4. Video Engine
+5. Voice Engine
 
 ---
 
@@ -184,6 +181,8 @@
   - QUIC & HTTP/3 Support：主流浏览器和服务端对 HTTP/3 的支持情况, https://sysin.org/article/QUIC-HTTP3-Support/
   - HTTP/HTTPS/HTTP2/HTTP3/QUIC/WebSocket协议详解, https://segmentfault.com/a/1190000021390130?utm_source=tag-newest
   - HTTP/3：起源, https://github.com/xitu/gold-miner/blob/master/TODO1/http-3-from-root-to-tip.md
+  - [caddy, 支持http3 go编写的web服务器](https://github.com/caddyserver/caddy)
+  - [网络编程懒人入门(十)：一泡尿的时间，快速读懂QUIC协议](http://www.52im.net/thread-2816-1-1.html)
 
 #### 1.4 SDP/JSEP
 
@@ -239,6 +238,20 @@
 
 - SDP整体结构
   - ![](doc/sdp_all.jpg)
+
+#### 1.5 UDP vs TCP
+
+##### 1.5.1 Media Path 首选 UDP
+
+1. TCP: 可靠性“牺牲”实时性, 
+   1. “发送” -> “确认” -> “丢包” -> “重传”, 保证不丢失, 不乱序(不抖动)；
+   2. 增加网络吞吐率, 采用延迟确认和Nagle算法；
+2. UDP: 本身简单, 速度“快”, 那如何解决丢包, 延迟, 抖动问题?
+   1. NACK/RTX, RTCP消息类型, 由接收端向发送端报告一段时间内丢包情况；RTX指发送端重传丢失包, 并使用新的SSRC；
+   2. FEC前向纠错, 使用异或操作传输数据, 在丢包时用于重传, 适合随机少量丢包场景；
+   3. JitterBufer防抖动, 将抖动较小乱序包恢复成有序包；
+   4. NetEQ, 音频控制, 以实现防抖动；
+   5. 拥塞控制
 
 ### 2 通信部分
 
@@ -310,26 +323,18 @@
 |                                                    |                                                              |
 - NAT类型检测
 
+  - NAT类型判断算法整体流程大至是，先判断防火墙是否阻止所有udp包进来，再判断是否是公网ip，再判断是否为全锥型，然后判断是否是对称型，最后判断是否是端口或地址限制型。
+  - 下面描述详细的判断过程,过程中需要与3台具有不同IP的服务器交互辅助。我们把这3台服务器称之为“协调服务器”,分别称为s1,s2,s3。
+  - 判断路由器防火墙是否防止所有UDP包进入 客户端向s1:30017发送一UDP包，s1收到后直接返回一udp数据包，如果客记端收不到s1的回包，那么判定为阻止所有udp,判断结束,否则进入一下判断。为了降低udp在网络中丢失，此过程可以重复多次。
+  - 判断主机是否直连公网 客户端收到s1回复，s1在处理时取出客户端的ip放入回复包里，客户商解析出数据区的ip与本机本地取出的所有ip对比，看是否存在匹配。存在匹配即认定当前主机是直接连接在公网上的，中间没有经过任何网关路由器,判断结束,否则进入一下判断。
+  - 判断当前网络的网关路由器是否为全锥型 客户端向s1:30017端口发送消息请求s1通知s3从不同于30017端口回一个udp消息包，如果客户端能收到s3的回复。那判定为全锥型nat，否则进入下一步判断。
+  - 判断是否为对称型nat 客户端分别向s1:30018,s2:30018发送udp消息，s1,s2收到包后，取出客户端的ip:port放入数据包发送回给客户端。客户端这样就取回自己的两份公网ip:port数据,客户端对比这两个地址，如果这两ip:port不一样那么就是客户端网关就是对称型。否则就是锥型，要么是地址限制型，要么是端口限制型。就需要继续向下判断了。
+  - 判断是地址限制型还是端口限制型nat 客户端向s1:30018发消息，请求s1从另一个端口回复一个消息比如端口6000。如果客户端收到了s1所回复的消息，那么判定为地址限制型而非端口限制型。否则收不到回复就判定为端口限制型。因为s1从非30018端口回复消息补路由器阻止了。
+  
   ![](doc/nat_test_rfc3478.jpg)
   ![](doc/Binding_Lifetime_Discovery.png)
 
 ​															*NAT检测原理 : https://datatracker.ietf.org/doc/html/rfc3489#page-22*
-
-
-
-NAT类型判断算法整体流程大至是，先判断防火墙是否阻止所有udp包进来，再判断是否是公网ip，再判断是否为全锥型，然后判断是否是对称型，最后判断是否是端口或地址限制型。
-
-下面描述详细的判断过程,过程中需要与3台具有不同IP的服务器交互辅助。我们把这3台服务器称之为“协调服务器”,分别称为s1,s2,s3。
-
-判断路由器防火墙是否防止所有UDP包进入 客户端向s1:30017发送一UDP包，s1收到后直接返回一udp数据包，如果客记端收不到s1的回包，那么判定为阻止所有udp,判断结束,否则进入一下判断。为了降低udp在网络中丢失，此过程可以重复多次。
-
-判断主机是否直连公网 客户端收到s1回复，s1在处理时取出客户端的ip放入回复包里，客户商解析出数据区的ip与本机本地取出的所有ip对比，看是否存在匹配。存在匹配即认定当前主机是直接连接在公网上的，中间没有经过任何网关路由器,判断结束,否则进入一下判断。
-
-判断当前网络的网关路由器是否为全锥型 客户端向s1:30017端口发送消息请求s1通知s3从不同于30017端口回一个udp消息包，如果客户端能收到s3的回复。那判定为全锥型nat，否则进入下一步判断。
-
-判断是否为对称型nat 客户端分别向s1:30018,s2:30018发送udp消息，s1,s2收到包后，取出客户端的ip:port放入数据包发送回给客户端。客户端这样就取回自己的两份公网ip:port数据,客户端对比这两个地址，如果这两ip:port不一样那么就是客户端网关就是对称型。否则就是锥型，要么是地址限制型，要么是端口限制型。就需要继续向下判断了。
-
-判断是地址限制型还是端口限制型nat 客户端向s1:30018发消息，请求s1从另一个端口回复一个消息比如端口6000。如果客户端收到了s1所回复的消息，那么判定为地址限制型而非端口限制型。否则收不到回复就判定为端口限制型。因为s1从非30018端口回复消息补路由器阻止了。
 
 
 ```sh
@@ -447,13 +452,55 @@ External Port: None
 #### 2.2 mDNS
 ### 3 数据部分
 
-#### 3.1 SRTP/SRTCP
-#### 3.2 SCTP
+#### 3.1 SRTP / SRTCP
+
+##### 3.1.1 SRTP安全实时传输协议
+
+- SRTP over UDP
+  - ![](doc/SRTP_over_UDP.png)
+
+- 过程
+
+  - 通信双方：通过DTLS握手，协商生成一对密钥；
+  - 数据发送方：将音视频数据封装成RTP包，将控制数据封装成RTCP包；
+  - 数据发送方：利用加密密钥，对RTP包、RTCP包进行加密，生成SRTP包、SRTCP包；
+  - 数据发送方：通过UDP传输SRTP包、SRTCP包；
+- SRTP格式
+  - ![](doc/srtp_head.png)
+
+- RTP格式
+  - ![](doc/rtp_head.png)
+
+##### 3.1.2 SRTCP安全实时传输控制协议
+
+#### 3.2 SCTP流控制传输协议
+
+​    数据通道采用SCTP构建。最初设计用于PSTN电话协议SS7消息
+
+- WebRTC 对 RTCDataChannel 接口及其传输协议有哪些要求?
+  - ![](doc/sctp_tcp.png) 
+  - 传输层必须支持多个独立信道的复用:
+    - 每个信道必须支持有序或乱序交付；
+    - 每个信道必须支持可靠或不可靠交付；
+    - 每个信道可以支持应用定义的优先级；
+  - 传输层必须提供一个面向消息的 API
+    - 每条应用消息都可能在传输层被分段和组装；
+  - 传输层必须实现流量和拥塞控制机制
+  - 传输层必须保证数据的机密性和完整性
+- SCTP格式
+  - ![](/home/yee/src/liveinonetools/tools/liveserver/webrtc/doc/sctp_head.png)
+  - ![](/home/yee/src/liveinonetools/tools/liveserver/webrtc/doc/sctp_format.gif)
+  - <img src="/home/yee/src/liveinonetools/tools/liveserver/webrtc/doc/sctp_chunk_type.png" style="zoom: 200%;" />
+
+- 参考资料
+  - <<UNIX网络编程>> 3rd, 第9, 10, 23章
+  - <<WEB性能优化指南> > 18.5.3 通过 SCTP 交付应用数据,  18.6 DataChannel
+  - SCTP in Go, https://2013.asiabsdcon.org/papers/abc2013-P7A-paper.pdf
+  - rfc3758: Stream Control Transmission Protocol (SCTP) Partial Reliability Extension
+  - rfc4895: Authenticated Chunks for the Stream Control Transmission Protocol (SCTP)
+  - rfc5061: Stream Control Transmission Protocol (SCTP) Dynamic Address Reconfiguration
+
 #### 3.3 Codec
-#### 3.4 参考资料
-- [jitsi/jitsi-rtp](https://github.com/jitsi/jitsi-rtp)
-- [jitsi/jitsi-srtp](https://github.com/jitsi/jitsi-srtp)
-- [jitsi/jitsi-sctp](https://github.com/jitsi/jitsi-sctp)
 
 ### 4 安全部分
 
@@ -490,7 +537,7 @@ External Port: None
 
 ### 5 浏览器侧API
 
-- 浏览器组件
+- 浏览器组件, [src](https://github1s.com/yejinlei/webrtc-src)
 
 ![](doc/browser_webrtc.png)
 
@@ -519,29 +566,59 @@ External Port: None
 ##### 6) 媒体轨道属性
 ##### 7) 媒体轨道Events
 
-#### 5.1.2  RTCPeerConnection
-##### 1) 连接状态
-##### 2) ICE收集状态
+#### 5.1.2  RTCPeerConnection API
 
-- RTCIceCandidateType 代表ICE候选地址的类型
+##### 1) RTCConfiguration成员
+  - ![](doc/RTCConfiguration_dictionary_members.png)
+##### 2) RTCIceServer成员
+  - ![](doc/RTCIceServer_dictionary_members.png)
 
-- RTCIceParameters
+##### 3) RTCPeerConnection构造函数, RTCPeerConnection(configuration)
+##### 4) RTCPeerConnection方法
+  - createOffer (RTCSessionDescriptionCallback successCallback, RTCPeerCon‐
+    nectionErrorCallback failureCallback, optional RTCOfferOptions options)|
+  - createAnswer (RTCSessionDescriptionCallback successCallback, RTCPeerCon‐
+    nectionErrorCallback failureCallback, optional RTCOfferAnswerOptions op‐
+    tions)
+  - setLocalDescription (RTCSessionDescription description, VoidFunction success‐
+    Callback, RTCPeerConnectionErrorCallback failureCallback)
+  - setRemoteDescription (RTCSessionDescription description, VoidFunction suc‐
+    cessCallback, RTCPeerConnectionErrorCallback failureCallback)
+  - updateIce (RTCConfiguration configuration)
+  - addIceCandidate (RTCIceCandidate candidate, VoidFunction successCallback,
+    RTCPeerConnectionErrorCallback failureCallback)
+  - getConfiguration ()
+  - getLocalStreams ()
+  - getRemoteStreams ()
+  - getStreamById (DOMString streamId)
+  - addStream (MediaStream stream)
+  - removeStream (MediaStream stream)
+  - close ()
+##### 5) RTCPeerConnection属性
+  - ![](doc/RTCPeerConnection_attributes.png)
 
-  - usernameFragment, 用户名
-  - password, 密码
+##### 6) RTCSignalingState信令状态
+  - ![](doc/RTCSignalingState.png)
 
-- RTCIceCandidatePair, 候选地址对
+##### 7) RTCIceGatheringState ICE收集状态
+  - ![](doc/RTCIceGatheringState.png)
 
-  - RTCIceCandidate local,  本地
-  - RTCIceCandidate remote, 远端
+##### 8) RTCIceConnectionState ICE连接状态及转换
+  - ![](doc/RTCIceConnectionState.png)
+  - ![](doc/RTCIceConnectionState_Trans.png)
 
-- RTCIceGathererState, 收集状态
+##### 9) 其他
+  - RTCIceCandidateType 代表ICE候选地址的类型
+  - RTCIceParameters
+    - usernameFragment, 用户名
+    - password, 密码
 
-##### 3) ICE连接状态
+  - RTCIceCandidatePair, 候选地址对
+    - RTCIceCandidate local,  本地
+    - RTCIceCandidate remote, 远端
 
-- RTCIceTransportState, 连接状态
 
-#### 5.1.3  RTCDataChannel
+#### 5.1.3  RTCDataChannel API
 
 ### 6 Native API
 
@@ -2248,7 +2325,6 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
   - janus_ice_handle_create, [ice.c](https://github1s.com/meetecho/janus-gateway/blob/master/ice.c)
 
-
 ##### 6.1.2 demo分析
 
 ###### 1) video call [demo](https://janus.conf.meetecho.com/videocalltest.html), [doc](https://janus.conf.meetecho.com/docs/videocall.html)
@@ -2261,7 +2337,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
 ##### 7.1 安装与部署, 参考[Dockerfile](https://github1s.com/lynckia/licode/blob/HEAD/Dockerfile)
 
-1. installUbuntuDeps.sh安装运行环境
+1. [installUbuntuDeps.sh](https://github1s.com/lynckia/licode/blob/HEAD/scripts/installUbuntuDeps.sh)安装运行环境
    1. check_sudo, 安装sudo命令
    2. install_apt_deps
    3. install_nvm_node, 通过nvm安装指定版本nodejs
@@ -2284,7 +2360,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
          2. cd erizoClient, 切换目录
             1. gulp erizo, gulp使用[gulpfile.js](https://github1s.com/lynckia/licode/blob/HEAD/erizo_controller/erizoClient/gulpfile.js)**构建erizo.js**
    4. install_spine, 构建NativeClient **erizofc.js**
-3. installNuve.sh
+3. [installNuve.sh](https://github1s.com/lynckia/licode/blob/HEAD/scripts/installNuve.sh)
    1. install_nuve
       1. nuve/installNuve.sh
          1. npm install, 安装依赖
@@ -2384,6 +2460,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
 1. [Real-time Communication Between Browsers 1.0](https://w3c.github.io/webrtc-pc/), 中文 <<WebRTC 1.0浏览器间实时通讯>>
 2. [Get Started with WebRTC](https://www.html5rocks.com/en/tutorials/webrtc/basics/)
+2. [<<WebRTC权威指南>>]()
 2. [Real-Time Communication in WEB-browsers (rtcweb)](https://datatracker.ietf.org/wg/rtcweb/documents/)
 2. [Build the backend services needed for a WebRTC app](https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/)
 2. [leggetter/realtime-web-technologies-guide](https://github.com/leggetter/realtime-web-technologies-guide)
