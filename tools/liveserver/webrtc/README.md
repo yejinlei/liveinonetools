@@ -688,7 +688,11 @@ External Port: None
 
 #### 6.2 Golang实现
 
-- [pion/example-webrtc-applications](https://github.com/pion/example-webrtc-applications) and more [examples](https://github.com/pion/webrtc/tree/master/examples)
+##### 6.2.1 [MediaEngine API not MediaStream API](https://github1s.com/pion/webrtc/blob/HEAD/mediaengine.go)
+
+##### 6.2.2 [RTCPeerConnection API](https://github1s.com/pion/webrtc/blob/HEAD/peerconnection.go)
+
+##### 6.2.3 [RTCDataChannel API](https://github1s.com/pion/webrtc/blob/HEAD/datachannel.go)
 
 #### 6.3 Rust实现
 
@@ -1644,8 +1648,6 @@ External Port: None
   }
   ```
 
-  
-
 #### 6. Insertable Streams, 可插入流
 
 ##### 1) [End to end encryption using WebRTC Insertable Streams](https://yejinlei.gitee.io/webrtc-samples/src/content/insertable-streams/endtoend-encryption)
@@ -1690,8 +1692,7 @@ defer func() {
 #### 3. Miscellaneous
 #### 4. 参考资料
 
-1. [pion/webrtc examples](https://github.com/pion/webrtc/tree/master/examples)
-2. [pion/example-webrtc-applications](https://github.com/pion/example-webrtc-applications)
+1. [pion/example-webrtc-applications](https://github.com/pion/example-webrtc-applications) and more [examples](https://github.com/pion/webrtc/tree/master/examples)
 
 ### 3 [WebRTC.rs examples](https://github.com/webrtc-rs/examples)
 ### 4 [node-webrtc examples](https://github.com/node-webrtc/node-webrtc-examples)
