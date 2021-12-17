@@ -607,15 +607,65 @@ External Port: None
   - ![](doc/RTCIceConnectionState.png)
   - ![](doc/RTCIceConnectionState_Trans.png)
 
-##### 9) 其他
-  - RTCIceCandidateType 代表ICE候选地址的类型
-  - RTCIceParameters
-    - usernameFragment, 用户名
-    - password, 密码
+##### 9) 完整定义
 
-  - RTCIceCandidatePair, 候选地址对
-    - RTCIceCandidate local,  本地
-    - RTCIceCandidate remote, 远端
+  - ```typescript
+    interface RTCPeerConnection extends EventTarget {
+        readonly canTrickleIceCandidates: boolean | null;
+        readonly connectionState: RTCPeerConnectionState;
+        readonly currentLocalDescription: RTCSessionDescription | null;
+        readonly currentRemoteDescription: RTCSessionDescription | null;
+        readonly iceConnectionState: RTCIceConnectionState;
+        readonly iceGatheringState: RTCIceGatheringState;
+        readonly localDescription: RTCSessionDescription | null;
+        onconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
+        ondatachannel: ((this: RTCPeerConnection, ev: RTCDataChannelEvent) => any) | null;
+        onicecandidate: ((this: RTCPeerConnection, ev: RTCPeerConnectionIceEvent) => any) | null;
+        onicecandidateerror: ((this: RTCPeerConnection, ev: Event) => any) | null;
+        oniceconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
+        onicegatheringstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
+        onnegotiationneeded: ((this: RTCPeerConnection, ev: Event) => any) | null;
+        onsignalingstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
+        ontrack: ((this: RTCPeerConnection, ev: RTCTrackEvent) => any) | null;
+        readonly pendingLocalDescription: RTCSessionDescription | null;
+        readonly pendingRemoteDescription: RTCSessionDescription | null;
+        readonly remoteDescription: RTCSessionDescription | null;
+        readonly signalingState: RTCSignalingState;
+        addIceCandidate(candidate?: RTCIceCandidateInit): Promise<void>;
+        /** @deprecated */
+        addIceCandidate(candidate: RTCIceCandidateInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+        addTrack(track: MediaStreamTrack, ...streams: MediaStream[]): RTCRtpSender;
+        addTransceiver(trackOrKind: MediaStreamTrack | string, init?: RTCRtpTransceiverInit): RTCRtpTransceiver;
+        close(): void;
+        createAnswer(options?: RTCAnswerOptions): Promise<RTCSessionDescriptionInit>;
+        /** @deprecated */
+        createAnswer(successCallback: RTCSessionDescriptionCallback, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+        createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit): RTCDataChannel;
+        createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit>;
+        /** @deprecated */
+        createOffer(successCallback: RTCSessionDescriptionCallback, failureCallback: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions): Promise<void>;
+        getConfiguration(): RTCConfiguration;
+        getReceivers(): RTCRtpReceiver[];
+        getSenders(): RTCRtpSender[];
+        getStats(selector?: MediaStreamTrack | null): Promise<RTCStatsReport>;
+        getTransceivers(): RTCRtpTransceiver[];
+        removeTrack(sender: RTCRtpSender): void;
+        restartIce(): void;
+        setConfiguration(configuration?: RTCConfiguration): void;
+        setLocalDescription(description?: RTCLocalSessionDescriptionInit): Promise<void>;
+        /** @deprecated */
+        setLocalDescription(description: RTCLocalSessionDescriptionInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+        setRemoteDescription(description: RTCSessionDescriptionInit): Promise<void>;
+        /** @deprecated */
+        setRemoteDescription(description: RTCSessionDescriptionInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+        addEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    ```
+
+    
 
 
 #### 5.1.3  RTCDataChannel API
@@ -1423,11 +1473,178 @@ External Port: None
 
 ##### 1) [Transmit text](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/basic/)
 
+- ```javascript
+  function createConnection() {
+    dataChannelSend.placeholder = '';
+    const servers = null;
+    //创建本端Peer连接
+    window.localConnection = localConnection = new RTCPeerConnection(servers);
+    console.log('Created local peer connection object localConnection');
+      
+   //创建本端数据通道对象
+    sendChannel = localConnection.createDataChannel('sendDataChannel');
+    console.log('Created send data channel');
+  
+    localConnection.onicecandidate = e => {
+      onIceCandidate(localConnection, e);
+    };
+    sendChannel.onopen = onSendChannelStateChange;
+    sendChannel.onclose = onSendChannelStateChange;
+    //创建远端Peer连接
+    window.remoteConnection = remoteConnection = new RTCPeerConnection(servers);
+    console.log('Created remote peer connection object remoteConnection');
+  
+    remoteConnection.onicecandidate = e => {
+      onIceCandidate(remoteConnection, e);
+    };
+    
+    //设置本端数据通道, 接收数据回调函数
+    remoteConnection.ondatachannel = receiveChannelCallback;
+  
+    localConnection.createOffer().then(
+        gotDescription1,
+        onCreateSessionDescriptionError
+    );
+    startButton.disabled = true;
+    closeButton.disabled = false;
+  }
+  
+  function onCreateSessionDescriptionError(error) {
+    console.log('Failed to create session description: ' + error.toString());
+  }
+  
+  function sendData() {
+    const data = dataChannelSend.value;
+     //通过本端数据通道对象.send函数发送文本
+    sendChannel.send(data);
+    console.log('Sent Data: ' + data);
+  }
+  
+  ```
+
+  
+
 ##### 2) [Transfer a file](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/filetransfer/)
+
+- ```javascript
+  function sendData() {
+    const file = fileInput.files[0];
+    console.log(`File is ${[file.name, file.size, file.type, file.lastModified].join(' ')}`);
+  
+    // Handle 0 size files.
+    statusMessage.textContent = '';
+    downloadAnchor.textContent = '';
+    if (file.size === 0) {
+      bitrateDiv.innerHTML = '';
+      statusMessage.textContent = 'File is empty, please select a non-empty file';
+      closeDataChannels();
+      return;
+    }
+    sendProgress.max = file.size;
+    receiveProgress.max = file.size;
+    const chunkSize = 16384;
+    fileReader = new FileReader();
+    let offset = 0;
+    fileReader.addEventListener('error', error => console.error('Error reading file:', error));
+    fileReader.addEventListener('abort', event => console.log('File reading aborted:', event));
+    fileReader.addEventListener('load', e => {
+      console.log('FileRead.onload ', e);
+      sendChannel.send(e.target.result);
+      offset += e.target.result.byteLength;
+      sendProgress.value = offset;
+      if (offset < file.size) {
+        readSlice(offset);
+      }
+    });
+    const readSlice = o => {
+      console.log('readSlice ', o);
+      const slice = file.slice(offset, o + chunkSize);
+      fileReader.readAsArrayBuffer(slice);
+    };
+    readSlice(0);
+  }
+  ```
+
+  
 
 ##### 3) [Transfer data](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/datatransfer/)
 
+- ```javascript
+  function onSendChannelOpen() {
+    console.log('Send channel is open');
+  
+    chunkSize = Math.min(localConnection.sctp.maxMessageSize, MAX_CHUNK_SIZE);
+    console.log('Determined chunk size: ', chunkSize);
+    dataString = new Array(chunkSize).fill('X').join('');
+    lowWaterMark = chunkSize; // A single chunk
+    highWaterMark = Math.max(chunkSize * 8, 1048576); // 8 chunks or at least 1 MiB
+    console.log('Send buffer low water threshold: ', lowWaterMark);
+    console.log('Send buffer high water threshold: ', highWaterMark);
+    sendChannel.bufferedAmountLowThreshold = lowWaterMark;
+    sendChannel.addEventListener('bufferedamountlow', (e) => {
+      console.log('BufferedAmountLow event:', e);
+      sendData();
+    });
+      
+  function sendData() {
+    // Stop scheduled timer if any (part of the workaround introduced below)
+    if (timeoutHandle !== null) {
+      clearTimeout(timeoutHandle);
+      timeoutHandle = null;
+    }
+  
+    let bufferedAmount = sendChannel.bufferedAmount;
+    while (sendProgress.value < sendProgress.max) {
+      transferStatus.innerText = 'Sending data...';
+      const timeBefore = performance.now();
+      sendChannel.send(dataString);
+      const timeUsed = performance.now() - timeBefore;
+      if (timeUsed > maxTimeUsedInSend) {
+        maxTimeUsedInSend = timeUsed;
+        totalTimeUsedInSend += timeUsed;
+      }
+      numberOfSendCalls += 1;
+      bufferedAmount += chunkSize;
+      sendProgress.value += chunkSize;
+  
+      // Pause sending if we reach the high water mark
+      if (bufferedAmount >= highWaterMark) {
+        // This is a workaround due to the bug that all browsers are incorrectly calculating the
+        // amount of buffered data. Therefore, the 'bufferedamountlow' event would not fire.
+        if (sendChannel.bufferedAmount < lowWaterMark) {
+          timeoutHandle = setTimeout(() => sendData(), 0);
+        }
+        console.log(`Paused sending, buffered amount: ${bufferedAmount} (announced: ${sendChannel.bufferedAmount})`);
+        break;
+      }
+    }
+  
+    if (sendProgress.value === sendProgress.max) {
+      transferStatus.innerHTML = 'Data transfer completed successfully!';
+    }
+  }
+  ```
+
+  
+
 ##### 4) [Messaging](https://yejinlei.gitee.io/webrtc-samples/src/content/datachannel/messaging/)
+
+- ```javascript
+    _sendMessage(selector, channel) {
+      const textarea = this.shadowRoot.querySelector(selector);
+      const value = textarea.value;
+      if (value === '') {
+        console.log('Not sending empty message!');
+        return;
+      }
+      console.log('Sending remote message: ', value);
+      channel.send(value);
+      textarea.value = '';
+    }
+  }
+  ```
+
+  
 
 #### 6. Insertable Streams, 可插入流
 
