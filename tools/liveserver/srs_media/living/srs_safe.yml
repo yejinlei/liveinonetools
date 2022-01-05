@@ -3,7 +3,7 @@ version: '3.3'
 services:
   live_ingest_loc:
     hostname: live_ingest_loc
-    image: registry.cn-hangzhou.aliyuncs.com/hxdi/live_ingest_safe.go:1.0
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/live_ingest_safe.go:1.0
     secrets:
       - regcode
     privileged: true
@@ -26,7 +26,7 @@ services:
 
   live_ingest_ipc:
     hostname: live_ingest_ipc
-    image: registry.cn-hangzhou.aliyuncs.com/hxdi/live_ingest_safe.go:1.0
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/live_ingest_safe.go:1.0
     secrets:
       - regcode
     privileged: true
@@ -47,7 +47,7 @@ services:
       - /ingest
 
   live_srs_forward:
-    image: registry.cn-hangzhou.aliyuncs.com/hxdi/srsv2.0-r6_centos7.6_safe:1.2
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/srsv2.0-r6_centos7.6_safe:1.2
     secrets:
       - regcode
     privileged: true
@@ -69,7 +69,7 @@ services:
       - ./live_safe
 
   live_srs_rtmp2rtmp:
-    image: registry.cn-hangzhou.aliyuncs.com/hxdi/srsv2.0-r6_centos7.6_safe:1.2
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/srsv2.0-r6_centos7.6_safe:1.2
     secrets:
       - regcode
     privileged: true
@@ -91,7 +91,7 @@ services:
       - ./live_safe
 
   live_srs_rtmp2hls:
-    image: registry.cn-hangzhou.aliyuncs.com/hxdi/srsv2.0-r6_centos7.6_safe:1.2
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/srsv2.0-r6_centos7.6_safe:1.2
     secrets:
       - regcode
     privileged: true
@@ -114,7 +114,7 @@ services:
       - ./live_safe
 
   live_srs_rtmp2httpflv:
-    image: registry.cn-hangzhou.aliyuncs.com/hxdi/srsv2.0-r6_centos7.6_safe:1.2
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/srsv2.0-r6_centos7.6_safe:1.2
     secrets:
       - regcode
     privileged: true
@@ -136,7 +136,7 @@ services:
       - ./live_safe
 
   live_srs_rtmp2hds:
-    image: registry.cn-hangzhou.aliyuncs.com/hxdi/srsv2.0-r6_centos7.6_safe:1.2
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/srsv2.0-r6_centos7.6_safe:1.2
     secrets:
       - regcode
     privileged: true
@@ -158,7 +158,7 @@ services:
       - ./live_safe
 
   live_srs_rtmp2dash:
-    image: registry.cn-hangzhou.aliyuncs.com/hxdi/srsv2.0-r6_centos7.6_safe:1.2
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/srsv2.0-r6_centos7.6_safe:1.2
     secrets:
       - regcode
     privileged: true
@@ -181,7 +181,7 @@ services:
       - ./live_safe
 
   live_srs_rtmp2dvr:
-    image: registry.cn-hangzhou.aliyuncs.com/hxdi/srsv2.0-r6_centos7.6_safe:1.2
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/srsv2.0-r6_centos7.6_safe:1.2
     secrets:
       - regcode
     privileged: true

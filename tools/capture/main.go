@@ -32,7 +32,7 @@ var locker_for_gor sync.Mutex
 
 var request_body = make(chan string, 150)
 
-//var ini_full_path = "D:\\my_work\\hxdi_code\\work_for_git\\hxdi\\liveinonetools\\tools\\capture\\my.ini"
+//var ini_full_path = "D:\\my_work\\yejinlei_code\\work_for_git\\yejinlei\\liveinonetools\\tools\\capture\\my.ini"
 var ini_full_path = "my.ini"
 
 var producer sarama.SyncProducer

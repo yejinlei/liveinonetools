@@ -21,7 +21,7 @@
 >
 >[fdfs]
 >server_addr=10.10.82.66:8888
->conf_full_path=D:\my_work\hxdi_code\work_for_git\hxdi\liveinonetools\tools\capture\fdfs_client.conf
+>conf_full_path=D:\my_work\yejinlei_code\work_for_git\yejinlei\liveinonetools\tools\capture\fdfs_client.conf
 >
 >[kafka]
 >server_addr=10.10.82.66:9092
