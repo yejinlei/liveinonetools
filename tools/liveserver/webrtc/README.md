@@ -1,8 +1,8 @@
-
+ 
 
 # 有关WebRTC
 
-## 一. WebRTC概述及索引
+## 一、 WebRTC概述及索引
 
 ### 1 WebRTC协议栈
 
@@ -32,7 +32,7 @@
 
 ---
 
-## 二. WebRTC原理
+## 二、 WebRTC原理
 
 ### 1 信令部分
 
@@ -262,7 +262,7 @@
 ​         交互式连通性建立（Interactive Connectivity Establishment - ICE）是一个允许实时对等端发现对方并且彼此连接的**框架**。ICE可以找到媒体传输的最短路径, 同时允许我们穿过防火墙和NAT进行工作.
 
 1. ICE 代理向操作系统查询本地 IP 地址；
-2. 如果有配置,ICE 代理会查询外部 STUN 服务器,以取得本地端的公共 IP 和端口号；
+2. 如果有配置,ICE 代理会查询外部 STUN 服务器,以取得本地端的公共 IP 和端口号（NAT网关）；
 3. 如果有配置,ICE 代理会将 TURN 服务器追加为最后一个候选项；假如端到端的连接失败,数据将通过指定的中间设备转发。
 
 ###### 1) ICE流程
@@ -400,6 +400,7 @@ External Port: None
   | ![](doc/Port_Restricted_Cone-Port_Restricted_Cone.png)<br />**借助第三方Proxy,  Full cone/restricted-restricted, 可以通信** |
   | ![](doc/Full_Cone-Symmetric_NAT.png)<br />**借助第三方Proxy, Full cone/IP restricted-symmetric, 可以通信** |
   
+
 ###### 3) RFC5389/5780中的NAT类型, 检测及穿透性
 
 | Mapping | Filtering |
@@ -413,7 +414,6 @@ External Port: None
 - RFC3489与RFC5780 NAT对应关系
 
   ![](doc/rfc3489_rfc5780.png)
-
 
 
 
@@ -448,8 +448,8 @@ External Port: None
 - [RFC 7065: TURN URI](https://tools.ietf.org/html/rfc7065)
 - [RFC 6544: TCP Candidates with ICE](https://tools.ietf.org/html/rfc6544)
 
-
 #### 2.2 mDNS
+
 ### 3 数据部分
 
 #### 3.1 SRTP / SRTCP
@@ -594,7 +594,9 @@ External Port: None
   - addStream (MediaStream stream)
   - removeStream (MediaStream stream)
   - close ()
+
 ##### 5) RTCPeerConnection属性
+
   - ![](doc/RTCPeerConnection_attributes.png)
 
 ##### 6) RTCSignalingState信令状态
@@ -710,7 +712,7 @@ External Port: None
 
 
 ---
-## 三. WebRTC例子解读及DIY
+## 三、 WebRTC例子解读及DIY
 
 ### 1 [WebRTC Samples](https://yejinlei.gitee.io/webrtc-samples/)官方例子
 
@@ -1403,7 +1405,7 @@ defer func() {
 
 ---
 
-## 四. 开源解决方案
+## 四、开源解决方案
 
 ### 1 Stun/Turn服务器 - coturn(TODO)
 
@@ -1741,11 +1743,39 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
 ### 3 [SimpleWebRTC](https://github.com/simplewebrtc/SimpleWebRTC)
 
-### 4 Kurent分析与实践
+### 4 Kurento分析与实践
 
 #### 4.1 源码分析
 
-![](../doc/kurento.png)
+##### 4.1.1 架构图
+
+![](./doc/kurento-mvc.jpg)
+
+![](./doc/kurentoapp-architecture.png)
+
+*备注：Kurento Protocol基于基于 [WebSocket](https://doc-kurento-zh.readthedocs.io/zh/latest/glossary.html#term-websocket) 和 [JSON-RPC](https://doc-kurento-zh.readthedocs.io/zh/latest/glossary.html#term-json-rpc)*, [配置文件](https://github1s.com/Kurento/kurento-media-server/blob/master/kurento.conf.ini)
+
+##### 4.1.2 核心代码
+
+###### KAS（Application logic部分，以kurento-group-call java版为例子， [js版官方](https://github.com/Kurento/kurento-tutorial-js)）
+
+- [GroupCallApp.java](https://github1s.com/Kurento/kurento-tutorial-java/blob/d235d82ba4d15dff52e63667c17e58a876d45b80/kurento-group-call/src/main/java/org/kurento/tutorial/groupcall/GroupCallApp.java)
+- [CallHandler.java](https://github1s.com/Kurento/kurento-tutorial-java/blob/d235d82ba4d15dff52e63667c17e58a876d45b80/kurento-group-call/src/main/java/org/kurento/tutorial/groupcall/CallHandler.java)
+  - joinRoom
+  - leaveRoom
+  - onIceCandidate
+  - receiveVideoFrom
+
+###### KAS (Kurento Client部分，操纵KMS媒体控制, [kurento-java](https://github1s.com/Kurento/kurento-java)， [kurento-client-js](https://github.com/kurento/kurento-client-js)及[doc](https://doc-kurento-zh.readthedocs.io/zh/latest/_static/client-jsdoc/index.html))
+
+###### KMS（媒体服务，实现SFU/MCU及特殊处理）
+
+- [kurento-media-server](https://github1s.com/Kurento/kurento-media-server)机制
+- [kms-core](https://github1s.com/Kurento/kms-core)核心元素实现
+  - 媒体管道
+  - 媒体元素
+    - 元素类型![](./doc/kurent_element.png)
+    - [WebRtcEndpoint](https://github1s.com/Kurento/kms-elements/blob/master/src/server/implementation/objects/WebRtcEndpointImpl.cpp)
 
 #### 4.2 部署
 
@@ -1765,22 +1795,16 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
   yejinlei/kurento-media-server
   ```
   
-- 设置java环境
-
-  ```sh
-  #curl -s "https://get.sdkman.io" | zsh
-  #source ~/.sdkman/bin/sdkman-init.sh
-  #sdk install java 8.0.302-open
-  #sudo apt install maven
-  sdk use java 8.0.302-open
-  ```
-  
-- 启动KAS服务
+  - 启动KAS服务， [js版](https://github.com/chapin666/kurento-group-call-node)
 
   ```sh
   //kurento-group-call, 开启https端口8443
   sudo mvn -U clean spring-boot:run -Dkms.url=ws://127.0.0.1:8888/kurento -DKMS_STUN_IP=123.60.88.103 -DKMS_STUN_PORT=3478 -DKMS_TURN_URL=yejinlei:pass@123.60.88.103:3478
-  ```
+
+#### 4.3 参考资料
+
+- [基于Kurento搭建WebRTC服务器](https://blog.gmem.cc/webrtc-server-basedon-kurento)
+- [Kurento实战](https://xinchen.blog.csdn.net/article/details/112504048)
 
 ### 5 Jitsi分析与实践
 
@@ -1953,7 +1977,7 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
   - websocket模块
 
-    - nginx方向代理
+    - nginx正向代理
 
     - ```nginx
       location /xmpp-websocket {
@@ -2197,7 +2221,6 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
 ###### 2) jitsi性能监控(服务侧)
 
-- 
 - sudo docker swarm init --advertise-addr=192.168.0.188
 - sudo docker stack deploy -c docker-compose.yml prom
 
@@ -2344,7 +2367,11 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
 ###### 7.2.4 Erizo.js
 
-## 五. RFC汇总及参考资料
+## 五、其他开源项目
+
+1. [MultiStreamsMixer.js](https://github.com/muaz-khan/MultiStreamsMixer)
+
+## 六、 RFC汇总及参考资料
 
 1. [RFC2119] Bradner, S., "Key words for use in RFCs to Indicate Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997, <https://www.rfc-editor.org/info/rfc2119>.
 2. [RFC3261] Rosenberg, J., Schulzrinne, H., Camarillo, G., Johnston, A., Peterson, J., Sparks, R., Handley, M., and E. Schooler, "SIP: Session Initiation Protocol", RFC 3261, DOI 10.17487/RFC3261, June 2002, <https://www.rfc-editor.org/info/rfc3261>.

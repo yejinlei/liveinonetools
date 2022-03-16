@@ -1,12 +1,13 @@
-# MaaS工具集
+# MaaS工具集❀
+
 Media as a Service, from codec to server architecture...✍ 
 
 ![](doc/音视频视图.png)
 ![](doc/音视频方案.png)
----
 
-### liveanalysis，多媒体、信令、消息等配套协议
-- ❀音视频相关协议及编解码❀
+## 一、liveanalysis，多媒体、信令、消息等配套协议
+
+### 1.1、音视频相关协议及编解码
 
   protocols（流协议及其他） | formats(封装容器,通常为本地音视文件格式(如mp4)及适用于网络传输的传输流及其本地文件形式(如fmp4,ts/ps流)) | codecs（音视频编解码） | hwaccels（硬件加速） | 协议/文档 | 工具/库
   ---|---|---|---|---|---
@@ -55,22 +56,22 @@ Media as a Service, from codec to server architecture...✍
   _ |_ |**vp8**(On2 VP8)) | | |
   _ |_ |**vorbis** | | |
   _ |_ |_|**qsv** | |
-  
-- ❀安防ONVIF❀
-  
+
+### 1.2、安防ONVIF
+
   _ | _ |  _
   ---|---|---
 
-- ❀安防GB28181(音视频部分)❀
+### 1.3、安防GB28181(音视频部分)
 
-  名字 | 协议 |  参考实现
-  ---|---|---
-  **rtsp** | [RFC 2326](https://tools.ietf.org/html/rfc2326) , Real Time Streaming Protocol (RTSP) | [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
-  **rtcp** | [RFC 3550](http://tools.ietf.org/html/rfc3550) , RTP: A Transport Protocol for Real-Time Applications<br>[RFC 3605](https://tools.ietf.org/html/rfc3605) , Real Time Control Protocol (RTCP) attribute in Session Description Protocol (SDP) |
-  **rtp** | 1. 视频关键帧的封装: RTP + PSheader + PS system header + PS system Map + PES header + h264 data<br>2. 视频非关键帧的封装: RTP + PS header + PES header + h264 data<br>3. 音频帧的封装: RTP + PES header + G711<br><br>[RFC 3550](http://tools.ietf.org/html/rfc3550) , RTP: A Transport Protocol for Real-Time Applications<br>[RFC 3551](http://tools.ietf.org/html/rfc3551) , RTP Profile for Audio and Video Conferences with Minimal Control<br>[RFC 5761](http://tools.ietf.org/html/rfc5761) , Multiplexing RTP Data and Control Packets on a Single Port<br>[RFC 6051](http://tools.ietf.org/html/rfc6051) , Rapid Synchronisation of RTP Flows<br>[RFC 6184](http://tools.ietf.org/html/rfc6184) , RTP Payload Format for H.264 Video<br>[RFC 6416](https://tools.ietf.org/html/rfc6416) , RTP Payload Format for MPEG-4 Audio/Visual Streams<br>[RFC 5215](http://tools.ietf.org/html/rfc5215) , RTP Payload Format for Vorbis Encoded Audio<br>[RFC 5219](https://tools.ietf.org/html/rfc5219) , A More Loss-Tolerant RTP Payload Format for MP3 Audio<br>[RFC 7741](https://tools.ietf.org/html/rfc7741) , RTP Payload Format for VP8 Video<br>[draft-ietf-payload-vp9-02](https://tools.ietf.org/html/draft-ietf-payload-vp9-02) , RTP Payload Format for VP9 Video draft-ietf-payload-vp9-02<br>[RFC 7007](http://tools.ietf.org/html/rfc7007) , Update to Remove DVI4 from the Recommended Codecs for the RTP Profile for Audio and Video Conferences with Minimal Control (RTP/AVP)<br>[RFC 7160](https://tools.ietf.org/html/rfc7160) , Support for Multiple Clock Rates in an RTP Session<br>[RFC 7164](https://tools.ietf.org/html/rfc7164) , RTP and Leap Seconds<br>[Real-Time Transport Protocol (RTP) Parameters](http://www.iana.org/assignments/rtp-parameters/rtp-parameters.xhtml#rtp-parameters-1) | [jrtplib's github](https://github.com/j0r1/JRTPLIB)、[GoRTP's github](https://github.com/whtang/GoRTP)、[linephone ortp's github](https://github.com/dmonakhov/ortp)、[live555's github](https://github.com/cmberryau/live555) 
+名字 | 协议 |  参考实现
+---|---|---
+**rtsp** | [RFC 2326](https://tools.ietf.org/html/rfc2326) , Real Time Streaming Protocol (RTSP) | [rtspdump](https://bisqwit.iki.fi/source/ms-rtsp-dump/)
+**rtcp** | [RFC 3550](http://tools.ietf.org/html/rfc3550) , RTP: A Transport Protocol for Real-Time Applications<br>[RFC 3605](https://tools.ietf.org/html/rfc3605) , Real Time Control Protocol (RTCP) attribute in Session Description Protocol (SDP) |
+**rtp** | 1. 视频关键帧的封装: RTP + PSheader + PS system header + PS system Map + PES header + h264 data<br>2. 视频非关键帧的封装: RTP + PS header + PES header + h264 data<br>3. 音频帧的封装: RTP + PES header + G711<br><br>[RFC 3550](http://tools.ietf.org/html/rfc3550) , RTP: A Transport Protocol for Real-Time Applications<br>[RFC 3551](http://tools.ietf.org/html/rfc3551) , RTP Profile for Audio and Video Conferences with Minimal Control<br>[RFC 5761](http://tools.ietf.org/html/rfc5761) , Multiplexing RTP Data and Control Packets on a Single Port<br>[RFC 6051](http://tools.ietf.org/html/rfc6051) , Rapid Synchronisation of RTP Flows<br>[RFC 6184](http://tools.ietf.org/html/rfc6184) , RTP Payload Format for H.264 Video<br>[RFC 6416](https://tools.ietf.org/html/rfc6416) , RTP Payload Format for MPEG-4 Audio/Visual Streams<br>[RFC 5215](http://tools.ietf.org/html/rfc5215) , RTP Payload Format for Vorbis Encoded Audio<br>[RFC 5219](https://tools.ietf.org/html/rfc5219) , A More Loss-Tolerant RTP Payload Format for MP3 Audio<br>[RFC 7741](https://tools.ietf.org/html/rfc7741) , RTP Payload Format for VP8 Video<br>[draft-ietf-payload-vp9-02](https://tools.ietf.org/html/draft-ietf-payload-vp9-02) , RTP Payload Format for VP9 Video draft-ietf-payload-vp9-02<br>[RFC 7007](http://tools.ietf.org/html/rfc7007) , Update to Remove DVI4 from the Recommended Codecs for the RTP Profile for Audio and Video Conferences with Minimal Control (RTP/AVP)<br>[RFC 7160](https://tools.ietf.org/html/rfc7160) , Support for Multiple Clock Rates in an RTP Session<br>[RFC 7164](https://tools.ietf.org/html/rfc7164) , RTP and Leap Seconds<br>[Real-Time Transport Protocol (RTP) Parameters](http://www.iana.org/assignments/rtp-parameters/rtp-parameters.xhtml#rtp-parameters-1) | [jrtplib's github](https://github.com/j0r1/JRTPLIB)、[GoRTP's github](https://github.com/whtang/GoRTP)、[linephone ortp's github](https://github.com/dmonakhov/ortp)、[live555's github](https://github.com/cmberryau/live555) 
 
-- ❀RTC信令控制、IM消息、WebRTC协议❀
-  
+### 1.4、RTC信令控制、IM消息、WebRTC协议
+
   协议 | _ | _
   ---|---|---
   **h.323** | | ![](tools/liveanalysis/doc/h323-stack.png)<br>1. [H.323 Version 6 - Overview](https://www.packetizer.com/ipmc/h323/whatsnew_v6.html)<br>2. [h323's wiki](https://wiki.wireshark.org/H323)<br>3. 参考实现：[h323plus's github](https://github.com/willamowius/h323plus)
@@ -78,13 +79,13 @@ Media as a Service, from codec to server architecture...✍
   **xmpp/jingle** | | 1. [rfc3921:Extensible Messaging and Presence Protocol (XMPP):Instant Messaging and Presence](https://tools.ietf.org/html/rfc3921), [CN](http://wiki.jabbercn.org/RFC3921)<br>3. 参考实现：[jxmpp's github](https://github.com/igniterealtime/jxmpp)
   **webrtc** | | [mozilla's webrtc api](https://developer.mozilla.org/zh-CN/docs/Web/API)
 
-- ❀NAT穿透ICE/STUN/TURN❀
+### 1.5、NAT穿透ICE/STUN/TURN
 
   NAT/ICE/STUN/TURN | 协议、标准 | 参考实现
   ---|---|---
   _ | [RFC 5389: STUN](https://tools.ietf.org/html/rfc5389)<br>[RFC 5780: NAT Behavior Discovery Using STUN](https://tools.ietf.org/html/rfc5780)<br>[RFC 7064: URI Scheme for STUN](https://tools.ietf.org/html/rfc7064)<br>[RFC 5766: TURN: Relay Extensions to STUN](https://tools.ietf.org/html/rfc5766)<br>[RFC 5245: ICE: A Protocol for NAT for Offer/Answer Protocols](https://tools.ietf.org/html/rfc5245)<br>[RFC 6062: TURN Extensions for TCP Allocations](https://tools.ietf.org/html/rfc6062)<br>[RFC 7065: TURN URI](https://tools.ietf.org/html/rfc7065)<br>[RFC 6544: TCP Candidates with ICE](https://tools.ietf.org/html/rfc6544)|
 
-- ❀协议转换/网关❀
+### 1.6、协议转换/网关
 
   协议 | 源码、项目 | 例子
   ---|---|---
@@ -96,9 +97,9 @@ Media as a Service, from codec to server architecture...✍
   RTSPtoWebRTC | [github](https://github.com/deepch/RTSPtoWebRTC) |
   media-server-go| [github](https://github.com/notedit/media-server-go) | webrtc媒体服务器，同时支持rtmp to webrtc、webrtc to rtmp、webrct to hls
 
-- 实时通信技术RTC - WebRTC
+### 1.7、实时通信技术RTC - WebRTC
   - **[WebRTC一张图](tools/liveserver/webrtc/doc/有关WebRTC.xmind)**
-  ![](tools/liveserver/webrtc/doc/有关WebRTC.png)
+    ![](tools/liveserver/webrtc/doc/有关WebRTC.png)
 
   - **WebRTC概述**
     *WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。WebRTC包含了若干相互关联的API和协议以达到这个目标。
@@ -118,43 +119,46 @@ Media as a Service, from codec to server architecture...✍
     - [《GBT 28181-2011 安全防范视频监控联网系统信息传输、交换、控制技术要求》](https://share.weiyun.com/5FGvp0D)
     - [《GB/T 35114-2017 公共安全视频监控联网信息安全技术要求》](https://share.weiyun.com/59txAC8)
     - [《GB/T 25724 公共安全视频监控数字视音频编解码技术要求》](https://share.weiyun.com/5xVEjAl)
-	- RFC 2030 简单网络时间协议（SNTP）第四版
-	- RFC 2326 RTSP：实时流协议
-	- RFC 3261 SIP: 会话初始协议
-	- RFC 3263 会话初始协议(SIP)：定位SIP 服务器
-	- RFC 3428 会话初始协议(SIP) 即时消息扩展
-	- RFC 3550 实时传输协议
-	- RFC 3725 会话初始协议(SIP)中第三方呼叫控制(3PCC)的当前最佳实现
-	- RFC 4566 SDP: 会话描述协议
-	- RFC 3219 TRIP（Telephony Routing over IP）IP 电话路由协议
-	- ITU-T Rec. G.711-1988 数字传输系统的通用部分：音频的脉冲编码调制
-	- ITU-T Rec. G.723.1-1996 数字传输系统的通用部分：5.3和6.3kbit的多媒体通信传输中的双速率语音编码器
-	- ITU-T Rec. G.729-1996 数字传输系统的通用部分：利用共轭结构代数码激励线形预测的8kbit/s语音编码
-	- ITU-T Rec. H.264-2005 H 系列：音视频和多媒体系统，音视频服务基础－活动视频编码：通用音视频服务的先进视频编码
-	- ITU-T Rec. H.264.1-2005 H 系列：音视频和多媒体系统，音视频服务基础－活动视频编码：H.264先进视频编码的一致性说明
-	- GB/T GB/T 25724-2010 安全防范监控数字视音频编解码技术要求
+    - RFC 2030 简单网络时间协议（SNTP）第四版
+    - RFC 2326 RTSP：实时流协议
+    - RFC 3261 SIP: 会话初始协议
+    - RFC 3263 会话初始协议(SIP)：定位SIP 服务器
+    - RFC 3428 会话初始协议(SIP) 即时消息扩展
+    - RFC 3550 实时传输协议
+    - RFC 3725 会话初始协议(SIP)中第三方呼叫控制(3PCC)的当前最佳实现
+    - RFC 4566 SDP: 会话描述协议
+    - RFC 3219 TRIP（Telephony Routing over IP）IP 电话路由协议
+    - ITU-T Rec. G.711-1988 数字传输系统的通用部分：音频的脉冲编码调制
+    - ITU-T Rec. G.723.1-1996 数字传输系统的通用部分：5.3和6.3kbit的多媒体通信传输中的双速率语音编码器
+    - ITU-T Rec. G.729-1996 数字传输系统的通用部分：利用共轭结构代数码激励线形预测的8kbit/s语音编码
+    - ITU-T Rec. H.264-2005 H 系列：音视频和多媒体系统，音视频服务基础－活动视频编码：通用音视频服务的先进视频编码
+    - ITU-T Rec. H.264.1-2005 H 系列：音视频和多媒体系统，音视频服务基础－活动视频编码：H.264先进视频编码的一致性说明
+    - GB/T GB/T 25724-2010 安全防范监控数字视音频编解码技术要求
 
 - ONVIF视频互联，视频监控
-	- ONVIF 架构[ONVIF 架构]
-	- ONVIF 分析服务WSDL [ONVIF 分析服务WSDL]
-	- ONVIF 解析设备服务[ONVIF 解析设备服务WSDL]
-	- ONVIF 设备服务WSDL [ONVIF 设备WSDL]
-	- ONVIF 设备IO 服务WSDL [ONVIF 设备IO WSDL]
-	- ONVIF 显示服务WSDL [ONVIF 显示WSDL]
-	- ONVIF 事件服务WSDL [ONVIF 事件WSDL]
-	- ONVIF 图像服务WSDL [ONVIF 图像WSDL]
-	- ONVIF 媒体服务WSDL [ONVIF 媒体WSDL]
-	- ONVIF PTZ 服务WSDL [ONVIF PTZ WSDL]
-	- ONVIF 记录服务WSDL [ONVIF 记录WSDL]
-	- ONVIF 远程发现WSDL [ONVIF 远程发现WSDL]
-	- ONVIF 重放服务WSDL [ONVIF 重放WSDL]
-	- ONVIF 检索服务WSDL [ONVIF 检索WSDL]
-	- ONVIF 主题XML 命名空间[ONV/IF 主题命名空间]
+  - ONVIF 架构[ONVIF 架构]
+  - ONVIF 分析服务WSDL [ONVIF 分析服务WSDL]
+  - ONVIF 解析设备服务[ONVIF 解析设备服务WSDL]
+  - ONVIF 设备服务WSDL [ONVIF 设备WSDL]
+  - ONVIF 设备IO 服务WSDL [ONVIF 设备IO WSDL]
+  - ONVIF 显示服务WSDL [ONVIF 显示WSDL]
+  - ONVIF 事件服务WSDL [ONVIF 事件WSDL]
+  - ONVIF 图像服务WSDL [ONVIF 图像WSDL]
+  - ONVIF 媒体服务WSDL [ONVIF 媒体WSDL]
+  - ONVIF PTZ 服务WSDL [ONVIF PTZ WSDL]
+  - ONVIF 记录服务WSDL [ONVIF 记录WSDL]
+  - ONVIF 远程发现WSDL [ONVIF 远程发现WSDL]
+  - ONVIF 重放服务WSDL [ONVIF 重放WSDL]
+  - ONVIF 检索服务WSDL [ONVIF 检索WSDL]
+  - ONVIF 主题XML 命名空间[ONV/IF 主题命名空间]
 
-### livesniff， 多媒体嗅探及质量评估
-- 多媒体嗅探
+## 二、livesniff， 多媒体嗅探及质量评估
+
+### 2.1、多媒体嗅探
   - livesniff工具
-- 图像/视频质量分析
+
+### 2.2、图像/视频质量分析
+
   - 参考资料
     - [全参考图像质量评价方法整理与实用性探讨](https://zhuanlan.zhihu.com/p/24804170)
     - [图像质量评估综述](https://zhuanlan.zhihu.com/p/32553977)
@@ -164,10 +168,12 @@ Media as a Service, from codec to server architecture...✍
     - [视频主观质量对比工具(Visual comparision tool based on ffplay)](https://blog.csdn.net/lrzkd/article/details/78809659?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control)
     - [视频客观质量评价工具：MSU Video Quality Measurement Tool](https://blog.csdn.net/leixiaohua1020/article/details/11729257)
     - [音视频技术：视频质量评价方法简介](https://blog.csdn.net/netease_im/article/details/83993239)
-### liveaccels，多媒体加速
-- wasm，各种webassembly播放器、服务器等
+
+## 三、liveaccels，多媒体加速
+
+### 3.1、wasm，各种webassembly播放器、服务器等
     - livegowasm，livego wasm形式服务器
-- 硬件编码
+### 3.2、硬件编码
   - NVENC
   - Quick Sync Video(介绍：http://www.elecfans.com/d/789787.html)
     - lsmod|grep 'i915'
@@ -175,8 +181,10 @@ Media as a Service, from codec to server architecture...✍
     - http://trac.ffmpeg.org/wiki/Hardware/QuickSync
   - MMX/SSE/SSE2/SSE3/SSE4
   - GPU/CUDA
-### liveplayer，客户端（web、移动、pc）
-- ❀播放器项目汇总❀
+
+## 四、liveplayer，客户端（web、移动、pc）
+
+### 4.1、播放器项目汇总
 
   播放器/库 | 源码及文档 | 分析及使用 
   --- | --- | ----
@@ -202,19 +210,25 @@ Media as a Service, from codec to server architecture...✍
   PeerJS | [github](https://github.com/peers/peerjs) | PeerJS提供了一个完整可配置易于使用基于WebRTC的点对点的数据通信和媒体流のAPI
   openwebrtc | [github](https://github.com/EricssonResearch/openwebrtc) | 爱立信开源WebRTC开发套件 
 
+### 4.2、jessibuca纯H5直播流播放器
+### 4.3、实战
 - call_run_nginx.sh，nginx启动脚本，会拷贝player到/
 - call_run_livego.sh，livego启动脚本
 - pub_rtmp.sh，推送rtmp流
 - pub_rtsp.sh，推送rtsp流
 - player，播放器
-### livevision，多媒体视觉
-- env_mxnet.sh，mxnet cpu环境
-- env_mxnet_gpu.sh，mxnet gpu环境
-- env_imageai_sh，imageai计算机视觉库环境
-- env_imageai_gpu.sh，imageai gpu计算机视觉库环境
-- obdetect，目标检测代码
-### liveserver，多媒体服务器
-- ❀服务器汇总❀
+
+## 五、livevision，多媒体视觉
+- 实战
+    - env_mxnet.sh，mxnet cpu环境
+    - env_mxnet_gpu.sh，mxnet gpu环境
+    - env_imageai_sh，imageai计算机视觉库环境
+    - env_imageai_gpu.sh，imageai gpu计算机视觉库环境
+    - obdetect，目标检测代码
+
+## 六、liveserver，多媒体服务器
+
+###  6.1 、服务器汇总
 
   项目 | 源码 |  分析
   --- | --- | --- 
@@ -266,6 +280,8 @@ Media as a Service, from codec to server architecture...✍
   Pion | [github](https://github.com/pion/webrtc) | go实现的WebRTC API，包罗万象 
   Temasys | [github](https://github.com/Temasys) | 
 
+### 6.2、SRS媒体服务器
+
 - srstools，srs直播工具相关工具
   - doc
     - [分发RTMP流](https://github.com/ossrs/srs/wiki/v1_CN_DeliveryRTMP)
@@ -290,111 +306,43 @@ Media as a Service, from codec to server architecture...✍
         - SrsEdgeUpstream::connect
       - edge边缘节点，推流到源站（SrsEdgeStatePublish标记）
         - SrsEdgeForwarder::start
-  
- - 实战living目录
+- 实战living目录
    - Forward模式
      - start_srs_compose.sh，SRS Forward模式集群docker-compose编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
      - start_srs_stack.sh，SRS Forward模式集群docker swarm/stack编排，支持rtmp(11936)、HLS(11937)、HTTP-FLV(11938)、HDS(11939)
      - start_srs_k8s.sh
     - edge模式
-   
-- WebRTC
+- 资料
 
-   - Web API
+   - [WebRTC-Developer-Tools-Landscape](https://bloggeek.me/download/11768/)
+   - [Comparative study of WebRTC SFUs for Video Conferencing](https://uploads-ssl.webflow.com/5c6853c495409838d874a0d2/5cbed66cae2b88609106befa_IPTComm_2018_LoadTesting-12%5B23229%5D.pdf)
 
-   - Native API
+### 6.3、ZLMediaKit媒体服务器
+### 6.4、Monibuca媒体服务器
+### 6.5、EasyDarwin媒体服务器
+### 4.6、实战
+   - pull_srs.sh，拉取srs版本库脚本
+   - build_srs，编译srs release脚本，需放入srs版本库中
+   - build_srs_gprof.sh，编译加入gprof性能工具
+   - centos6.5_dev.sh，容器开发环境，已经集成了gcc、gdb等工具
+   - gperf，google性能工具相关脚本
+   - clangtools，Apple clang/llvm相关工具
+   - valgrind，linux下valgring内存、cpu分析工具
+   - install_livego.sh，纯go实现的支持rtmp、hls、httpflv协议的轻量级直播服务器
+   - install_easydarwin，纯go实现的支持rtsp的直播服务器
+   - install_live555.sh，c++实现的流媒体项目
+   - ipc_sipserver，sip服务器
 
-      - Google C/C++
-      - Pion
-      - WebRTC.rs
 
-   - Signaling
+## 七、livetools，多媒体工具
 
-   - Stun/Turn
+### 7.1、ffmpeg
 
-      - coturn及子项目
+### 7.2、gstreamer
 
-         - turnserver, stun/turn服务器
+### 7.3、nginx
 
-            ```shell
-            turnserver -c /usr/local/etc/turnserver.conf #使用配置文件或使用命令选型
-            turnserver 内网IP:PORT 外网
-            ```
-
-            ---
-
-            ```c++
-            //mainrelay.c
-            main
-                |
-            ```
-
-         - turnadmin, 用于管理账户
-
-            ```shell
-            ./turnadmin -k  -u yejinlei -p xxxxx -r hxdi.com #默认使用md5, 相当于md5("gorst:yejinlei.gov:xxxxx",32) => 0x7da2270ccfa49786e0115366d3a3d14d
-            ```
-
-            
-
-         - turnutils_natdiscovery使用及分析
-
-         - turnutils_oauth使用及分析
-
-         - turnutils_peer使用及分析
-
-         - turnutils_rfc5769check使用及分析
-
-         - turnutils_stunclient, 用于测试stun
-
-         - turnutils_uclient, 用于测试turn
-
-            ```shell
-            ./turnutils_uclient -v -u yejinlei -w xxxxx 121.37.143.208 -t -T #121.37.143.208为turn server ip；-t -T使用TCP协议,默认UDP
-            ```
-
-            
-
-   - Scheme
-
-      - Google AppRTC
-      - Licode
-      - Intel OWT
-      - Jitsi
-      - Janus
-
-   - 资料
-     
-      - [WebRTC-Developer-Tools-Landscape](https://bloggeek.me/download/11768/)
-      - [Comparative study of WebRTC SFUs for Video Conferencing](https://uploads-ssl.webflow.com/5c6853c495409838d874a0d2/5cbed66cae2b88609106befa_IPTComm_2018_LoadTesting-12%5B23229%5D.pdf)
-
-- pull_srs.sh，拉取srs版本库脚本
-
-- build_srs，编译srs release脚本，需放入srs版本库中
-
-- build_srs_gprof.sh，编译加入gprof性能工具
-
-- centos6.5_dev.sh，容器开发环境，已经集成了gcc、gdb等工具
-
-- gperf，google性能工具相关脚本
-
-- clangtools，Apple clang/llvm相关工具
-
-- valgrind，linux下valgring内存、cpu分析工具
-
-- install_livego.sh，纯go实现的支持rtmp、hls、httpflv协议的轻量级直播服务器
-
-- install_easydarwin，纯go实现的支持rtsp的直播服务器
-
-- install_live555.sh，c++实现的流媒体项目
-
-- ipc_sipserver，sip服务器
-
-### livetools，多媒体工具
-#### ffmpeg-tools
-#### nginx/openregsty-tools
-
-### livesafe，多媒体安全
+## 八、livesafe，多媒体安全
 
 - ❀全方位保护❀
 
@@ -419,7 +367,8 @@ Media as a Service, from codec to server architecture...✍
 
 - [开源软件协议介绍](https://gitee.com/oschina/git-osc/wikis/License)
 
-### livenv， 环境安装
+## 八、livenv， 环境安装
+
 - k8环境及工具
   - install_minikube.sh
   - install_kubeadm.sh
@@ -438,20 +387,39 @@ Media as a Service, from codec to server architecture...✍
 - 国产操作系统
   - [uos操作系统](https://www.chinauos.com/applyfor)
 
-### 测试地址
+## 九、其他
+
+### 9.1 流媒体地址
+
 - rtmp，rtmp://202.69.69.180:443/webcast/bshdlive-pc
+
 - rtmp，rtmp://1011.lssplay.aodianyun.com/demo/game
+
 - rtmp，rtmp://play.nodemedia.io/live/ljq
+
 - kmp，kmp://play.nodemedia.io/live/ljq
+
 - http-flv(h265)，http://alplay.nodemedia.cn/live/cam_178.flv
+
 - http-flv(h265)，http://alplay.nodemedia.cn/live/cam_180.flv
+
 - http-flv(h265)，http://alplay.nodemedia.cn/live/cam_112.flv
+
 - rtsp，rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov
+
 - rtsp，rtsp://170.93.143.139/rtplive/470011e600ef003a004ee33696235daa
+
 - hls，https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8
+
 - hls，http://220.161.87.62:8800/hls/0/index.m3u8
+
 - hls，http://220.161.87.62:8800/hls/1/index.m3u8
+
 - mp4，http://www.w3school.com.cn/i/movie.mp4
+
 - av1/mp4, https://media.vued.vanthink.cn/video.av1.mp4
-### 其他
+
+### 9.2、工具
+
 - [wireshark's Captures](https://wiki.wireshark.org/SampleCaptures)
+- [Axinom Media Tools](https://tools.axinom.com/)
