@@ -97,3 +97,50 @@ REPOSITORY                     TAG                 IMAGE ID            CREATED  
 hxdi/arm64v8_ubuntu20.04_srs   v4.0                bb2eec1fc239        6 minutes ago       102MB
 ```
 
+## 三、Qemu模拟
+
+```sh
+qemu-system-aarch64 \
+ -m 4096 \
+ -cpu cortex-a72 -smp 4,cores=4,threads=1,sockets=1 \
+ -M virt \
+ -bios QEMU_EFI.fd \
+ -net nic,model=pcnet \
+ -device nec-usb-xhci \
+ -device usb-kbd \
+ -device usb-mouse \
+ -device VGA \
+ -drive if=none,file=./ubuntukylin-20.04.1-enhanced-amd64.iso,id=cdrom,media=cdrom \
+ -device virtio-scsi-device \
+ -device scsi-cd,drive=cdrom \
+ -drive if=none,file=rootfs.qcow2,id=hd0 \
+ -device virtio-blk-device,drive=hd0
+```
+
+```objectivec
+qemu-system-aarch64 \
+ -m 4096 \
+ -cpu cortex-a72 -smp 4,cores=4,threads=1,sockets=1 \
+ -M virt \
+ -bios QEMU_EFI.fd \
+ -net nic,model=pcnet \
+ -device nec-usb-xhci \
+ -device usb-kbd \
+ -device usb-mouse \
+ -device VGA \
+ -drive if=none,file=./ubuntukylin-20.04.1-enhanced-amd64.iso,id=cdrom,media=cdrom \
+ -device virtio-scsi-device \
+ -device scsi-cd,drive=cdrom \
+ -drive if=none,file=rootfs.qcow2,id=hd0 \
+ -device virtio-blk-device,drive=hd0
+```
+
+
+
+## 四、参考资料
+
+1. [v4_CN_SrsLinuxArm](https://github.com/ossrs/srs/wiki/v4_CN_SrsLinuxArm#ubuntu-cross-build-srs-armv8aarch64)
+2. [Support buildin setjmp/longjmp for ARM](https://github.com/ossrs/state-threads/issues/1)
+3. [ARM上部署SRS实例](https://www.wenjiangs.com/doc/srs-samplearm)
+4. [qemu kvm 安装kylin server v10系统](https://blog.csdn.net/weixin_42915431/article/details/113887132)
+5. [ubuntukylin 20.04 iso](https://mirrors.tuna.tsinghua.edu.cn/ubuntukylin-cdimage/20.04/)
