@@ -1,0 +1,18 @@
+version: '3.5'
+services:
+  vipc:
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-vipc:1.0.0
+    ports:
+      - "1935:1935"
+      - "8554:8554"
+    volumes:
+      - $PWD/rtsp-simple-server.yml:/rtsp-simple-server/rtsp-simple-server.yml:ro 
+  push:
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0 
+    links:
+      - vipc
+    depends_on:
+      - vipc
+    volumes:
+      - $PWD/argv.conf:/argv.conf:ro
+      - $PWD/camera.conf:/camera.conf:ro 
