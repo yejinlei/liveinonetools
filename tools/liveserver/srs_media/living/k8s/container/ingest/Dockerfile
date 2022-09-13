@@ -1,10 +1,6 @@
-FROM golang:1.17 as builder
+FROM registry.cn-hangzhou.aliyuncs.com/yejinlei/golang.build:1.0 as builder
 WORKDIR /app
-#ENV GOPROXY https://goproxy.cn
-ENV GO111MODULE auto
 COPY . .
-#COPY go.mod go.sum ./
-#RUN go mod download
 RUN go build -o ingest .
 
 FROM jrottenberg/ffmpeg:4.4-alpine
