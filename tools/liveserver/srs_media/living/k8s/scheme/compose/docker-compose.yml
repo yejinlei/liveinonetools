@@ -22,3 +22,24 @@ services:
     volumes:
       - ./argv.conf:/argv.conf:ro
       - ./camera.conf:/camera.conf:ro
+
+  live_ingest_ipc:                                                                                                                                                                                                                                                         
+    hostname: live_ingest_ipc
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
+    networks:                                                                                                                                                                                                                                                              
+      - live-network                                                                                                                                                                                                                                                       
+    volumes:                                                                                                                                                                                                                                                            
+      - ./ipc_camera.conf:/camera.conf:ro
+      - ./ipc_argv.conf:/argv.conf:ro
+    deploy:
+      mode: replicated
+      replicas: 1                                                                                                                                                                                                                                                       
+    environment:                                                                                                                                                                                                                                                         
+      TASK_SLOT: 1
+      SERVICE_NAME: 1
+      NODE_HOSTNAME: 1
+    command: ./ingest
+
+networks:
+  live-network:
+    driver: bridge
