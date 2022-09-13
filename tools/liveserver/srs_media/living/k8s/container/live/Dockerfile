@@ -5,8 +5,8 @@ FROM registry.cn-hangzhou.aliyuncs.com/yejinlei/ubuntu.build:1.0 AS builder
 WORKDIR /tmp
 COPY . .
 # for srs
-RUN apt-get -qq install unzip tcl cmake
-RUN cd /tmp/srs/trunk && chmod a+x ./configure && ./configure --static=on && make -j8
+RUN apt-get -qq install unzip tcl cmake --fix-missing
+RUN cd /tmp/srs/trunk && chmod a+x ./configure && ./configure --cxx="g++ -static" && make -j8
 FROM alpine:3.14 AS runner
 COPY --from=builder /tmp/srs/trunk/objs/srs /opt/objs/srs
 COPY --from=builder /tmp/srs/trunk/conf /opt
