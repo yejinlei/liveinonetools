@@ -9,8 +9,7 @@ RUN apt-get -qq install unzip tcl cmake --fix-missing
 RUN cd /tmp/srs/trunk && chmod a+x ./configure && ./configure --cxx="g++ -static" && make -j8
 
 FROM alpine:3.14 AS runner
-COPY --from=builder /tmp/srs/trunk/objs/srs /opt/objs/srs
-COPY --from=builder /tmp/srs/trunk/conf /opt
-WORKDIR /opt
+COPY --from=builder /tmp/srs/trunk/objs/srs /usr/local/objs/srs
+COPY --from=builder /tmp/srs/trunk/conf /usr/local
+WORKDIR /usr/local
 CMD objs/srs -c conf/srs.conf
-
