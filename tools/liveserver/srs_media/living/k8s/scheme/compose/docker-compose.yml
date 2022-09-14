@@ -1,31 +1,35 @@
 version: '3.5'
 services:
-  vipc:
+  live_vipc:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-vipc:1.0.0
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                
     ports:
       - "8554:8554" #RTSP
-      - "8332:8332" #RTSPS
-      - "1935:1935" #RTMP
-      - "1936:1936" #RTMPS
-      - "8888:8888" #HLS
-      - "9997:9997" #api
-      - "9998:9998" #metrics
-      - "9999:9999" #ppof
+        #- "8332:8332" #RTSPS
+        #- "1935:1935" #RTMP
+        #- "1936:1936" #RTMPS
+        #- "8888:8888" #HLS
+        #- "9997:9997" #api
+        #- "9998:9998" #metrics
+        #- "9999:9999" #ppof
     volumes:
       - ./rtsp-simple-server.yml:/rtsp-simple-server/rtsp-simple-server.yml 
-  push:
+  live_push:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0 
-    links:
-      - vipc
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                
+    #links:
+    #  - vipc
     depends_on:
-      - vipc
+      - live_vipc
     volumes:
-      - ./argv.conf:/argv.conf:ro
-      - ./camera.conf:/camera.conf:ro
+      - ./vipc_argv.conf:/argv.conf:ro
+      - ./vipc_camera.conf:/camera.conf:ro
 
   #采集器
-  live_ingest_ipc:                                                                                                                                                                   
-    hostname: live_ingest_ipc
+  live_ingest:                                                                                                                                                                   
+    hostname: ingest
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
     networks:                                                                                                                                                                         
       - live-network                                                                                                                                                                
@@ -42,13 +46,13 @@ services:
     command: ./ingest
 
   #转发节点
-  live_forward_master:
-    hostname: live_forward_master
+  live_forward:
+    hostname: forward
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
     ports:
-      - "11935:1935"
+      - "31935:1935"
     volumes:
-      - ./forward.conf:/usr/local/srs/conf/srs.conf
+        - ./forward.conf:/usr/local/srs/conf/forward.conf:ro
     networks:
       - live-network
     deploy:
@@ -58,8 +62,8 @@ services:
       - /bin/sh
       - -c
       - |
-        objs/srs -c conf/srs.conf
-        server 8085
+        objs/srs -c conf/forward.conf
+        ./server 8085
 
 networks:
   live-network:
