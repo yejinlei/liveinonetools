@@ -15,6 +15,7 @@ services:
         #- "9999:9999" #ppof
     volumes:
       - ./rtsp-simple-server.yml:/rtsp-simple-server/rtsp-simple-server.yml 
+  
   live_push:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0 
     networks:                                                                                                                                                                         
@@ -52,7 +53,8 @@ services:
     ports:
       - "31935:1935"
     volumes:
-        - ./forward.conf:/usr/local/srs/conf/forward.conf:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./forward.conf:/usr/local/srs/conf/forward.conf:ro
     networks:
       - live-network
     deploy:
@@ -63,6 +65,27 @@ services:
       - -c
       - |
         objs/srs -c conf/forward.conf
+        ./server 8085
+
+  live_rtmp:
+    hostname: live_rtmp
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
+    ports:
+      - "31936:1935"
+    volumes:
+      - ./crossdomain.xml:/usr/local/srs/hls/crossdomain.xml:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./rtmp2rtmp.conf:/usr/local/srs/conf/rtmp2rtmp.conf:ro
+    networks:
+      - live-network
+    deploy:
+      mode: replicated
+      replicas: 1
+    command:
+      - /bin/sh
+      - -c
+      - |
+        objs/srs -c conf/rtmp2rtmp.conf
         ./server 8085
 
 networks:
