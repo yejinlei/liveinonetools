@@ -1,6 +1,7 @@
 version: '3.5'
 services:
   live_vipc:
+    hostname: vipc
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-vipc:1.0.0
     networks:                                                                                                                                                                         
       - live-network                                                                                                                                                                
@@ -17,6 +18,7 @@ services:
       - ./rtsp-simple-server.yml:/rtsp-simple-server/rtsp-simple-server.yml 
   
   live_push:
+    hostname: push
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0 
     networks:                                                                                                                                                                         
       - live-network                                                                                                                                                                
@@ -68,12 +70,11 @@ services:
         ./server 8085
 
   live_rtmp:
-    hostname: live_rtmp
+    hostname: rtmp
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
     ports:
       - "31936:1935"
     volumes:
-      - ./crossdomain.xml:/usr/local/srs/hls/crossdomain.xml:ro
       - /etc/localtime:/etc/localtime:ro
       - ./rtmp2rtmp.conf:/usr/local/srs/conf/rtmp2rtmp.conf:ro
     networks:
