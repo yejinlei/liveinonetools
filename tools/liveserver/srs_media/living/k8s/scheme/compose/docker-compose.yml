@@ -41,8 +41,8 @@ services:
       - ./ipc_argv.conf:/argv.conf:ro
     deploy:
       mode: replicated
-      replicas: 1                                                                                                                                                                                                                                                       
-    environment:                                                                                                                                                                                                                                                         
+      replicas: 1
+    environment:
       TASK_SLOT: 1
       SERVICE_NAME: 1
       NODE_HOSTNAME: 1
@@ -96,7 +96,7 @@ services:
       - "31937:8180"                                                                                                                                                                
     volumes:                                                                                                                                                                        
       - /etc/localtime:/etc/localtime:ro                                                                                                                                            
-      - ./rtmp2hls.conf:/usr/local/srs/conf/rtmp2hls.conf:ro                                                                                                                
+      - ./rtmp2hls.conf:/usr/local/srs/conf/rtmp2hls.conf:ro
     networks:                                                                                                                                                                       
       - live-network                                                                                                                                                                
     deploy:                                                                                                                                                                         
@@ -106,8 +106,8 @@ services:
       - /bin/sh                                                                                                                                                                     
       - -c                                                                                                                                                                          
       - |                                                                                                                                                                           
-        objs/srs -c conf/rtmp2hls.conf                                                                                                                                          
-        ./server 8085      
+        objs/srs -c conf/rtmp2hls.conf
+        ./server 8085 
             
   live_httpflv:                                                                                                                                                                          
     hostname: httpflv                                                                                                                                                                    
