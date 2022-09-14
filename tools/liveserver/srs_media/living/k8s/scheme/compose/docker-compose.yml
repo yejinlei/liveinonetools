@@ -89,6 +89,46 @@ services:
         objs/srs -c conf/rtmp2rtmp.conf
         ./server 8085
 
+  live_hls:                                                                                                                                                                     
+    hostname: hls                                                                                                                                                              
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0                                                                                                             
+    ports:                                                                                                                                                                          
+      - "31937:8180"                                                                                                                                                                
+    volumes:                                                                                                                                                                        
+      - /etc/localtime:/etc/localtime:ro                                                                                                                                            
+      - ./rtmp2hls.conf:/usr/local/srs/conf/rtmp2hls.conf:ro                                                                                                                
+    networks:                                                                                                                                                                       
+      - live-network                                                                                                                                                                
+    deploy:                                                                                                                                                                         
+      mode: replicated                                                                                                                                                              
+      replicas: 1                                                                                                                                                                   
+    command:                                                                                                                                                                        
+      - /bin/sh                                                                                                                                                                     
+      - -c                                                                                                                                                                          
+      - |                                                                                                                                                                           
+        objs/srs -c conf/rtmp2hls.conf                                                                                                                                          
+        ./server 8085      
+            
+  live_httpflv:                                                                                                                                                                          
+    hostname: httpflv                                                                                                                                                                    
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0                                                                                                               
+    ports:                                                                                                                                                                            
+      - "31938:8180"                                                                                                                                                                  
+    volumes:                                                                                                                                                                          
+      - /etc/localtime:/etc/localtime:ro                                                                                                                                              
+      - ./rtmp2httpflv.conf:/usr/local/srs/conf/rtmp2httpflv.conf:ro                                                                                                                        
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                  
+    deploy:                                                                                                                                                                           
+      mode: replicated                                                                                                                                                                
+      replicas: 1                                                                                                                                                                     
+    command:                                                                                                                                                                          
+      - /bin/sh                                                                                                                                                                       
+      - -c
+      - |                                                                                                                                                                             
+        objs/srs -c conf/rtmp2httpflv.conf                                                                                                                                               
+        ./server 8085
+
 networks:
   live-network:
     driver: bridge
