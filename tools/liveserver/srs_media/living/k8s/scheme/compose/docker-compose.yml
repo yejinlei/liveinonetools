@@ -23,12 +23,13 @@ services:
       - ./argv.conf:/argv.conf:ro
       - ./camera.conf:/camera.conf:ro
 
-  live_ingest_ipc:                                                                                                                                                                                                                                                         
+  #采集器
+  live_ingest_ipc:                                                                                                                                                                   
     hostname: live_ingest_ipc
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
-    networks:                                                                                                                                                                                                                                                              
-      - live-network                                                                                                                                                                                                                                                       
-    volumes:                                                                                                                                                                                                                                                            
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                
+    volumes:                                                                                                                                                                         
       - ./ipc_camera.conf:/camera.conf:ro
       - ./ipc_argv.conf:/argv.conf:ro
     deploy:
@@ -39,6 +40,26 @@ services:
       SERVICE_NAME: 1
       NODE_HOSTNAME: 1
     command: ./ingest
+
+  #转发节点
+  live_forward_master:
+    hostname: live_forward_master
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
+    ports:
+      - "11935:1935"
+    volumes:
+      - ./forward.conf:/usr/local/srs/conf/srs.conf
+    networks:
+      - live-network
+    deploy:
+      mode: replicated
+      replicas: 1
+    command:
+      - /bin/sh
+      - -c
+      - |
+        objs/srs -c conf/srs.conf
+        server 8085
 
 networks:
   live-network:

@@ -11,5 +11,6 @@ RUN cd /tmp/srs/trunk && chmod a+x ./configure && ./configure --cxx="g++ -static
 FROM alpine:3.14 AS runner
 COPY --from=builder /tmp/srs/trunk/objs/srs /usr/local/objs/srs
 COPY --from=builder /tmp/srs/trunk/conf /usr/local
+ADD server /usr/local/bin/server
 WORKDIR /usr/local
 CMD objs/srs -c conf/srs.conf
