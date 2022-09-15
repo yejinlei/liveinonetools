@@ -129,6 +129,30 @@ services:
         objs/srs -c conf/rtmp2httpflv.conf                                                                                                                                               
         ./server 8085
 
+  live_dvr:                                                                                                                                                                          
+    hostname: dvr                                                                                                                                                                    
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0                                                                                                               
+    ports:                                                                                                                                                                            
+      - "31940:8180"                                                                                                                                                                  
+    volumes:                                                                                                                                                                          
+      - ./data:/usr/local/srs/objs/nginx/html
+      #- ./data:/data
+      #- ./crossdomain.xml:/data/crossdomain.xml
+      - /etc/localtime:/etc/localtime:ro                                                                                                                                              
+      - ./rtmp2dvr.conf:/usr/local/srs/conf/rtmp2dvr.conf:ro                                                                                                                        
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                  
+    deploy:                                                                                                                                                                           
+      mode: replicated                                                                                                                                                                
+      replicas: 1                                                                                                                                                                     
+    command:                                                                                                                                                                          
+      - /bin/sh                                                                                                                                                                       
+      - -c
+      - |                                                                                                                                                                             
+        objs/srs -c conf/rtmp2dvr.conf
+        ./server 8085
+
+
 networks:
   live-network:
     driver: bridge
