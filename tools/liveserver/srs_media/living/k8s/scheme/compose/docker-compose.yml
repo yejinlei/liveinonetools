@@ -168,8 +168,7 @@ services:
     deploy:                                                                                                                                                                           
       mode: replicated                                                                                                                                                                
       replicas: 1                                                                                                                                                                     
-    command:                                                                                                                                                                          
-      - nginx -g "daemon on;"
+    command: nginx -g "daemon on;"                                                                                                                                                        
 
 
 networks:
