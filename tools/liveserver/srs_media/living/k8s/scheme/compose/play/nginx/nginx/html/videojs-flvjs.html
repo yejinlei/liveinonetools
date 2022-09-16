@@ -1,0 +1,27 @@
+<head>
+    <title>video</title>
+    <!-- Video.js -->
+    <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+    <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+    <script src="https://unpkg.com/flv.js/dist/flv.min.js"></script>
+    <script src="https://unpkg.com/videojs-flvjs/dist/videojs-flvjs.min.js"></script>
+</head>
+<video id="videojs-flvjs-player" class="video-js vjs-default-skin" controls>
+  <source src="http://live_flv:8180/live/2.flv" type='video/x-flv'>
+</video>
+<script>
+  //<source src="https://sf1-hscdn-tos.pstatp.com/obj/media-fe/xgplayer_doc_video/flv/xgplayer-demo-720p.flv" type='video/x-flv'>
+  // For v5 the tech must be added to the tech order.
+  // For v6 this is not needed.
+  videojs('videojs-flvjs-player', {
+    techOrder: ['html5', 'flvjs'],
+    flvjs: {
+      mediaDataSource: {
+        isLive: true,
+        cors: true,
+        withCredentials: false,
+      },
+      // config: {},
+    },
+  });
+</script>
