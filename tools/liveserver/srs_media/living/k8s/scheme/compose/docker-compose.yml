@@ -152,6 +152,25 @@ services:
         objs/srs -c conf/rtmp2dvr.conf
         ./server 8085
 
+  live_play:
+    hostname: play
+    image: nginx:latest
+    ports:
+      - "38080:80"
+    volumes:
+      - ./play/nginx/nginx/html:/usr/share/nginx/html
+      - ./play/nginx/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./play/nginx/nginx/conf/conf.d:/etc/nginx/conf.d
+      - ./play/nginx/nginx/log:/var/log/nginx
+      - ./play/nginx/docker-entrypoint.sh:/docker-entrypoint.sh
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                  
+    deploy:                                                                                                                                                                           
+      mode: replicated                                                                                                                                                                
+      replicas: 1                                                                                                                                                                     
+    command:                                                                                                                                                                          
+      - nginx -g "daemon on;"
+
 
 networks:
   live-network:
