@@ -171,9 +171,12 @@ services:
     image: nginx:latest
     ports:
       - "38080:80"
+      - "33433:443"
     volumes:
       - ./play/nginx/nginx/html:/usr/share/nginx/html
       - ./play/nginx/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./play/nginx/nginx/conf/server.crt:/etc/nginx/server.crt
+      - ./play/nginx/nginx/conf/server.key:/etc/nginx/server.key
       - ./play/nginx/nginx/conf/conf.d:/etc/nginx/conf.d
       - ./play/nginx/nginx/log:/var/log/nginx
       - ./play/nginx/docker-entrypoint.sh:/docker-entrypoint.sh
