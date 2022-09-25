@@ -21,3 +21,4 @@
 ---
 1. [基于OpenCV实现图像质量评价](https://blog.csdn.net/luohenyj/article/details/108984313)
 2. [图像增强算法效果评价指标及实现](https://www.coder55.com/article/51157)
+3. [FFmpeg原理](https://ffmpeg.xianwaizhiyin.net/cover.html)
