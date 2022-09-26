@@ -170,8 +170,8 @@ services:
     hostname: play
     image: nginx:latest
     ports:
-      - "38080:80"
-      - "33433:443"
+      - "39080:80"
+      - "31433:443"
     volumes:
       - ./play/nginx/nginx/html:/usr/share/nginx/html
       - ./play/nginx/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
