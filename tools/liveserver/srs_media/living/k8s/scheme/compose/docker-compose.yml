@@ -94,9 +94,12 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0                                                                                                             
     ports:                                                                                                                                                                          
       - "31937:8180"                                                                                                                                                                
+      - "32937:8088"                                                                                                                                                                
     volumes:                                                                                                                                                                        
       - /etc/localtime:/etc/localtime:ro                                                                                                                                            
       - ./hls/rtmp2hls.conf:/usr/local/srs/conf/rtmp2hls.conf:ro
+      - ./play/nginx/nginx/conf/server.crt:/etc/nginx/server.crt
+      - ./play/nginx/nginx/conf/server.key:/etc/nginx/server.key
     networks:                                                                                                                                                                       
       - live-network                                                                                                                                                                
     deploy:                                                                                                                                                                         
@@ -114,9 +117,12 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0                                                                                                               
     ports:                                                                                                                                                                            
       - "31938:8180"                                                                                                                                                                  
+      - "32938:8088"                                                                                                                                                                
     volumes:                                                                                                                                                                          
       - /etc/localtime:/etc/localtime:ro                                                                                                                                              
       - ./flv/rtmp2httpflv.conf:/usr/local/srs/conf/rtmp2httpflv.conf:ro                                                                                                                        
+      - ./play/nginx/nginx/conf/server.crt:/etc/nginx/server.crt
+      - ./play/nginx/nginx/conf/server.key:/etc/nginx/server.key
     networks:                                                                                                                                                                         
       - live-network                                                                                                                                                                  
     deploy:                                                                                                                                                                           
