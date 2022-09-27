@@ -177,7 +177,7 @@ services:
     image: nginx:latest
     ports:
       - "39080:80"
-      - "31433:443"
+      - "31443:443"
     volumes:
       - ./play/nginx/nginx/html:/usr/share/nginx/html
       - ./play/nginx/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
