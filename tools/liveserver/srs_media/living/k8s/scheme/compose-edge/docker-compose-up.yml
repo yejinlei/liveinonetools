@@ -72,6 +72,26 @@ services:
         objs/srs -c conf/edge.conf
         ./server 8085                                                                                                                                                   
 
+  #下行边缘
+  live_edge_down_test:
+    hostname: edge_down_test
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
+    ports:
+      - "33935:1935"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./edge-down/edge.conf:/usr/local/srs/conf/edge.conf:ro
+    networks:
+      - live-network-up
+    deploy:
+      mode: replicated
+      replicas: 1
+    command:
+      - /bin/sh
+      - -c
+      - |
+        objs/srs -c conf/edge.conf
+        ./server 8085       
 
 networks:
   live-network-up:
