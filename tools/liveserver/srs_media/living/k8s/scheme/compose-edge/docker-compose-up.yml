@@ -30,6 +30,24 @@ services:
       - ./vipc/vipc_argv.conf:/argv.conf:ro
       - ./vipc/vipc_camera.conf:/camera.conf:ro
 
+  #采集器
+  live_ingest:                                                                                                                                                                   
+    hostname: ingest
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
+    networks:                                                                                                                                                                         
+      - live-network-up                                                                                                                                                                
+    volumes:                                                                                                                                                                         
+      - ./ingest/ipc_camera.conf:/camera.conf:ro
+      - ./ingest/ipc_argv.conf:/argv.conf:ro
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      TASK_SLOT: 1
+      SERVICE_NAME: 1
+      NODE_HOSTNAME: 1
+    command: ./ingest
+
   #源站节点
   live_origin:
     hostname: origin
