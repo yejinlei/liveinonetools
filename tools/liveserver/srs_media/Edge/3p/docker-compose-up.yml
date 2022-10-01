@@ -1,0 +1,75 @@
+version: '3.5'
+services:
+  live_vipc:
+    hostname: vipc
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-vipc:1.0.0
+    networks:                                                                                                                                                                         
+      - live-network-up                                                                                                                                                              
+    ports:
+      - "8554:8554" #RTSP
+        #- "8332:8332" #RTSPS
+        #- "1935:1935" #RTMP
+        #- "1936:1936" #RTMPS
+        #- "8888:8888" #HLS
+        #- "9997:9997" #api
+        #- "9998:9998" #metrics
+        #- "9999:9999" #ppof
+    volumes:
+      - ./vipc/rtsp-simple-server.yml:/rtsp-simple-server/rtsp-simple-server.yml 
+
+  live_push:
+    hostname: push
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0 
+    networks:                                                                                                                                                                         
+      - live-network-up                                                                                                                                                               
+    #links:
+    #  - vipc
+    depends_on:
+      - live_vipc
+    volumes:
+      - ./vipc/vipc_argv.conf:/argv.conf:ro
+      - ./vipc/vipc_camera.conf:/camera.conf:ro
+
+  #采集器
+  live_ingest:                                                                                                                                                                   
+    hostname: ingest
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
+    networks:                                                                                                                                                                         
+      - live-network-up                                                                                                                                                               
+    volumes:                                                                                                                                                                         
+      - ./ingest/ipc_camera.conf:/camera.conf:ro
+      - ./ingest/ipc_argv.conf:/argv.conf:ro
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      TASK_SLOT: 1
+      SERVICE_NAME: 1
+      NODE_HOSTNAME: 1
+    command: ./ingest
+
+
+  #上行边缘
+  live_edge_up:
+    hostname: edge_up
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
+    ports:
+      - "31935:1935"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./edge-up/edge.conf:/usr/local/srs/conf/edge.conf:ro
+    networks:
+      - live-network-up
+    deploy:
+      mode: replicated
+      replicas: 1
+    command:
+      - /bin/sh
+      - -c
+      - |
+        objs/srs -c conf/edge.conf
+        ./server 8085                                                                                                                                                   
+
+networks:
+  live-network-up:
+    driver: bridge
