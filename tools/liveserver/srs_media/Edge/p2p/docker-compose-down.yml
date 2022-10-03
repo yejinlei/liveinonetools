@@ -10,7 +10,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./edge-down/edge.conf:/usr/local/srs/conf/edge.conf:ro
     networks:
-      - live-network-down
+      - live-network-p2p
     deploy:
       mode: replicated
       replicas: 1
@@ -23,5 +23,6 @@ services:
 
 
 networks:
-  live-network-down:
-    driver: bridge
+  live-network-p2p:
+    #driver: bridge
+    external: true

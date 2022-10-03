@@ -4,7 +4,7 @@ services:
     hostname: vipc
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-vipc:1.0.0
     networks:                                                                                                                                                                         
-      - live-network-up-origin                                                                                                                                                               
+      - live-network-p2p                                                                                                                                                               
     ports:
       - "8554:8554" #RTSP
         #- "8332:8332" #RTSPS
@@ -21,7 +21,7 @@ services:
     hostname: push
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0 
     networks:                                                                                                                                                                         
-      - live-network-up-origin                                                                                                                                                               
+      - live-network-p2p                                                                                                                                                               
     #links:
     #  - vipc
     depends_on:
@@ -35,7 +35,7 @@ services:
     hostname: ingest
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
     networks:                                                                                                                                                                         
-      - live-network-up-origin                                                                                                                                                                
+      - live-network-p2p                                                                                                                                                                
     volumes:                                                                                                                                                                         
       - ./ingest/ipc_camera.conf:/camera.conf:ro
       - ./ingest/ipc_argv.conf:/argv.conf:ro
@@ -58,7 +58,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./edge-up-origin/origin.conf:/usr/local/srs/conf/origin.conf:ro
     networks:
-      - live-network-up-origin
+      - live-network-p2p
     deploy:
       mode: replicated
       replicas: 1
@@ -79,7 +79,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./edge-up-origin/edge.conf:/usr/local/srs/conf/edge.conf:ro
     networks:
-      - live-network-up-origin
+      - live-network-p2p
     deploy:
       mode: replicated
       replicas: 1
@@ -90,27 +90,7 @@ services:
         objs/srs -c conf/edge.conf
         ./server 8085                                                                                                                                                   
 
-  #下行边缘
-  live_edge_down_test:
-    hostname: edge_down_test
-    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
-    ports:
-      - "33935:1935"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./edge-up-origin/edge.conf:/usr/local/srs/conf/edge.conf:ro
-    networks:
-      - live-network-up-origin
-    deploy:
-      mode: replicated
-      replicas: 1
-    command:
-      - /bin/sh
-      - -c
-      - |
-        objs/srs -c conf/edge.conf
-        ./server 8085       
-
 networks:
-  live-network-up-origin:
-    driver: bridge
+  live-network-p2p:
+    #driver: bridge
+    external: true
