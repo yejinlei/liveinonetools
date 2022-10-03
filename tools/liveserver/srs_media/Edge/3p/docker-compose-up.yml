@@ -4,7 +4,7 @@ services:
     hostname: vipc
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-vipc:1.0.0
     networks:                                                                                                                                                                         
-      - live-network-up                                                                                                                                                              
+      - live-network-3p                                                                                                                                                              
     ports:
       - "8554:8554" #RTSP
         #- "8332:8332" #RTSPS
@@ -21,7 +21,7 @@ services:
     hostname: push
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0 
     networks:                                                                                                                                                                         
-      - live-network-up                                                                                                                                                               
+      - live-network-3p                                                                                                                                                               
     #links:
     #  - vipc
     depends_on:
@@ -35,7 +35,7 @@ services:
     hostname: ingest
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
     networks:                                                                                                                                                                         
-      - live-network-up                                                                                                                                                               
+      - live-network-3p                                                                                                                                                               
     volumes:                                                                                                                                                                         
       - ./ingest/ipc_camera.conf:/camera.conf:ro
       - ./ingest/ipc_argv.conf:/argv.conf:ro
@@ -59,7 +59,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./edge-up/edge.conf:/usr/local/srs/conf/edge.conf:ro
     networks:
-      - live-network-up
+      - live-network-3p
     deploy:
       mode: replicated
       replicas: 1
@@ -71,5 +71,6 @@ services:
         ./server 8085                                                                                                                                                   
 
 networks:
-  live-network-up:
-    driver: bridge
+  live-network-3p:
+    #driver: bridge
+    external: true
