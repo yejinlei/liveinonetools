@@ -10,3 +10,4 @@ nohup ffplay http://127.0.0.1:31937/live/2.m3u8 &
 nohup vlc    https://127.0.0.1:32937/live/2.m3u8 &
 nohup ffplay http://127.0.0.1:31938/live/2.flv &
 nohup vlc    https://127.0.0.1:32938/live/2.flv &
+nohup google-chrome http://127.0.0.1:38081/stream/player/1 &
