@@ -7,23 +7,23 @@ COPY .  .
 ARG TARGETOS TARGETARCH TARGETVARIANT
 
 ENV CGO_ENABLED=0
-RUN cd RTSPtoWeb \
+RUN cd RTSPtoWebRTC \
     && go get \
     && go mod download \
-    && GOOS=${TARGETOS} GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT#"v"} go build -a -o rtsp-to-web
+    && GOOS=${TARGETOS} GOARCH=${TARGETARCH} GOARM=${TARGETVARIANT#"v"} go build -a -o rtsp-to-webrtc
 
 EXPOSE 8081
 
 FROM ubuntu:focal AS runner
 WORKDIR /app
 
-COPY --from=builder /go/src/app/RTSPtoWeb/rtsp-to-web /app/
-COPY --from=builder /go/src/app/RTSPtoWeb/web /app/web
+COPY --from=builder /go/src/app/RTSPtoWebRTC/rtsp-to-webrtc /app/
+COPY --from=builder /go/src/app/RTSPtoWebRTC/web /app/web
 
 RUN mkdir -p /config
-COPY --from=builder /go/src/app/RTSPtoWeb/config.json /config
+COPY --from=builder /go/src/app/RTSPtoWebRTC/config.json /app/
 
 #ENV GO111MODULE="on"
 #ENV GIN_MODE="release"
 
-CMD ["./rtsp-to-web", "--config=/config/config.json"]
+CMD ["./rtsp-to-webrtc"]

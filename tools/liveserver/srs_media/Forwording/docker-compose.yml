@@ -137,12 +137,12 @@ services:
 
   live_webrtc:                                                                                                                                                                          
     hostname: webrtc                                                                                                                                                                    
-    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live.rtsp2web:1.0.0                                                                                                               
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live.rtsp2webrtc:1.0.0                                                                                                               
     ports:                                                                                                                                                                            
       - "38081:8081"                                                                                                                                                                  
     volumes:                                                                                                                                                                          
       - /etc/localtime:/etc/localtime:ro                                                                                                                                              
-      - ./webrtc/config.json:/config/config.json:ro                                                                                                                        
+      - ./webrtc/config.json:/app/config.json:ro                                                                                                                        
     networks:                                                                                                                                                                         
       - live-network                                                                                                                                                                  
     deploy:                                                                                                                                                                           

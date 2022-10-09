@@ -1,58 +1,19 @@
 {
   "server": {
-    "debug": true,
-    "log_level": "info",
-    "http_demo": true,
-    "http_debug": false,
-    "http_login": "demo",
-    "http_password": "demo",
     "http_port": ":8081",
-    "ice_servers": ["stun:stun.l.google.com:19302"],
-    "rtsp_port": ":8554"
+    "ice_servers": ["turn:openrelay.metered.ca:80"],
+    "ice_username": "openrelayproject",
+    "ice_credential": "openrelayproject"
   },
   "streams": {
-    "demo1": {
-      "name": "test video stream 1",
-      "channels": {
-        "0": {
-          "name": "ch1",
-          "url": "rtsp://live_vipc:8554/live/1",
-          "on_demand": true,
-          "debug": false,
-          "audio": true,
-          "status": 0
-        },
-        "1": {
-          "name": "ch2",
-          "url": "rtsp://live_vipc:8554/live/1",
-          "on_demand": true,
-          "debug": false,
-          "audio": true,
-          "status": 0
-        }
-      }
+    "1": {
+      "on_demand": true,
+      "disable_audio": true,
+      "url": "rtsp://live_vipc:8554/live/1"
     },
-    "demo2": {
-      "name": "test video stream 2",
-      "channels": {
-        "0": {
-          "name": "ch1",
-          "url": "rtsp://live_vipc:8554/live/2",
-          "on_demand": true,
-          "debug": false,
-          "status": 0
-        },
-        "1": {
-          "name": "ch2",
-          "url": "https://sf1-hscdn-tos.pstatp.com/obj/media-fe/xgplayer_doc_video/flv/xgplayer-demo-720p.flv",
-          "on_demand": true,
-          "debug": false,
-          "status": 0
-        }
-      }
+    "2": {
+      "on_demand": true,
+      "url": "rtsp://live_vipc:8554/live/2"
     }
-  },
-  "channel_defaults": {
-    "on_demand": true
   }
 }
