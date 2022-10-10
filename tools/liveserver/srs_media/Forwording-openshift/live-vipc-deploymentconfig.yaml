@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-vipc
+  name: live-vipc
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: live-vipc
+  strategy:
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.network/live-network: "true"
+        io.kompose.service: live-vipc
+    spec:
+      containers:
+        - image: ' '
+          name: live_vipc
+          ports:
+            - containerPort: 8554
+          resources: {}
+          volumeMounts:
+            - mountPath: /rtsp-simple-server/rtsp-simple-server.yml
+              name: live-vipc-claim0
+      hostname: vipc
+      restartPolicy: Always
+      volumes:
+        - name: live-vipc-claim0
+          persistentVolumeClaim:
+            claimName: live-vipc-claim0
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - live-vipc
+        from:
+          kind: ImageStreamTag
+          name: live-vipc:1.0.0
+      type: ImageChange
+status:
+  availableReplicas: 0
+  latestVersion: 0
+  observedGeneration: 0
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0

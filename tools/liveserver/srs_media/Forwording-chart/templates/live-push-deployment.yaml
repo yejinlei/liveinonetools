@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-push
+  name: live-push
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: live-push
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/live-network: "true"
+        io.kompose.service: live-push
+    spec:
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
+          name: live_push
+          resources: {}
+          volumeMounts:
+            - mountPath: /argv.conf
+              name: live-push-claim0
+              readOnly: true
+            - mountPath: /camera.conf
+              name: live-push-claim1
+              readOnly: true
+      hostname: push
+      restartPolicy: Always
+      volumes:
+        - name: live-push-claim0
+          persistentVolumeClaim:
+            claimName: live-push-claim0
+            readOnly: true
+        - name: live-push-claim1
+          persistentVolumeClaim:
+            claimName: live-push-claim1
+            readOnly: true
+status: {}

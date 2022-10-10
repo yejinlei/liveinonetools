@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-hls
+  name: live_hls
+spec:
+  ports:
+    - name: "31937"
+      port: 31937
+      targetPort: 8180
+    - name: "32937"
+      port: 32937
+      targetPort: 8088
+  selector:
+    io.kompose.service: live-hls
+status:
+  loadBalancer: {}

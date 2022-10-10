@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-play
+  name: live-play
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: live-play
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/live-network: "true"
+        io.kompose.service: live-play
+    spec:
+      containers:
+        - args:
+            - nginx
+            - -g
+            - daemon on;
+          image: nginx:latest
+          name: live_play
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: live-play-claim0
+            - mountPath: /etc/nginx/nginx.conf
+              name: live-play-claim1
+            - mountPath: /etc/nginx/server.crt
+              name: live-play-claim2
+            - mountPath: /etc/nginx/server.key
+              name: live-play-claim3
+            - mountPath: /etc/nginx/conf.d
+              name: live-play-claim4
+            - mountPath: /var/log/nginx
+              name: live-play-claim5
+            - mountPath: /docker-entrypoint.sh
+              name: live-play-claim6
+      hostname: play
+      restartPolicy: Always
+      volumes:
+        - name: live-play-claim0
+          persistentVolumeClaim:
+            claimName: live-play-claim0
+        - name: live-play-claim1
+          persistentVolumeClaim:
+            claimName: live-play-claim1
+        - name: live-play-claim2
+          persistentVolumeClaim:
+            claimName: live-play-claim2
+        - name: live-play-claim3
+          persistentVolumeClaim:
+            claimName: live-play-claim3
+        - name: live-play-claim4
+          persistentVolumeClaim:
+            claimName: live-play-claim4
+        - name: live-play-claim5
+          persistentVolumeClaim:
+            claimName: live-play-claim5
+        - name: live-play-claim6
+          persistentVolumeClaim:
+            claimName: live-play-claim6
+status: {}

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-ingest
+  name: live-ingest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: live-ingest
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/live-network: "true"
+        io.kompose.service: live-ingest
+    spec:
+      containers:
+        - args:
+            - ./ingest
+          env:
+            - name: NODE_HOSTNAME
+              value: "1"
+            - name: SERVICE_NAME
+              value: "1"
+            - name: TASK_SLOT
+              value: "1"
+          image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
+          name: live_ingest
+          resources: {}
+          volumeMounts:
+            - mountPath: /camera.conf
+              name: live-ingest-claim0
+              readOnly: true
+            - mountPath: /argv.conf
+              name: live-ingest-claim1
+              readOnly: true
+      hostname: ingest
+      restartPolicy: Always
+      volumes:
+        - name: live-ingest-claim0
+          persistentVolumeClaim:
+            claimName: live-ingest-claim0
+            readOnly: true
+        - name: live-ingest-claim1
+          persistentVolumeClaim:
+            claimName: live-ingest-claim1
+            readOnly: true
+status: {}

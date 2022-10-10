@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-httpflv
+  name: live-httpflv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: live-httpflv
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/live-network: "true"
+        io.kompose.service: live-httpflv
+    spec:
+      containers:
+        - args:
+            - /bin/sh
+            - -c
+            - "objs/srs -c conf/rtmp2httpflv.conf                                                                                                                                               \n./server 8085\n"
+          image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
+          name: live_httpflv
+          ports:
+            - containerPort: 8180
+            - containerPort: 8088
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/localtime
+              name: live-httpflv-claim0
+              readOnly: true
+            - mountPath: /usr/local/srs/conf/rtmp2httpflv.conf
+              name: live-httpflv-claim1
+              readOnly: true
+            - mountPath: /etc/nginx/server.crt
+              name: live-httpflv-claim2
+            - mountPath: /etc/nginx/server.key
+              name: live-httpflv-claim3
+      hostname: httpflv
+      restartPolicy: Always
+      volumes:
+        - name: live-httpflv-claim0
+          persistentVolumeClaim:
+            claimName: live-httpflv-claim0
+            readOnly: true
+        - name: live-httpflv-claim1
+          persistentVolumeClaim:
+            claimName: live-httpflv-claim1
+            readOnly: true
+        - name: live-httpflv-claim2
+          persistentVolumeClaim:
+            claimName: live-httpflv-claim2
+        - name: live-httpflv-claim3
+          persistentVolumeClaim:
+            claimName: live-httpflv-claim3
+status: {}

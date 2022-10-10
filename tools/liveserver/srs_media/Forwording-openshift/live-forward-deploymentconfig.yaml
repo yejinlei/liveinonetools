@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-forward
+  name: live-forward
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: live-forward
+  strategy:
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.network/live-network: "true"
+        io.kompose.service: live-forward
+    spec:
+      containers:
+        - args:
+            - /bin/sh
+            - -c
+            - |
+              objs/srs -c conf/forward.conf
+              ./server 8085
+          image: ' '
+          name: live_forward
+          ports:
+            - containerPort: 1935
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/localtime
+              name: live-forward-claim0
+              readOnly: true
+            - mountPath: /usr/local/srs/conf/forward.conf
+              name: live-forward-claim1
+              readOnly: true
+      hostname: forward
+      restartPolicy: Always
+      volumes:
+        - name: live-forward-claim0
+          persistentVolumeClaim:
+            claimName: live-forward-claim0
+            readOnly: true
+        - name: live-forward-claim1
+          persistentVolumeClaim:
+            claimName: live-forward-claim1
+            readOnly: true
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - live-forward
+        from:
+          kind: ImageStreamTag
+          name: live-forward:1.0.0
+      type: ImageChange
+status:
+  availableReplicas: 0
+  latestVersion: 0
+  observedGeneration: 0
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0

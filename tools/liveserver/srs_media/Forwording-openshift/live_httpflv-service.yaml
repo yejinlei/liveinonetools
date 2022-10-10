@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-httpflv
+  name: live_httpflv
+spec:
+  ports:
+    - name: "31938"
+      port: 31938
+      targetPort: 8180
+    - name: "32938"
+      port: 32938
+      targetPort: 8088
+  selector:
+    io.kompose.service: live-httpflv
+status:
+  loadBalancer: {}

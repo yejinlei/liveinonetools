@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-rtmp
+  name: live-rtmp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: live-rtmp
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/live-network: "true"
+        io.kompose.service: live-rtmp
+    spec:
+      containers:
+        - args:
+            - /bin/sh
+            - -c
+            - |
+              objs/srs -c conf/rtmp2rtmp.conf
+              ./server 8085
+          image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
+          name: live_rtmp
+          ports:
+            - containerPort: 1935
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/localtime
+              name: live-rtmp-claim0
+              readOnly: true
+            - mountPath: /usr/local/srs/conf/rtmp2rtmp.conf
+              name: live-rtmp-claim1
+              readOnly: true
+      hostname: rtmp
+      restartPolicy: Always
+      volumes:
+        - name: live-rtmp-claim0
+          persistentVolumeClaim:
+            claimName: live-rtmp-claim0
+            readOnly: true
+        - name: live-rtmp-claim1
+          persistentVolumeClaim:
+            claimName: live-rtmp-claim1
+            readOnly: true
+status: {}

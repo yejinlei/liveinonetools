@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-dvr
+  name: live-dvr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: live-dvr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/live-network: "true"
+        io.kompose.service: live-dvr
+    spec:
+      containers:
+        - args:
+            - /bin/sh
+            - -c
+            - |
+              objs/srs -c conf/rtmp2dvr.conf
+              ./server 8085
+          image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
+          name: live_dvr
+          ports:
+            - containerPort: 8180
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/local/srs/objs/nginx/html
+              name: live-dvr-claim0
+            - mountPath: /etc/localtime
+              name: live-dvr-claim1
+              readOnly: true
+            - mountPath: /usr/local/srs/conf/rtmp2dvr.conf
+              name: live-dvr-claim2
+              readOnly: true
+      hostname: dvr
+      restartPolicy: Always
+      volumes:
+        - name: live-dvr-claim0
+          persistentVolumeClaim:
+            claimName: live-dvr-claim0
+        - name: live-dvr-claim1
+          persistentVolumeClaim:
+            claimName: live-dvr-claim1
+            readOnly: true
+        - name: live-dvr-claim2
+          persistentVolumeClaim:
+            claimName: live-dvr-claim2
+            readOnly: true
+status: {}

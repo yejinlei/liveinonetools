@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-push
+  name: live-push
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
+      generation: null
+      importPolicy: {}
+      name: ""
+      referencePolicy:
+        type: ""
+status:
+  dockerImageRepository: ""

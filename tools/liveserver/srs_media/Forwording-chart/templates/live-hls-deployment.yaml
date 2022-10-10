@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: live-hls
+  name: live-hls
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: live-hls
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/live-network: "true"
+        io.kompose.service: live-hls
+    spec:
+      containers:
+        - args:
+            - /bin/sh
+            - -c
+            - "objs/srs -c conf/rtmp2hls.conf\n./server 8085 \n    \n"
+          image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
+          name: live_hls
+          ports:
+            - containerPort: 8180
+            - containerPort: 8088
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/localtime
+              name: live-hls-claim0
+              readOnly: true
+            - mountPath: /usr/local/srs/conf/rtmp2hls.conf
+              name: live-hls-claim1
+              readOnly: true
+            - mountPath: /etc/nginx/server.crt
+              name: live-hls-claim2
+            - mountPath: /etc/nginx/server.key
+              name: live-hls-claim3
+      hostname: hls
+      restartPolicy: Always
+      volumes:
+        - name: live-hls-claim0
+          persistentVolumeClaim:
+            claimName: live-hls-claim0
+            readOnly: true
+        - name: live-hls-claim1
+          persistentVolumeClaim:
+            claimName: live-hls-claim1
+            readOnly: true
+        - name: live-hls-claim2
+          persistentVolumeClaim:
+            claimName: live-hls-claim2
+        - name: live-hls-claim3
+          persistentVolumeClaim:
+            claimName: live-hls-claim3
+status: {}
