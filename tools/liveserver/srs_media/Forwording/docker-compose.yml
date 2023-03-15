@@ -51,7 +51,7 @@ services:
   #转发节点
   live_forward:
     hostname: forward
-    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release
     ports:
       - "31935:1935"
     volumes:
@@ -71,7 +71,7 @@ services:
 
   live_rtmp:
     hostname: rtmp
-    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release
     ports:
       - "31936:1935"
     volumes:
@@ -91,7 +91,7 @@ services:
 
   live_hls:                                                                                                                                                                     
     hostname: hls                                                                                                                                                              
-    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0                                                                                                             
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release                                                                                                        
     ports:                                                                                                                                                                          
       - "31937:8180"                                                                                                                                                                
       - "32937:8088"                                                                                                                                                                
@@ -114,7 +114,7 @@ services:
             
   live_httpflv:                                                                                                                                                                          
     hostname: httpflv                                                                                                                                                                    
-    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0                                                                                                               
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release                                                                                                          
     ports:                                                                                                                                                                            
       - "31938:8180"                                                                                                                                                                  
       - "32938:8088"                                                                                                                                                                
@@ -151,7 +151,7 @@ services:
         
   live_dvr:                                                                                                                                                                          
     hostname: dvr                                                                                                                                                                    
-    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:1.0.0                                                                                                               
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release                                                                                                               
     ports:                                                                                                                                                                            
       - "31945:8180"                                                                                                                                                                  
     volumes:                                                                                                                                                                          
