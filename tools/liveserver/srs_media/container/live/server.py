@@ -35,12 +35,12 @@ reload(sys)
 exec("sys.setdefaultencoding('utf-8')")
 assert sys.getdefaultencoding().lower() == "utf-8"
 
-import os, json, time, datetime, cherrypy, threading, urllib2
+import os, json, time, datetime, cherrypy, threading, urllib.request, urllib.error, urllib.parse
 
 # simple log functions.
 def trace(msg):
     date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print "[%s][trace] %s"%(date, msg)
+    print("[%s][trace] %s"%(date, msg))
 
 # enable crossdomain access for js-client
 # define the following method:
@@ -112,7 +112,7 @@ class RESTClients(object):
         trace("post to clients, req=%s"%(req))
         try:
             json_req = json.loads(req)
-        except Exception, ex:
+        except Exception as ex:
             code = Error.system_parse_json
             trace("parse the request to json failed, req=%s, ex=%s, code=%s"%(req, ex, code))
             return str(code)
@@ -199,7 +199,7 @@ class RESTStreams(object):
         trace("post to streams, req=%s"%(req))
         try:
             json_req = json.loads(req)
-        except Exception, ex:
+        except Exception as ex:
             code = Error.system_parse_json
             trace("parse the request to json failed, req=%s, ex=%s, code=%s"%(req, ex, code))
             return str(code)
@@ -279,7 +279,7 @@ class RESTDvrs(object):
         trace("post to dvrs, req=%s"%(req))
         try:
             json_req = json.loads(req)
-        except Exception, ex:
+        except Exception as ex:
             code = Error.system_parse_json
             trace("parse the request to json failed, req=%s, ex=%s, code=%s"%(req, ex, code))
             return str(code)
@@ -330,17 +330,17 @@ class RESTProxy(object):
         enable_crossdomain()
         
         url = "http://" + "/".join(args);
-        print "start to proxy url: %s"%url
+        print("start to proxy url: %s"%url)
         
         f = None
         try:
-            f = urllib2.urlopen(url)
+            f = urllib.request.urlopen(url)
             f.read()
         except:
-            print "error proxy url: %s"%url
+            print("error proxy url: %s"%url)
         finally:
             if f: f.close()
-            print "completed proxy url: %s"%url
+            print("completed proxy url: %s"%url)
         return url
 
 '''
@@ -400,7 +400,7 @@ class RESTHls(object):
         trace("post to hls, req=%s"%(req))
         try:
             json_req = json.loads(req)
-        except Exception, ex:
+        except Exception as ex:
             code = Error.system_parse_json
             trace("parse the request to json failed, req=%s, ex=%s, code=%s"%(req, ex, code))
             return str(code)
@@ -476,7 +476,7 @@ class RESTSessions(object):
         trace("post to sessions, req=%s"%(req))
         try:
             json_req = json.loads(req)
-        except Exception, ex:
+        except Exception as ex:
             code = Error.system_parse_json
             trace("parse the request to json failed, req=%s, ex=%s, code=%s"%(req, ex, code))
             return str(code)
@@ -597,7 +597,7 @@ class RESTServers(object):
             trace("post to nodes, req=%s"%(req))
             try:
                 json_req = json.loads(req)
-            except Exception, ex:
+            except Exception as ex:
                 code = Error.system_parse_json
                 trace("parse the request to json failed, req=%s, ex=%s, code=%s"%(req, ex, code))
                 return json.dumps({"code":code, "data": None})
@@ -843,13 +843,13 @@ if __name__ != "__main__":
 
 # check the user options
 if len(sys.argv) <= 1:
-    print "SRS api callback server, Copyright (c) 2013-2015 SRS(ossrs)"
-    print "Usage: python %s <port>"%(sys.argv[0])
-    print "    port: the port to listen at."
-    print "For example:"
-    print "    python %s 8085"%(sys.argv[0])
-    print ""
-    print "See also: https://github.com/ossrs/srs"
+    print("SRS api callback server, Copyright (c) 2013-2015 SRS(ossrs)")
+    print("Usage: python %s <port>"%(sys.argv[0]))
+    print("    port: the port to listen at.")
+    print("For example:")
+    print("    python %s 8085"%(sys.argv[0]))
+    print("")
+    print("See also: https://github.com/ossrs/srs")
     sys.exit(1)
 
 # parse port from user options.
