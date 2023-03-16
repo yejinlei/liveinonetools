@@ -54,6 +54,7 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release
     ports:
       - "31935:1935"
+      - "39972:9972"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./forward/forward.conf:/usr/local/srs/conf/forward.conf:ro
@@ -74,6 +75,7 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release
     ports:
       - "31936:1935"
+      - "39976:9972"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./rtmp/rtmp2rtmp.conf:/usr/local/srs/conf/rtmp2rtmp.conf:ro
@@ -95,6 +97,7 @@ services:
     ports:                                                                                                                                                                          
       - "31937:8180"                                                                                                                                                                
       - "32937:8088"                                                                                                                                                                
+      - "39977:9972"
     volumes:                                                                                                                                                                        
       - /etc/localtime:/etc/localtime:ro                                                                                                                                            
       - ./hls/rtmp2hls.conf:/usr/local/srs/conf/rtmp2hls.conf:ro
@@ -118,6 +121,7 @@ services:
     ports:                                                                                                                                                                            
       - "31938:8180"                                                                                                                                                                  
       - "32938:8088"                                                                                                                                                                
+      - "39978:9972"
     volumes:                                                                                                                                                                          
       - /etc/localtime:/etc/localtime:ro                                                                                                                                              
       - ./flv/rtmp2httpflv.conf:/usr/local/srs/conf/rtmp2httpflv.conf:ro                                                                                                                        
@@ -154,6 +158,7 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release                                                                                                               
     ports:                                                                                                                                                                            
       - "31945:8180"                                                                                                                                                                  
+      - "39975:9972"
     volumes:                                                                                                                                                                          
       - ./data:/usr/local/srs/objs/nginx/html
       #- ./data:/data
@@ -170,7 +175,7 @@ services:
       - -c
       - |                                                                                                                                                                             
         objs/srs -c conf/rtmp2dvr.conf
-        ./server 8085
+        python ./server.py 8085
 
   live_play:
     hostname: play

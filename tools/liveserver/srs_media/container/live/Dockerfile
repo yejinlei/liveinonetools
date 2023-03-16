@@ -17,6 +17,6 @@ COPY --from=builder /tmp/srs/trunk/conf /usr/local/srs/conf
 ADD server.py /usr/local/srs/server.py
 
 WORKDIR /usr/local/srs
-ENV SRS_ENV_ONLY=on 
-ENV SRS_EXPORTER_ENABLED=on
+#ENV SRS_ENV_ONLY=on 
+#ENV SRS_EXPORTER_ENABLED=on
 CMD objs/srs -c conf/srs.conf
