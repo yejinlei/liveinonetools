@@ -1,18 +1,40 @@
 docker stop node-exporter
+docker stop cadvisor
+docker stop pushgateway
 docker stop prometheus
 docker stop grafana
 docker rm prometheus
+docker rm pushgateway
+docker rm cadvisor
 docker rm node-exporter
 docker rm grafana
 
 #docker run --rm -d -p 9100:9100 prom/node-exporter
 #docker run --name node-exporter --rm -d --network=host prom/node-exporter
 docker run --name node-exporter -d  \
+--privileged=true \
 -v "/proc:/host/proc:ro" \
 -v "/sys:/host/sys:ro" \
 -v "/:/rootfs:ro" \
---net="host" \
+--network=host \
 prom/node-exporter
+
+#监控docker
+#docker run -d \
+#--volume=/:/rootfs:ro \
+#--volume=/var/run:/var/run:rw \
+#--volume=/sys:/sys:ro \
+#--volume=/var/lib/docker/:/var/lib/docker:ro \
+#--publish=38080:8080 \
+#--detach=true \
+#--name=cadvisor \
+#-v "/etc/localtime:/etc/localtime" \
+#google/cadvisor:latest
+
+docker run --name=cadvisor -d --privileged=true --volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --volume=/dev/disk/:/dev/disk:ro --publish=38080:8080 --detach=true google/cadvisor
+
+#端口9091
+docker run --name=pushgateway --network=host -d prom/pushgateway
 
 cat > prometheus.yml <<EOF
 global:
@@ -27,30 +49,42 @@ scrape_configs:
     follow_redirects: true
     static_configs:
       - targets: ["10.13.2.11:9100"]
+
+  - job_name: "cadvisor"
+    metrics_path: "/metrics"
+    scheme: http
+    follow_redirects: true
+    static_configs:
+      - targets: ["10.13.2.11:38080"]
+
   - job_name: "live_forward"
     metrics_path: "/metrics"
     scheme: http
     follow_redirects: true
     static_configs:
       - targets: ["10.13.2.11:39972"]
+
   - job_name: "live_rtmp"
     metrics_path: "/metrics"
     scheme: http
     follow_redirects: true
     static_configs:
       - targets: ["10.13.2.11:39976"]
+
   - job_name: "live_hls"
     metrics_path: "/metrics"
     scheme: http
     follow_redirects: true
     static_configs:
       - targets: ["10.13.2.11:39977"]
+
   - job_name: "live_httpflv"
     metrics_path: "/metrics"
     scheme: http
     follow_redirects: true
     static_configs:
       - targets: ["10.13.2.11:39978"]
+
   - job_name: "live_dvr"
     metrics_path: "/metrics"
     scheme: http
@@ -58,8 +92,10 @@ scrape_configs:
     static_configs:
       - targets: ["10.13.2.11:39975"]
 EOF
+
+#端口9090
 #docker run --rm -d -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml -p 9090:9090 prom/prometheus
 docker run --name prometheus  --rm -d -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml --network=host prom/prometheus
 
-#docker run --rm -d -it -p 3000:3000 \
+#端口3000
 docker run --name grafana --rm -d -it --network=host -e GF_SECURITY_ADMIN_USER=admin -e GF_SECURITY_ADMIN_PASSWORD=admin -e GF_USERS_DEFAULT_THEME=light grafana/grafana
