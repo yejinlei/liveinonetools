@@ -30,49 +30,59 @@ scrape_configs:
     scheme: http
     follow_redirects: true
     static_configs:
-      - targets: ["10.13.2.11:9100"]
+      - targets: ["10.10.10.30:9100"]
+
+  - job_name: "fastdfs"
+    scrape_interval: 150s
+    scrape_timeout: 100s
+    evaluation_interval: 150s
+    metrics_path: "/metrics"
+    scheme: http
+    follow_redirects: true
+    static_configs:
+      - targets: ["10.10.10.70:9018"]
 
   - job_name: "cadvisor"
     metrics_path: "/metrics"
     scheme: http
     follow_redirects: true
     static_configs:
-      - targets: ["10.13.2.11:38080"]
+      - targets: ["10.10.10.30:38080"]
 
   - job_name: "live_forward"
     metrics_path: "/metrics"
     scheme: http
     follow_redirects: true
     static_configs:
-      - targets: ["10.13.2.11:39972"]
+      - targets: ["10.10.10.30:39972"]
 
   - job_name: "live_rtmp"
     metrics_path: "/metrics"
     scheme: http
     follow_redirects: true
     static_configs:
-      - targets: ["10.13.2.11:39976"]
+      - targets: ["10.10.10.30:39976"]
 
   - job_name: "live_hls"
     metrics_path: "/metrics"
     scheme: http
     follow_redirects: true
     static_configs:
-      - targets: ["10.13.2.11:39977"]
+      - targets: ["10.10.10.30:39977"]
 
   - job_name: "live_httpflv"
     metrics_path: "/metrics"
     scheme: http
     follow_redirects: true
     static_configs:
-      - targets: ["10.13.2.11:39978"]
+      - targets: ["10.10.10.30:39978"]
 
   - job_name: "live_dvr"
     metrics_path: "/metrics"
     scheme: http
     follow_redirects: true
     static_configs:
-      - targets: ["10.13.2.11:39975"]
+      - targets: ["10.10.10.30:39975"]
 EOF
 
 #端口9090
