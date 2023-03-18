@@ -1,0 +1,15 @@
+FROM ubuntu
+LABEL maintainer="4010896@qq.com"
+
+COPY requirements.txt /tmp/requirements.txt
+COPY . /opt/
+
+RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list && sed -i s@/security.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+RUN apt-get update -y --fix-missing && apt-get install python3 python3-pip -y \
+    && pip3 install -U pip -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn \
+    && pip3 install -r /opt/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn  \
+    && apt-get clean
+
+WORKDIR /opt
+EXPOSE 9018
+CMD ["gunicorn", "--workers=1", "src.wsgi:app", "-b 0.0.0.0:9099"]
