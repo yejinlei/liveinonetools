@@ -12,7 +12,9 @@ EXPOSE 9000/udp
 
 # ADD sources.list /etc/apt/sources.list
 
-RUN apt-get update && \
+RUN  --mount=type=cache,,target=/var/cache/apt,sharing=locked \
+     --mount=type=cache,target=/var/lib/apt,sharing=locked \
+         apt update && \
          DEBIAN_FRONTEND="noninteractive" \
          apt-get install -y --no-install-recommends \
          build-essential \
@@ -51,8 +53,9 @@ FROM ubuntu:18.04
 ARG MODEL
 
 # ADD sources.list /etc/apt/sources.list
-
-RUN apt-get update && \
+RUN  --mount=type=cache,,target=/var/cache/apt,sharing=locked \
+     --mount=type=cache,target=/var/lib/apt,sharing=locked \
+         apt-get update && \
          DEBIAN_FRONTEND="noninteractive" \
          apt-get install -y --no-install-recommends \
          vim \
