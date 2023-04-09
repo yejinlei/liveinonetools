@@ -1,0 +1,40 @@
+version: '3'
+services:
+  db:
+    image: registry.cn-hangzhou.aliyuncs.com/hxdi/mysql:5.7
+    container_name: mysql57
+    privileged: true
+    volumes:
+      - ./my.cnf:/etc/my.cnf
+      - ./volumes:/home/yejinlei
+      #- "${PWD}/volumes/conf:/etc/mysql/conf.d"
+      #- "${PWD}/volumes/logs/:/logs"
+      #- "${PWD}/volumes/data/:/var/lib/mysql"
+      #- "/etc/timezone:/etc/timezone:rw"
+      #- "/etc/localtime:/etc/localtime:rw"
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./mysql.env
+#  adminer:
+#    image: adminer
+#    volumes:
+#      - "/etc/timezone:/etc/timezone:rw"
+#      - "/etc/localtime:/etc/localtime:rw"
+#    ports:
+#      - 38080:8080
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - "8082:80"
+    environment:
+      - PMA_ARBITRARY=1
+    links:
+      - db
+    depends_on:
+      - db
+    volumes:
+      #- "/etc/timezone:/etc/timezone:rw"
+      #- "/etc/localtime:/etc/localtime:rw"
+      - /sessions
+
