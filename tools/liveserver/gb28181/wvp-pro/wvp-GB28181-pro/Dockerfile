@@ -1,32 +1,25 @@
 FROM ubuntu:20.04   as   build
-
-ARG gitUrl="https://gitee.com/pan648540858"
-ARG zlmGitUrl="https://gitee.com/xia-chu/ZLMediaKit"
+ENV DEBIAN_FRONTEND noninteractive
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked \
-        export DEBIAN_FRONTEND=noninteractive &&\
+RUN --mount=type=cache,target=/var/cache/apt,id=apt,sharing=locked --mount=type=cache,target=/var/lib/apt,id=apt,sharing=locked \
+    --mount=type=cache,target=/root/.m2,id=maven,sharing=locked \
         apt-get update && \
         apt-get install -y --no-install-recommends openjdk-11-jre git maven nodejs npm build-essential \
         cmake ca-certificates openssl ffmpeg &&\
         mkdir -p /opt/wvp/config /opt/wvp/heapdump /opt/wvp/config /opt/assist/config /opt/assist/heapdump /opt/media/www/record
 
-#RUN cd /home && \
-#        git clone "${gitUrl}/maven.git" && \
-#        cp maven/settings.xml /usr/share/maven/conf/
-
-ADD wvp-GB28181-pro /home
-#RUN cd /home && \
-#        git clone "${gitUrl}/wvp-GB28181-pro.git"
+ADD wvp-GB28181-pro /home/wvp-GB28181-pro
 RUN cd /home/wvp-GB28181-pro/web_src && \
-        npm install && \
+        npm install --registry=https://registry.npm.taobao.org && \
         npm run build
+
 RUN cd /home/wvp-GB28181-pro && \
         mvn clean package -Dmaven.test.skip=true && \
         cp /home/wvp-GB28181-pro/target/*.jar /opt/wvp/ && \
         cp /home/wvp-GB28181-pro/src/main/resources/application-docker.yml /opt/wvp/config/application.yml
 
-ADD wvp-pro-assist /home
+ADD wvp-pro-assist /home/wvp-pro-assist
 #RUN cd /home && \
 #		git clone "${gitUrl}/wvp-pro-assist.git"
 RUN cd /home/wvp-pro-assist && \
@@ -72,9 +65,9 @@ EXPOSE 30000-30500/tcp
 EXPOSE 30000-30500/udp
 
 ENV LC_ALL zh_CN.UTF-8
+ENV DEBIAN_FRONTEND noninteractive
 
-RUN export DEBIAN_FRONTEND=noninteractive &&\
-        apt-get update && \
+RUN --mount=type=cache,target=/var/cache/apt,id=apt,sharing=locked --mount=type=cache,target=/var/lib/apt,id=apt,sharing=locked \
         apt-get install -y --no-install-recommends openjdk-11-jre ca-certificates ffmpeg language-pack-zh-hans && \
         apt-get autoremove -y && \
         apt-get clean -y && \

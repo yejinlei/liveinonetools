@@ -16,7 +16,7 @@ services:
     container_name: mysql57
     privileged: true
     volumes:
-      - .mysql/my.cnf:/etc/my.cnf
+      - ./mysql/my.cnf:/etc/my.cnf
       - ./mysql/volumes/conf:/etc/mysql/conf.d
       - ./mysql/volumes/logs/:/logs
       - ./mysql/volumes/data/:/var/lib/mysql
@@ -24,8 +24,6 @@ services:
       #- "/etc/localtime:/etc/localtime:rw"
     ports:
       - "3306:3306"
-    env_file:
-      - ./mysql.env
 
   phpmyadmin:
     image: phpmyadmin
@@ -55,7 +53,8 @@ services:
       - "30000-30500:30000-30500/tcp"
       - "30000-30500:30000-30500/udp"
     volumes:
-      - ./wvp/application-docker.yml /opt/wvp/config/application.yml
+      - ./wvp/application-docker.yml:/opt/wvp/config/application.yml
+      - ./wvp/application-dev.yml:/opt/assist/config/application.yml
       - ./wvp/video:/opt/media/www/record/
       - ./wvp/logs/wvp:/opt/wvp/logs/
       - ./wvp/logs/assist:/opt/assist/logs/
