@@ -16,11 +16,10 @@ services:
     container_name: mysql57
     privileged: true
     volumes:
-      - ./my.cnf:/etc/my.cnf
-      - ./volumes:/home/yejinlei
-      #- "${PWD}/volumes/conf:/etc/mysql/conf.d"
-      #- "${PWD}/volumes/logs/:/logs"
-      #- "${PWD}/volumes/data/:/var/lib/mysql"
+      - .mysql/my.cnf:/etc/my.cnf
+      - ./mysql/volumes/conf:/etc/mysql/conf.d
+      - ./mysql/volumes/logs/:/logs
+      - ./mysql/volumes/data/:/var/lib/mysql
       #- "/etc/timezone:/etc/timezone:rw"
       #- "/etc/localtime:/etc/localtime:rw"
     ports:
