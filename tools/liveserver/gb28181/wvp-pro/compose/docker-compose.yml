@@ -1,5 +1,15 @@
 version: '3'
 services:
+  redis:
+    image: redis
+    restart: always
+    volumes:
+      - ./redis/redis.conf:/etc/redis/redis_default.conf
+      - ./redis/data/:/data
+    environment:
+      TZ: "Asia/Shanghai"
+    command: redis-server /etc/redis/redis_default.conf --appendonly yes
+
   db:
     image: registry.cn-hangzhou.aliyuncs.com/hxdi/mysql:5.7
     container_name: mysql57
