@@ -56,15 +56,16 @@ services:
       - "30000-30500:30000-30500/tcp"
       - "30000-30500:30000-30500/udp"
     volumes:
-      - ./video:/opt/media/www/record/
-      - ./logs/wvp:/opt/wvp/logs/
-      - ./logs/assist:/opt/assist/logs/
-      - ./logs/media:/opt/media/log/
+      - ./wvp/application-docker.yml /opt/wvp/config/application.yml
+      - ./wvp/video:/opt/media/www/record/
+      - ./wvp/logs/wvp:/opt/wvp/logs/
+      - ./wvp/logs/assist:/opt/assist/logs/
+      - ./wvp/logs/media:/opt/media/log/
     environment:
       TZ: "Asia/Shanghai"
-      # [必须修改] 本机的IP
+      # 用于替换/opt/wvp/config/application.yml中变量
       WVP_HOST: 172.18.0.61
-      WVP_PWD: aseqw_+hiy123
+      WVP_PWD: 12345678
       WVP_DOMAIN: 6101130049
       WVP_ID: 61011300490000000001
       REDIS_HOST: redis
