@@ -2,6 +2,7 @@ version: '3'
 services:
   redis:
     image: redis
+#    container_name: redis
     ports:
       - "6379:6379"
     volumes:
@@ -11,9 +12,9 @@ services:
       TZ: "Asia/Shanghai"
     command: redis-server /etc/redis/redis_default.conf --appendonly yes
 
-  db:
+  mysql:
     image: registry.cn-hangzhou.aliyuncs.com/hxdi/mysql:5.7
-    container_name: mysql57
+#    container_name: mysql
     privileged: true
     volumes:
       - ./mysql/my.cnf:/etc/my.cnf
@@ -24,6 +25,8 @@ services:
       #- "/etc/localtime:/etc/localtime:rw"
     ports:
       - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
 
   phpmyadmin:
     image: phpmyadmin
@@ -31,10 +34,10 @@ services:
       - "8083:80"
     environment:
       - PMA_ARBITRARY=1
-    links:
-      - db
+#    links:
+#      - db
     depends_on:
-      - db
+      - mysql
     volumes:
       #- "/etc/timezone:/etc/timezone:rw"
       #- "/etc/localtime:/etc/localtime:rw"
@@ -42,7 +45,7 @@ services:
 
   zlm:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/zlmediakit:2ae97a6
-    container_name: zlm
+#    container_name: zlm
     ports:
       - "1935:1935"
       - "554:554"
@@ -60,14 +63,14 @@ services:
 
   wvp:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/wvp:2.0
-    container_name: wvp
+#    container_name: wvp
     ports:
       - "5060:5060"
       - "5060:5060/udp"
       - "18080:18080"
-      - "80:80"
-      - "10000:10000/tcp"
-      - "10000:10000/udp"
+      #- "80:80"
+      #- "10000:10000/tcp"
+      #- "10000:10000/udp"
       - "30000-30500:30000-30500/tcp"
       - "30000-30500:30000-30500/udp"
     volumes:
@@ -80,8 +83,8 @@ services:
     environment:
       TZ: "Asia/Shanghai"
       # 用于替换/opt/wvp/config/application.yml中变量
-      WVP_HOST: 10.13.2.15
-      WVP_PWD: 12345678
+      #WVP_HOST: 10.13.2.16
+      #WVP_PWD: 12345678
       WVP_DOMAIN: 6101130049
       WVP_ID: 61011300490000000001
       REDIS_HOST: redis
@@ -92,9 +95,9 @@ services:
       WVP_JVM_CONFIG: -Xms128m -Xmx256m
       ASSIST_CONFIG:
       WVP_CONFIG:
-      ZLM_HOST: zlm 
+      ZLM_HOST: 10.13.2.16 
       ZLM_PORT: 80
     depends_on:
       - redis
-      - db
+      - mysql
       - zlm
