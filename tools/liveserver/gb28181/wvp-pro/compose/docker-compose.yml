@@ -107,7 +107,7 @@ services:
       WVP_JVM_CONFIG: -Xms128m -Xmx256m
       ASSIST_CONFIG:
       WVP_CONFIG:
-      ZLM_HOST: 10.13.2.16 
+      ZLM_HOST: zlm 
       ZLM_PORT: 80
     depends_on:
       - redis

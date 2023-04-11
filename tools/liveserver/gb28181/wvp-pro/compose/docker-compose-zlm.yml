@@ -1,0 +1,23 @@
+version: '3'
+services:
+  zlm:
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/zlmediakit:2ae97a6
+#    container_name: zlm
+    ports:
+      - "1935:1935"
+      - "554:554"
+      - "80:80"
+      - "443:443"
+      - "10000:10000"
+      - "10000:10000/udp"
+      - "8000:8000/udp"
+      - "9000:9000/udp"
+    volumes:
+      - ./zlmediakit/config.ini:/opt/media/conf/config.ini
+      - ./zlmediakit/default.pem:/opt/media/bin/default.pem
+      - ./wvp/application-dev.yml:/opt/assist/config/application.yml
+      - ./wvp/video:/opt/media/www/record/
+      - ./wvp/logs/assist:/opt/assist/logs/
+      - ./wvp/logs/media:/opt/media/log/
+#    command:
+#      - sh -c "./MediaServer -s default.pem -c ../conf/config.ini"
