@@ -12,7 +12,8 @@ EXPOSE 9000/udp
 
 # ADD sources.list /etc/apt/sources.list
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked \    
+RUN --mount=type=cache,target=/var/cache/apt,id=apt,sharing=locked --mount=type=cache,target=/var/lib/apt,id=apt,sharing=locked \
+    --mount=type=cache,target=/root/.m2,id=maven,sharing=locked \
          apt update && \
          DEBIAN_FRONTEND="noninteractive" \
          apt-get install -y --no-install-recommends \
@@ -31,12 +32,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,t
          gcc \
          g++ \
          libavcodec-dev libavutil-dev libswscale-dev libresample-dev \
-         gdb && \
-         apt-get autoremove -y && \
-         apt-get clean -y && \
+         gdb maven && \
+#         apt-get autoremove -y && \
+#         apt-get clean -y && \
          wget https://github.com/cisco/libsrtp/archive/v2.2.0.tar.gz -O libsrtp-2.2.0.tar.gz && tar xfv libsrtp-2.2.0.tar.gz && \
          cd libsrtp-2.2.0 && ./configure --enable-openssl && make -j $(nproc) && make install && \
-    rm -rf /var/lib/apt/lists/*
+         mkdir -p /opt/assist/config /opt/assist/heapdump /opt/media/www/record
+#    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/media
 COPY ZLMediaKit /opt/media/ZLMediaKit
@@ -48,12 +50,19 @@ WORKDIR /opt/media/ZLMediaKit/build
 RUN cmake -DCMAKE_BUILD_TYPE=${MODEL} -DENABLE_WEBRTC=true -DENABLE_FFMPEG=true -DENABLE_TESTS=false -DENABLE_API=false .. && \
     make -j $(nproc)
 
+ADD wvp-pro-assist /home/wvp-pro-assist
+RUN cd /home/wvp-pro-assist && \
+        git reset --hard 58f1a79136a55a7cd1593c95b56ddadcc2225b61 && \
+        mvn clean package -Dmaven.test.skip=true && \
+        cp /home/wvp-pro-assist/target/*.jar /opt/assist/ && \
+        cp /home/wvp-pro-assist/src/main/resources/application-dev.yml /opt/assist/config/application.yml
+
 FROM ubuntu:20.04
 ARG MODEL
 
 # ADD sources.list /etc/apt/sources.list
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked \    
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,id=apt,sharing=locked \    
          apt update && \
          DEBIAN_FRONTEND="noninteractive" \
          apt-get install -y --no-install-recommends \
@@ -69,10 +78,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,t
          gcc \
          g++ \
          libavcodec-dev libavutil-dev libswscale-dev libresample-dev \
-         gdb && \
-         apt-get autoremove -y && \
-         apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/*
+         gdb \
+         openjdk-11-jre language-pack-zh-hans
+#         apt-get autoremove -y && \
+#         apt-get clean -y && \
+#    rm -rf /var/lib/apt/lists/*
 
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
