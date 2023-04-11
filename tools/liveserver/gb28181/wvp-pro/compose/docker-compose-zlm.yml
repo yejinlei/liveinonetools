@@ -3,6 +3,7 @@ services:
   zlm:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/zlmediakit:2ae97a6
 #    container_name: zlm
+    restart: always
     ports:
       - "1935:1935"
       - "554:554"
