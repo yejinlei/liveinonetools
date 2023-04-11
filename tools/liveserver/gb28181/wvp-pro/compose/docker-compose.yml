@@ -54,6 +54,9 @@ services:
       - "9000:9000/udp"
     volumes:
       - ./zlmediakit/config.ini:/opt/media/conf/config.ini
+      - ./zlmediakit/default.pem:/opt/media/bin/default.pem
+    command:
+      - ["sh","-c","./MediaServer -s default.pem -c ../conf/config.ini"]
 
   wvp:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/wvp:2.0
