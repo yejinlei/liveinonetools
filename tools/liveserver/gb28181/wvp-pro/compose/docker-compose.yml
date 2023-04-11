@@ -28,7 +28,7 @@ services:
   phpmyadmin:
     image: phpmyadmin
     ports:
-      - "8082:80"
+      - "8083:80"
     environment:
       - PMA_ARBITRARY=1
     links:
@@ -39,6 +39,21 @@ services:
       #- "/etc/timezone:/etc/timezone:rw"
       #- "/etc/localtime:/etc/localtime:rw"
       - /sessions
+
+  zlm:
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/zlmediakit:2ae97a6
+    container_name: zlm
+    ports:
+      - "1935:1935"
+      - "554:554"
+      - "80:80"
+      - "443:443"
+      - "10000:10000"
+      - "10000:10000/udp"
+      - "8000:8000/udp"
+      - "9000:9000/udp"
+    volumes:
+      - ./zlmediakit/config.ini:/opt/media/conf/config.ini
 
   wvp:
     image: registry.cn-hangzhou.aliyuncs.com/yejinlei/wvp:2.0
@@ -62,7 +77,7 @@ services:
     environment:
       TZ: "Asia/Shanghai"
       # 用于替换/opt/wvp/config/application.yml中变量
-      WVP_HOST: 172.18.0.61
+      WVP_HOST: 10.13.2.15
       WVP_PWD: 12345678
       WVP_DOMAIN: 6101130049
       WVP_ID: 61011300490000000001
@@ -74,6 +89,9 @@ services:
       WVP_JVM_CONFIG: -Xms128m -Xmx256m
       ASSIST_CONFIG:
       WVP_CONFIG:
+      ZLM_HOST: zlm 
+      ZLM_PORT: 80
     depends_on:
       - redis
       - db
+      - zlm
