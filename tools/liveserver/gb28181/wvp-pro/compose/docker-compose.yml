@@ -12,6 +12,13 @@ services:
       TZ: "Asia/Shanghai"
     command: redis-server /etc/redis/redis_default.conf --appendonly yes
 
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./redisinsight:/db
+
   mysql:
     image: registry.cn-hangzhou.aliyuncs.com/hxdi/mysql:5.7
 #    container_name: mysql
@@ -58,6 +65,10 @@ services:
     volumes:
       - ./zlmediakit/config.ini:/opt/media/conf/config.ini
       - ./zlmediakit/default.pem:/opt/media/bin/default.pem
+      - ./wvp/application-dev.yml:/opt/assist/config/application.yml
+      - ./wvp/video:/opt/media/www/record/
+      - ./wvp/logs/assist:/opt/assist/logs/
+      - ./wvp/logs/media:/opt/media/log/
 #    command:
 #      - sh -c "./MediaServer -s default.pem -c ../conf/config.ini"
 
@@ -75,11 +86,11 @@ services:
       - "30000-30500:30000-30500/udp"
     volumes:
       - ./wvp/application-docker.yml:/opt/wvp/config/application.yml
-      - ./wvp/application-dev.yml:/opt/assist/config/application.yml
-      - ./wvp/video:/opt/media/www/record/
+      #- ./wvp/application-dev.yml:/opt/assist/config/application.yml
+      #- ./wvp/video:/opt/media/www/record/
       - ./wvp/logs/wvp:/opt/wvp/logs/
-      - ./wvp/logs/assist:/opt/assist/logs/
-      - ./wvp/logs/media:/opt/media/log/
+      #- ./wvp/logs/assist:/opt/assist/logs/
+      #- ./wvp/logs/media:/opt/media/log/
     environment:
       TZ: "Asia/Shanghai"
       # 用于替换/opt/wvp/config/application.yml中变量
