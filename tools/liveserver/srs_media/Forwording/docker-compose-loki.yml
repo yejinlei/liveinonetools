@@ -1,0 +1,223 @@
+version: '3.5'
+
+x-logging:
+  &loki-logging
+  driver: loki
+  options:
+    loki-url: "http://10.13.2.16:3100/loki/api/v1/push"
+    max-size: "300m"
+    max-file: "10"
+
+services:
+  live_vipc:
+    hostname: vipc
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-vipc:1.0.0
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                
+    ports:
+      - "8554:8554" #RTSP
+        #- "8332:8332" #RTSPS
+        #- "1935:1935" #RTMP
+        #- "1936:1936" #RTMPS
+        #- "8888:8888" #HLS
+        #- "9997:9997" #api
+        #- "9998:9998" #metrics
+        #- "9999:9999" #ppof
+    volumes:
+      - ./vipc/rtsp-simple-server.yml:/rtsp-simple-server/rtsp-simple-server.yml 
+    logging: *loki-logging
+
+  live_push:
+    hostname: push
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0 
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                
+    #links:
+    #  - vipc
+    depends_on:
+      - live_vipc
+    volumes:
+      - ./vipc/vipc_argv.conf:/argv.conf:ro
+      - ./vipc/vipc_camera.conf:/camera.conf:ro
+    logging: *loki-logging
+
+  #采集器
+  live_ingest:                                                                                                                                                                   
+    hostname: ingest
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-ingest:1.0.0
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                
+    volumes:                                                                                                                                                                         
+      - ./ingest/ipc_camera.conf:/camera.conf:ro
+      - ./ingest/ipc_argv.conf:/argv.conf:ro
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      TASK_SLOT: 1
+      SERVICE_NAME: 1
+      NODE_HOSTNAME: 1
+    command: ./ingest
+    logging: *loki-logging
+
+  #转发节点
+  live_forward:
+    hostname: forward
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release
+    ports:
+      - "31935:1935"
+      - "39972:9972"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./forward/forward.conf:/usr/local/srs/conf/forward.conf:ro
+    networks:
+      - live-network
+    deploy:
+      mode: replicated
+      replicas: 1
+    command:
+      - /bin/sh
+      - -c
+      - |
+        objs/srs -c conf/forward.conf
+        ./server 8085
+    logging: *loki-logging
+
+  live_rtmp:
+    hostname: rtmp
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release
+    ports:
+      - "31936:1935"
+      - "39976:9972"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./rtmp/rtmp2rtmp.conf:/usr/local/srs/conf/rtmp2rtmp.conf:ro
+    networks:
+      - live-network
+    deploy:
+      mode: replicated
+      replicas: 1
+    command:
+      - /bin/sh
+      - -c
+      - |
+        objs/srs -c conf/rtmp2rtmp.conf
+        ./server 8085
+    logging: *loki-logging
+
+  live_hls:                                                                                                                                                                     
+    hostname: hls                                                                                                                                                              
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release                                                                                                        
+    ports:                                                                                                                                                                          
+      - "31937:8180"                                                                                                                                                                
+      - "32937:8088"                                                                                                                                                                
+      - "39977:9972"
+    volumes:                                                                                                                                                                        
+      - /etc/localtime:/etc/localtime:ro                                                                                                                                            
+      - ./hls/rtmp2hls.conf:/usr/local/srs/conf/rtmp2hls.conf:ro
+      - ./play/nginx/nginx/conf/server.crt:/etc/nginx/server.crt
+      - ./play/nginx/nginx/conf/server.key:/etc/nginx/server.key
+    networks:                                                                                                                                                                       
+      - live-network                                                                                                                                                                
+    deploy:                                                                                                                                                                         
+      mode: replicated                                                                                                                                                              
+      replicas: 1                                                                                                                                                                   
+    command:                                                                                                                                                                        
+      - /bin/sh                                                                                                                                                                     
+      - -c                                                                                                                                                                          
+      - |                                                                                                                                                                           
+        objs/srs -c conf/rtmp2hls.conf
+        ./server 8085 
+    logging: *loki-logging
+            
+  live_httpflv:                                                                                                                                                                          
+    hostname: httpflv                                                                                                                                                                    
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release                                                                                                          
+    ports:                                                                                                                                                                            
+      - "31938:8180"                                                                                                                                                                  
+      - "32938:8088"                                                                                                                                                                
+      - "39978:9972"
+    volumes:                                                                                                                                                                          
+      - /etc/localtime:/etc/localtime:ro                                                                                                                                              
+      - ./flv/rtmp2httpflv.conf:/usr/local/srs/conf/rtmp2httpflv.conf:ro                                                                                                                        
+      - ./play/nginx/nginx/conf/server.crt:/etc/nginx/server.crt
+      - ./play/nginx/nginx/conf/server.key:/etc/nginx/server.key
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                  
+    deploy:                                                                                                                                                                           
+      mode: replicated                                                                                                                                                                
+      replicas: 1                                                                                                                                                                     
+    command:                                                                                                                                                                          
+      - /bin/sh                                                                                                                                                                       
+      - -c
+      - |                                                                                                                                                                             
+        objs/srs -c conf/rtmp2httpflv.conf                                                                                                                                               
+        ./server 8085
+    logging: *loki-logging
+
+  live_webrtc:                                                                                                                                                                          
+    hostname: webrtc                                                                                                                                                                    
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live.rtsp2webrtc:1.0.0                                                                                                               
+    ports:                                                                                                                                                                            
+      - "38081:8081"                                                                                                                                                                  
+    volumes:                                                                                                                                                                          
+      - /etc/localtime:/etc/localtime:ro                                                                                                                                              
+      - ./webrtc/config.json:/app/config.json:ro                                                                                                                        
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                  
+    deploy:                                                                                                                                                                           
+      mode: replicated                                                                                                                                                                
+      replicas: 1                                                                                                                                                                     
+    logging: *loki-logging
+        
+  live_dvr:                                                                                                                                                                          
+    hostname: dvr                                                                                                                                                                    
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/domain-live:5.0release                                                                                                               
+    ports:                                                                                                                                                                            
+      - "31945:8180"                                                                                                                                                                  
+      - "39975:9972"
+    volumes:                                                                                                                                                                          
+      - ./data:/usr/local/srs/objs/nginx/html
+      #- ./data:/data
+      #- ./crossdomain.xml:/data/crossdomain.xml
+      - /etc/localtime:/etc/localtime:ro                                                                                                                                              
+      - ./dvr/rtmp2dvr.conf:/usr/local/srs/conf/rtmp2dvr.conf:ro                                                                                                                        
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                  
+    deploy:                                                                                                                                                                           
+      mode: replicated                                                                                                                                                                
+      replicas: 1                                                                                                                                                                     
+    command:                                                                                                                                                                          
+      - /bin/sh                                                                                                                                                                       
+      - -c
+      - |                                                                                                                                                                             
+        objs/srs -c conf/rtmp2dvr.conf
+        python ./server.py 8085
+    logging: *loki-logging
+
+  live_play:
+    hostname: play
+    image: nginx:latest
+    ports:
+      - "39080:80"
+      - "31443:443"
+    volumes:
+      - ./play/nginx/nginx/html:/usr/share/nginx/html
+      - ./play/nginx/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./play/nginx/nginx/conf/server.crt:/etc/nginx/server.crt
+      - ./play/nginx/nginx/conf/server.key:/etc/nginx/server.key
+      - ./play/nginx/nginx/conf/conf.d:/etc/nginx/conf.d
+      - ./play/nginx/nginx/log:/var/log/nginx
+      - ./play/nginx/docker-entrypoint.sh:/docker-entrypoint.sh
+    networks:                                                                                                                                                                         
+      - live-network                                                                                                                                                                  
+    deploy:                                                                                                                                                                           
+      mode: replicated                                                                                                                                                                
+      replicas: 1                                                                                                                                                                     
+    command: nginx -g "daemon on;"                                                                                                                                                        
+    logging: *loki-logging
+
+
+networks:
+  live-network:
+    driver: bridge
