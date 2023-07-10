@@ -36,7 +36,10 @@ enum AVHWDeviceType {
 };
 ```
 
- 
+## 命令行
+
+### 硬件加速，ffmpeg -hwaccels
+
 
 ## 开源项目
 
