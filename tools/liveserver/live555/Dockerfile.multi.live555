@@ -1,0 +1,21 @@
+FROM registry.cn-hangzhou.aliyuncs.com/yejinlei/alpine.multidown:1.0 as download
+WORKDIR /tmp
+RUN axel -n 4 http://www.live555.com/liveMedia/public/live555-latest.tar.gz 
+
+FROM registry.cn-hangzhou.aliyuncs.com/yejinlei/multi.ubuntu.gcc:10-13 as builder
+COPY --from=download /tmp/live555-latest.tar.gz tmp
+WORKDIR /tmp
+
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 20 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 20 && \
+    gcc -v
+ENV CXXFLAGS="-std=c++20"
+RUN \
+    cd /tmp && \
+    tar xvzf live555-latest.tar.gz && \
+    cd live && \
+    ./genMakefiles linux && \
+    make -j4 && \
+    make install
+
+
