@@ -16,6 +16,11 @@ RUN \
     cd live && \
     ./genMakefiles linux && \
     make -j4 && \
-    make install
+    make install && \
+    deps.sh /usr/local/bin/live555M
 
+FROM ubuntu:22.04 as runtime
+COPY --from=builder /usr/local/bin/* /usr/local/bin/
+COPY --from=builder /bak/* /lib64/
 
+CMD live555MediaServer
