@@ -6,6 +6,9 @@
 
 ### 1.2、编译
 
+#### 静态编译
+
+
 #### configure文件
 
     echo "1. 查看所有可用的编码器"
@@ -206,6 +209,7 @@ enum AVHWDeviceType {
 - [BtbN/FFmpeg-Builds](https://github.com/BtbN/FFmpeg-Builds)
 - [zimbatm/ffmpeg-static](https://github.com/zimbatm/ffmpeg-static)
 - [FFmpeg Static Builds](https://www.johnvansickle.com/ffmpeg/)
+- [cosmin/docker-ffmpeg](https://github.com/cosmin/docker-ffmpeg/)
 
 ## 三、其他资料
 
