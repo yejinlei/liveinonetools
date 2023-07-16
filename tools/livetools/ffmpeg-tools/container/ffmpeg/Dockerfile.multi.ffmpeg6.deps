@@ -1,0 +1,71 @@
+FROM registry.cn-hangzhou.aliyuncs.com/yejinlei/alpine.multidown:1.0 as download
+WORKDIR /tmp
+
+ENV FFMPEG_VERSION=6.0 \  
+    AOM_VERSION=v1.0.0 \
+    FDKAAC_VERSION=0.1.5 \
+    FONTCONFIG_VERSION=2.12.4 \
+    FREETYPE_VERSION=2.10.4 \
+    FRIBIDI_VERSION=0.19.7 \
+    KVAZAAR_VERSION=2.0.0 \
+    LAME_VERSION=3.100 \
+    LIBASS_VERSION=0.13.7 \
+    LIBPTHREAD_STUBS_VERSION=0.4 \
+    LIBVIDSTAB_VERSION=1.1.0 \
+    LIBXCB_VERSION=1.13.1 \
+    XCBPROTO_VERSION=1.13 \
+    OGG_VERSION=1.3.2 \
+    OPENCOREAMR_VERSION=0.1.5 \
+    OPUS_VERSION=1.2 \
+    OPENJPEG_VERSION=2.1.2 \
+    THEORA_VERSION=1.1.1 \
+    VORBIS_VERSION=1.3.5 \
+    VPX_VERSION=1.8.0 \
+    WEBP_VERSION=1.0.2 \
+    X264_VERSION=20170226-2245-stable \
+    X265_VERSION=3.4 \
+    XAU_VERSION=1.0.9 \
+    XORG_MACROS_VERSION=1.19.2 \
+    XPROTO_VERSION=7.0.31 \
+    XVID_VERSION=1.3.4 \
+    LIBXML2_VERSION=2.9.10 \
+    LIBBLURAY_VERSION=1.1.2 \
+    LIBZMQ_VERSION=4.3.2 \
+    LIBSRT_VERSION=1.4.1 \
+    LIBARIBB24_VERSION=1.0.3 \
+    LIBPNG_VERSION=1.6.9
+#RUN --mount=type=cache,id=down,target=/tmp,sharing=locked \
+RUN axel -n 8 -k  https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://versaweb.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://github.com/videolan/x265/archive/refs/tags/${X265_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber http://downloads.xiph.org/releases/ogg/libogg-${OGG_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://archive.mozilla.org/pub/opus/opus-${OPUS_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://codeload.github.com/webmproject/libvpx/tar.gz/v${VPX_VERSION} && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${WEBP_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber http://downloads.xvid.org/downloads/xvidcore-${XVID_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://github.com/fribidi/fribidi/archive/${FRIBIDI_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://github.com/libass/libass/archive/${LIBASS_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://github.com/ultravideo/kvazaar/archive/v${KVAZAAR_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://www.x.org/archive//individual/util/util-macros-${XORG_MACROS_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://www.x.org/archive/individual/proto/xproto-${XPROTO_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://www.x.org/archive/individual/lib/libXau-${XAU_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://xcb.freedesktop.org/dist/libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://xcb.freedesktop.org/dist/xcb-proto-${XCBPROTO_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://xcb.freedesktop.org/dist/libxcb-${LIBXCB_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://gitlab.gnome.org/GNOME/libxml2/-/archive/v${LIBXML2_VERSION}/libxml2-v${LIBXML2_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://download.videolan.org/pub/videolan/libbluray/${LIBBLURAY_VERSION}/libbluray-${LIBBLURAY_VERSION}.tar.bz2 && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://github.com/zeromq/libzmq/archive/v${LIBZMQ_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://github.com/Haivision/srt/archive/v${LIBSRT_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://github.com/nkoriyama/aribb24/archive/v${LIBARIBB24_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz && \
+    wget -t 120 -T 120 --no-check-certificate --no-clobber https://nchc.dl.sourceforge.net/project/lame/lame/${LAME_VERSION}/lame-${LAME_VERSION}.tar.gz
+#RUN curl -sL https://versaweb.dl.sourceforge.net/project/lame/lame/$(echo ${LAME_VERSION} | sed -e 's/[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)/\1.\2/')/lame-${LAME_VERSION}.tar.gz
+RUN git clone -b ${AOM_VERSION} https://gitee.com/rzkn/aom.git && \
+    git clone https://git.code.sf.net/p/libpng/code  -b v${LIBPNG_VERSION} --depth 1

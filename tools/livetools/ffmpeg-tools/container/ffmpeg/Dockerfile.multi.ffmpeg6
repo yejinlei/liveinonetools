@@ -1,0 +1,377 @@
+FROM registry.cn-hangzhou.aliyuncs.com/yejinlei/multi.ffmpeg.deps:6.0 as download
+WORKDIR /tmp
+
+FROM registry.cn-hangzhou.aliyuncs.com/yejinlei/multi.ubuntu.gcc:11 as builder
+ENV         FFMPEG_VERSION=3.3.9 \
+            AOM_VERSION=v1.0.0 \
+            FDKAAC_VERSION=0.1.5 \
+            FONTCONFIG_VERSION=2.12.4 \
+            FREETYPE_VERSION=2.10.4 \
+            FRIBIDI_VERSION=0.19.7 \
+            KVAZAAR_VERSION=2.0.0 \
+            LAME_VERSION=3.100 \
+            LIBASS_VERSION=0.13.7 \
+            LIBPTHREAD_STUBS_VERSION=0.4 \
+            LIBVIDSTAB_VERSION=1.1.0 \
+            LIBXCB_VERSION=1.13.1 \
+            XCBPROTO_VERSION=1.13 \
+            OGG_VERSION=1.3.2 \
+            OPENCOREAMR_VERSION=0.1.5 \
+            OPUS_VERSION=1.2 \
+            OPENJPEG_VERSION=2.1.2 \
+            THEORA_VERSION=1.1.1 \
+            VORBIS_VERSION=1.3.5 \
+            VPX_VERSION=1.8.0 \
+            WEBP_VERSION=1.0.2 \
+            X264_VERSION=20170226-2245-stable \
+            X265_VERSION=3.4 \
+            XAU_VERSION=1.0.9 \
+            XORG_MACROS_VERSION=1.19.2 \
+            XPROTO_VERSION=7.0.31 \
+            XVID_VERSION=1.3.4 \
+            LIBXML2_VERSION=2.9.10 \
+            LIBBLURAY_VERSION=1.1.2 \
+            LIBZMQ_VERSION=4.3.2 \
+            LIBSRT_VERSION=1.4.1 \
+            LIBARIBB24_VERSION=1.0.3 \
+            LIBPNG_VERSION=1.6.9 \
+            SRC=/usr/local
+
+ARG         LD_LIBRARY_PATH=/opt/ffmpeg/lib
+ARG         MAKEFLAGS="-j16"
+ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig"
+ARG         PREFIX=/opt/ffmpeg
+ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
+
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN      buildDeps="expat libgomp1 autoconf \
+                    automake \
+                    cmake \
+                    bzip2 \
+                    libexpat1-dev \
+                    gperf \
+                    meson \
+                    perl \
+                    zlib1g-dev \
+                    libfribidi0 libfribidi-bin libfribidi-dev" && \
+                    apt-get -yqq update && \
+                    apt-get install -yq --no-install-recommends ${buildDeps}
+
+
+COPY --from=download /tmp/* /tmp
+WORKDIR /tmp
+
+## opencore-amr https://sourceforge.net/projects/opencore-amr/
+RUN \
+        tar -zxvf opencore-amr-${OPENCOREAMR_VERSION}.tar.gz && cd opencore-amr-${OPENCOREAMR_VERSION} && \
+        ./configure --prefix="${PREFIX}" --enable-shared  && \
+        make -j16 && \
+        make install
+
+## x264 http://www.videolan.org/developers/x264.html
+#ADD --disable-asm
+RUN \
+        tar -xvjf x264-snapshot-${X264_VERSION}.tar.bz2  && cd x264-snapshot-${X264_VERSION} && \
+        ./configure --prefix="${PREFIX}" --enable-shared --enable-pic --disable-cli --disable-asm && \
+        make -j16 && \
+        make install
+
+### x265 http://x265.org/
+RUN \
+        tar -zxvf ${X265_VERSION}.tar.gz && \
+        cd x265-${X265_VERSION}/build/linux && \
+        sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
+        sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
+        ./multilib.sh && \
+        make -C 8bit install
+
+### libogg https://www.xiph.org/ogg/
+RUN \
+        tar -zxvf libogg-${OGG_VERSION}.tar.gz && cd libogg-${OGG_VERSION} && \
+        ./configure --prefix="${PREFIX}" --enable-shared  && \
+        make -j16 && \
+        make install
+
+### libopus https://www.opus-codec.org/
+#RUN \
+#        tar -zxvf opus-${OPUS_VERSION}.tar.gz && cd opus-${OPUS_VERSION} && \
+#        autoreconf -fiv && \
+#        ./configure --prefix="${PREFIX}" --enable-shared && \
+#        make -j16 && \
+#        make install
+
+### libvorbis https://xiph.org/vorbis/
+RUN \
+        tar -zxvf libvorbis-${VORBIS_VERSION}.tar.gz && cd libvorbis-${VORBIS_VERSION} && \
+        ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
+        make -j16 && \
+        make install
+
+### libtheora http://www.theora.org/
+RUN \
+        tar -zxvf libtheora-${THEORA_VERSION}.tar.gz && cd libtheora-${THEORA_VERSION} && \
+        ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
+        make -j16 && \
+        make install
+
+### libvpx https://www.webmproject.org/code/
+#RUN \
+#        tar -zxvf v${VPX_VERSION} && cd libvpx-${VPX_VERSION} && \
+#        ./configure --prefix="${PREFIX}" --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth --enable-pic --enable-shared \
+#        --disable-debug --disable-examples --disable-docs --disable-install-bins && \
+#        make -j16 && \
+#        make install
+
+### libwebp https://developers.google.com/speed/webp/
+RUN \
+        tar -zxvf libwebp-${WEBP_VERSION}.tar.gz && cd libwebp-${WEBP_VERSION} && \
+        ./configure --prefix="${PREFIX}" --enable-shared  && \
+        make -j16 && \
+        make install
+
+### libmp3lame http://lame.sourceforge.net/
+RUN \
+        tar -zxvf lame-${LAME_VERSION}.tar.gz && cd lame-${LAME_VERSION} && \
+        ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --disable-frontend && \
+        make -j16 && \
+        make install
+
+### xvid https://www.xvid.com/
+RUN \
+        tar -zxvf  xvidcore-${XVID_VERSION}.tar.gz && \
+        cd xvidcore/build/generic && \
+        ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" && \
+        make -j16 && \
+        make install
+
+### fdk-aac https://github.com/mstorsjo/fdk-aac
+RUN \
+        tar -zxvf v${FDKAAC_VERSION}.tar.gz && cd fdk-aac-${FDKAAC_VERSION} && \
+        autoreconf -fiv && \
+        ./configure --prefix="${PREFIX}" --enable-shared --datadir="/tmp/fdk-aac" && \
+        make && \
+        make install
+
+## openjpeg https://github.com/uclouvain/openjpeg
+RUN \
+        tar -zxvf v${OPENJPEG_VERSION}.tar.gz && cd openjpeg-${OPENJPEG_VERSION} && \
+        cmake -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
+        make -j16 && \
+        make install
+
+## freetype https://www.freetype.org/
+RUN  \
+        tar -zxvf freetype-${FREETYPE_VERSION}.tar.gz && cd freetype-${FREETYPE_VERSION} && \
+        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install
+
+## libvstab https://github.com/georgmartius/vid.stab
+RUN  \
+        tar -zxvf v${LIBVIDSTAB_VERSION}.tar.gz && cd vid.stab-${LIBVIDSTAB_VERSION} && \
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
+        make -j16 && \
+        make install
+
+## fridibi https://www.fribidi.org/
+#./bootstrap --no-config --auto && \
+#RUN  \
+#        tar -zxvf ${FRIBIDI_VERSION}.tar.gz && cd fribidi-${FRIBIDI_VERSION} && \
+#        sed -i 's/^SUBDIRS =.*/SUBDIRS=gen.tab charset lib bin/' Makefile.am && \
+#        ./bootstrap --auto && \
+#        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+#        make -j16 && \
+#        make install
+
+## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
+RUN  \
+        tar -jxvf fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && cd fontconfig-${FONTCONFIG_VERSION} && \
+        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+        make -j16 && \
+        make install
+
+## libass https://github.com/libass/libass
+RUN  \
+        tar -zxvf ${LIBASS_VERSION}.tar.gz && cd libass-${LIBASS_VERSION} && \
+        ./autogen.sh && \
+        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+        make -j16 && \
+        make install
+
+## kvazaar https://github.com/ultravideo/kvazaar
+RUN \
+        tar -zxvf v${KVAZAAR_VERSION}.tar.gz && cd kvazaar-${KVAZAAR_VERSION} && \
+        ./autogen.sh && \
+        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+        make -j16 && \
+        make install
+
+RUN \
+        cd /tmp/aom && ls -al && sleep 60 && \
+        mkdir -p ./aom_build && \
+        cd ./aom_build && \
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 .. && \
+        make && \
+        make install
+
+## libxcb (and supporting libraries) for screen capture https://xcb.freedesktop.org/
+RUN \
+        tar -zxvf util-macros-${XORG_MACROS_VERSION}.tar.gz && cd util-macros-${XORG_MACROS_VERSION} && \
+        ./configure --srcdir=${DIR} --prefix="${PREFIX}" && \
+        make -j16 && \
+        make install
+
+RUN \
+        tar -zxvf xproto-${XPROTO_VERSION}.tar.gz && cd xproto-${XPROTO_VERSION} && \
+        ./configure --srcdir=${DIR} --prefix="${PREFIX}" && \
+        make -j16 && \
+        make install
+
+RUN \
+        tar -zxvf libXau-${XAU_VERSION}.tar.gz && cd libXau-${XAU_VERSION} && \
+        ./configure --srcdir=${DIR} --prefix="${PREFIX}" && \
+        make -j16 && \
+        make install
+
+RUN \
+        tar -zxvf libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz && cd libpthread-stubs-${LIBPTHREAD_STUBS_VERSION} && \
+        ./configure --prefix="${PREFIX}" && \
+        make -j16 && \
+        make install
+
+RUN \
+        tar -zxvf xcb-proto-${XCBPROTO_VERSION}.tar.gz && cd xcb-proto-${XCBPROTO_VERSION} && \
+        ACLOCAL_PATH="${PREFIX}/share/aclocal" ./autogen.sh && \
+        ./configure --prefix="${PREFIX}" && \
+        make -j16 && \
+        make install
+
+RUN \
+        tar -zxvf libxcb-${LIBXCB_VERSION}.tar.gz && cd libxcb-${LIBXCB_VERSION} && \
+        ACLOCAL_PATH="${PREFIX}/share/aclocal" ./autogen.sh && \
+        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+        make -j16 && \
+        make install
+
+## libxml2 - for libbluray
+RUN \
+        tar -zxvf libxml2-v${LIBXML2_VERSION}.tar.gz && cd libxml2-v${LIBXML2_VERSION} && \
+        ./autogen.sh --prefix="${PREFIX}" --with-ftp=no --with-http=no --with-python=no && \
+        make -j16 && \
+        make install
+
+## libbluray - Requires libxml, freetype, and fontconfig
+RUN \
+        tar -jxvf libbluray-${LIBBLURAY_VERSION}.tar.bz2 && cd libbluray-${LIBBLURAY_VERSION} && \
+        ./configure --prefix="${PREFIX}" --disable-examples --disable-bdjava-jar --disable-static --enable-shared && \
+        make -j16 && \
+        make install
+
+## libzmq https://github.com/zeromq/libzmq/
+RUN \
+        tar -zxvf v${LIBZMQ_VERSION}.tar.gz && cd libzmq-${LIBZMQ_VERSION} && \
+        ./autogen.sh && \
+        ./configure --prefix="${PREFIX}" && \
+        make && \
+        make check && \
+        make install
+
+## libsrt https://github.com/Haivision/srt
+RUN \
+        tar -zxvf v${LIBSRT_VERSION}.tar.gz && cd srt-${LIBSRT_VERSION} && \
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
+        make && \
+        make install
+
+## libpng
+RUN \
+        cd code && \
+        ./autogen.sh && \
+        ./configure --prefix="${PREFIX}" && \
+        make check && \
+        make install
+
+## libaribb24
+RUN \
+        tar -zxvf v${LIBARIBB24_VERSION}.tar.gz && cd aribb24-${LIBARIBB24_VERSION} && \
+        autoreconf -fiv && \
+        ./configure CFLAGS="-I${PREFIX}/include -fPIC" --prefix="${PREFIX}" && \
+        make && \
+        make install
+
+## ffmpeg https://ffmpeg.org/
+
+COPY ./ /tmp/ffmpeg/
+
+RUN \
+        DIR=/tmp/ffmpeg && cd ${DIR} && \
+        ./configure \
+        --disable-debug \
+        --disable-doc \
+        --disable-ffplay \
+        --enable-shared \
+        --enable-avresample \
+        --enable-libopencore-amrnb \
+        --enable-libopencore-amrwb \
+        --enable-gpl \
+        --enable-libass \
+        --enable-fontconfig \
+        --enable-libfreetype \
+        --enable-libvidstab \
+        --enable-libmp3lame \
+        --enable-libopus \
+        --enable-libtheora \
+        --enable-libvorbis \
+        --enable-libvpx \
+        --enable-libwebp \
+        --enable-libxcb \
+        --enable-libx265 \
+        --enable-libxvid \
+        --enable-libx264 \
+        --enable-nonfree \
+        --enable-openssl \
+        --enable-libfdk_aac \
+        --enable-postproc \
+        --enable-small \
+        --enable-version3 \
+        --enable-libbluray \
+        --enable-libzmq \
+        --extra-libs=-ldl \
+        --prefix="${PREFIX}" \
+        --enable-libopenjpeg \
+        --enable-libkvazaar \
+        --extra-cflags="-I${PREFIX}/include" \
+        --extra-ldflags="-L${PREFIX}/lib" && \
+        make -j16 && \
+        make install && \
+        make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
+        make distclean && \
+        hash -r && \
+        cd tools && \
+        make qt-faststart && cp qt-faststart ${PREFIX}/bin/
+
+## cleanup
+RUN \
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
+        for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
+        cp ${PREFIX}/bin/* /usr/local/bin/ && \
+        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
+        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
+        mkdir -p /usr/local/lib/pkgconfig && \
+        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
+          sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
+        done
+		
+
+FROM        ubuntu:22.04
+
+ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
+
+#CMD         ["--help"]
+#ENTRYPOINT  ["ffmpeg"]
+
+COPY --from=builder /usr/local /usr/local/
+
