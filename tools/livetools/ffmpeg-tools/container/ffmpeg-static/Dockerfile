@@ -50,75 +50,82 @@ RUN mkdir -p /opt/ffmpeg/bin
 ENV PATH="/opt/ffmpeg/bin:$PATH"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/lib/pkgconfig"
 
-# WORKDIR /opt/sources
+# WORKDIR /tmp
 # # RUN curl -sS -O https://www.nasm.us/pub/nasm/releasebuilds/${nasm_version}/nasm-${nasm_version}.tar.xz
 # RUN curl -sS -O https://ftp.osuosl.org/pub/blfs/conglomeration/nasm/nasm-${nasm_version}.tar.xz
 # RUN tar xf nasm-${nasm_version}.tar.xz
-# WORKDIR /opt/sources/nasm-${nasm_version}
+# WORKDIR /tmp/nasm-${nasm_version}
 # RUN ./autogen.sh && ./configure --prefix="/opt/ffmpeg" --bindir="/opt/ffmpeg/bin"
 # RUN make -j$(nproc)
 # RUN make install
 
-WORKDIR /opt/sources/zimg
-RUN git clone --branch ${zimg_version} --depth 1 https://github.com/sekrit-twc/zimg .
+#https://github.com/sekrit-twc/zimg
+WORKDIR /tmp/zimg
+RUN git clone --branch ${zimg_version} --depth 1 https://gitee.com/yejinlei/zimg.git .
 RUN ./autogen.sh
 RUN ./configure --enable-static  --prefix=/opt/ffmpeg --disable-shared
 RUN make -j $(nproc)
 RUN make install
 
-WORKDIR /opt/sources/x264
-RUN git clone --branch ${x264_version} --depth 1 https://github.com/corecodec/x264.git .
+#https://github.com/corecodec/x264.git
+WORKDIR /tmp/x264
+RUN git clone --branch ${x264_version} --depth 1 https://gitee.com/yejinlei/x264.git .
 RUN ./configure --prefix="/opt/ffmpeg" --bindir="/opt/ffmpeg/bin" --enable-static --enable-pic
 RUN make -j$(nproc)
 RUN make install
 
-WORKDIR /opt/sources/x265
+WORKDIR /tmp/x265
 RUN git clone --branch ${x265_version} --depth 1 https://bitbucket.org/multicoreware/x265_git.git .
 WORKDIR build/linux
 RUN cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="/opt/ffmpeg" -DENABLE_SHARED=off ../../source
 RUN make -j$(nproc)
 RUN make install
 
-WORKDIR /opt/sources/libvpx
-RUN git clone --branch ${libvpx_version} --depth 1 https://github.com/webmproject/libvpx.git .
+#https://github.com/webmproject/libvpx.git
+WORKDIR /tmp/libvpx
+RUN git clone --branch ${libvpx_version} --depth 1 https://gitee.com/yejinlei/libvpx.git .
 RUN ./configure --prefix="/opt/ffmpeg" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm
 RUN make -j$(nproc)
 RUN make install
 
-WORKDIR /opt/sources/fdk-aac
-RUN git clone --branch ${fdk_aac_version} --depth 1 https://github.com/mstorsjo/fdk-aac .
+#https://github.com/mstorsjo/fdk-aac
+WORKDIR /tmp/fdk-aac
+RUN git clone --branch ${fdk_aac_version} --depth 1 https://gitee.com/yejinlei/fdk-aac.git .
 RUN autoreconf -fiv && ./configure --prefix="/opt/ffmpeg" --disable-shared
 RUN make -j$(nproc)
 RUN make install
 
-WORKDIR /opt/sources/opus
-RUN git clone --branch ${opus_version} --depth 1 https://github.com/xiph/opus.git .
+#https://github.com/xiph/opus.git
+WORKDIR /tmp/opus
+RUN git clone --branch ${opus_version} --depth 1 https://gitee.com/yejinlei/opus.git .
 RUN ./autogen.sh
 RUN ./configure --prefix="/opt/ffmpeg" --disable-shared
 RUN make -j$(nproc)
 RUN make install
 
-WORKDIR /opt/sources/aom
+#https://github.com/jbeich/aom
+WORKDIR /tmp/aom
 RUN git -C aom pull 2> /dev/null || git clone --branch ${libaom_version} --depth 1 https://gitee.com/yejinlei/aom.git .
-WORKDIR /opt/sources/aom_build
+WORKDIR /tmp/aom_build
 RUN cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="/opt/ffmpeg" -DBUILD_SHARED_LIBS=off -DENABLE_TOOLS=off -DENABLE_DOCS=off -DENABLE_EXAMPLES=off -DENABLE_TESTS=off -DENABLE_NASM=on ../aom
 RUN make -j$(nproc)
 RUN make install
 
-WORKDIR /opt/sources/vmaf
+#https://github.com/Netflix/vmaf.git
+WORKDIR /tmp/vmaf
 RUN git clone --branch ${vmaf_version} --depth 1 https://gitee.com/yejinlei/vmaf.git .
 WORKDIR libvmaf/build
 RUN meson .. --default-library=static --prefix=/opt/ffmpeg --libdir=/opt/ffmpeg/lib --buildtype=release
 RUN ninja -vC . install
 
-WORKDIR /opt/sources/svt-av1
+WORKDIR /tmp/svt-av1
 RUN git clone --branch ${svt_av1_version} --depth 1 https://gitlab.com/AOMediaCodec/SVT-AV1.git .
 WORKDIR Build/linux
 RUN cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="/opt/ffmpeg" -DBUILD_SHARED_LIBS=off -DCMAKE_BUILD_TYPE=Release ../../
 RUN make -j $(nproc)
 RUN make install
 
-WORKDIR /opt/sources
+WORKDIR /tmp
 RUN curl -sS -O https://ffmpeg.org/releases/ffmpeg-${ffmpeg_version}.tar.bz2
 WORKDIR ffmpeg-${ffmpeg_version}
 RUN tar xjf ../ffmpeg-${ffmpeg_version}.tar.bz2 --strip-components 1
@@ -156,8 +163,8 @@ RUN    ./configure \
 RUN make -j$(nproc)
 RUN make install
 
-FROM ubuntu:jammy
-LABEL maintainer "Cosmin Stejerean <cosmin@offbytwo.com>"
+FROM ubuntu:22.04
+LABEL maintainer "yejinlei <4010896@qq.com>"
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -qq && apt-get upgrade -y && \
     apt-get -y install --no-install-recommends \
@@ -166,7 +173,7 @@ RUN apt-get update -qq && apt-get upgrade -y && \
     libfreetype6 \
     && apt-get -y clean && rm -r /var/lib/apt/lists/*
 
-ENV TZ=UTC
+ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /opt/ffmpeg
