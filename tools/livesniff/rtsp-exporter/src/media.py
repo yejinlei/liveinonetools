@@ -20,7 +20,7 @@ media_all = Gauge('media_all', "media_all", ['group'], registry=REGISTRY)
 def ApiResponse():
     CAMERA_CONF = os.getenv("CAMERA_CONF")
     media_url = 'rtsp://10.10.10.30:8554/live/2'
-    cmdLine = "ffprobe -v quiet -print_format json -show_format -show_streams " + media_url
+    cmdLine = "ffprobe -v quiet -print_format json -show_format -show_streams -print_format json=c=1 " + media_url
     #cmdLine = "ffprobe -v quiet -show_format -show_streams " + media_url
     cmdResult = os.popen(cmdLine).readlines()
     media_all.labels(group=cmdResult).set(1)
