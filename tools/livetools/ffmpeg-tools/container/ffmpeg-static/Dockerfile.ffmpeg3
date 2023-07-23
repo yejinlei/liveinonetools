@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/yejinlei/multi.ubuntu.gcc:11 as build
+FROM registry.cn-hangzhou.aliyuncs.com/yejinlei/multi.ubuntu.gcc:9.4 as build
 
 ARG nasm_version=2.15.05
 ARG x264_version=master
@@ -128,9 +128,9 @@ RUN tar xjf ../ffmpeg-${ffmpeg_version}.tar.bz2 --strip-components 1
 #RUN curl -sS -o svt-av1-consolidated.patch https://github.com/cosmin/FFmpeg/commit/9a151b0edee710727a588dddd0b331b4dc676227.patch
 #RUN patch -p1 < svt-av1-consolidated.patch
 
-WORKDIR /tmp/ffmpeg
+WORKDIR /tmp/ffmpeg-${ffmpeg_version}
 
-RUN    ./configure \
+RUN ./configure \
     --prefix="/opt/ffmpeg" \
     --ld="g++" \
     --pkg-config-flags="--static" \
