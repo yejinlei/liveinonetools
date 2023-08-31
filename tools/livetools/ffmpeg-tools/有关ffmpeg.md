@@ -68,7 +68,7 @@ sudo apt-get install libfdk-aac-dev libspeex-dev libx264-dev libx265-dev
 >
 > 该命令将输入视频文件input.mp4进行编码，并使用libx264编码器、medium预设和film调整参数。同时，它还将音频流直接复制到输出文件中，以保持音频的原始格式。
 
-#### 源码中支持哪些硬解
+#### 2.2.1、源码中支持哪些硬解
 
 ```cpp
 // libavutil/hwcontext.h
@@ -86,6 +86,10 @@ enum AVHWDeviceType {
     AV_HWDEVICE_TYPE_MEDIACODEC,
 };
 ```
+
+#### 2.2.2、参考资料
+
+- [ffmpeg HWAccelIntro](https://trac.ffmpeg.org/wiki/HWAccelIntro)
 
 ### 2.3、libavdevice：设备输入输出模块
 
