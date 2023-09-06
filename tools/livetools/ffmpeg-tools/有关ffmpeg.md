@@ -90,6 +90,7 @@ enum AVHWDeviceType {
 #### 2.2.2、参考资料
 
 - [ffmpeg HWAccelIntro](https://trac.ffmpeg.org/wiki/HWAccelIntro)
+- [w3 webcodecs](https://w3c.github.io/webcodecs)
 
 ### 2.3、libavdevice：设备输入输出模块
 
@@ -217,8 +218,11 @@ enum AVHWDeviceType {
 
 ## 三、其他资料
 
-\- [FFmpeg官方网站](https://www.ffmpeg.org/)
-\- [FFmpeg文档](https://www.ffmpeg.org/documentation.html)
-\- [FFmpeg API参考](https://www.ffmpeg.org/doxygen/trunk/index.html)
-\- [FFmpeg示例代码](https://github.com/FFmpeg/FFmpeg/tree/master/doc/examples)
-\- [FFmpeg开发者社区](https://trac.ffmpeg.org/wiki/Community)
+- [FFmpeg官方网站](https://www.ffmpeg.org/)
+- [FFmpeg文档](https://www.ffmpeg.org/documentation.html)
+- [FFmpeg API参考](https://www.ffmpeg.org/doxygen/trunk/index.html)
+- [FFmpeg示例代码](https://github.com/FFmpeg/FFmpeg/tree/master/doc/examples)
+- [FFmpeg开发者社区](https://trac.ffmpeg.org/wiki/Community)
+- [FFmpeg wiki]()
+  - [Capture/Webcam](https://trac.ffmpeg.org/wiki/Capture/Webcam)
+- [流媒体视频基础 MSE 入门 & FFmpeg 制作视频预览缩略图和 fmp4](https://juejin.cn/post/6953777965838630926)
