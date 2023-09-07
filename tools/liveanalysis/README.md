@@ -8,7 +8,15 @@
 
 ## 二、视频质量分析
 
-## 三、参考资料
+## 三、工具
+
+### 3.1、MP4工具
+
+#### [bento4](https://www.bento4.com/documentation/mp4info/)
+
+### [MP4Box](https://gpac.wp.imt.fr/)
+
+## 四、参考资料
 
 1. [hybridgroup/gocv](https://github.com/hybridgroup/gocv)
 2. [abhiTronix/vidgear](https://github.com/abhiTronix/vidgear)
