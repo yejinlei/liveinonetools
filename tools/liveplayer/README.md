@@ -2,7 +2,10 @@
 
 ![](../../doc/音视频方案.png)
 
-## wasm 播放器
+## 一、内置方案 - js/flash
 
-## 其他资料
+## 二、外置方案 - MediaServer
 
+## 三、内置方案 - webassembly
+
+## 四、其他资料

@@ -1,22 +1,42 @@
 # 音视频编解码、容器及协议
 
-## 一、音视频分析
+## 一、编解码
 
-### RTSPtoWebRTC，[源码](https://github1s.com/deepch/RTSPtoWebRTC)
+## 二、音视频容器
 
-### deepch/vdk，[源码](https://github1s.com/deepch/vdk)
+| protocols（流协议及其他） | 容器格式                           | codecs（音视频编解码）                      | hwaccels（硬件加速） | 协议/文档            | 工具/库                                                      |
+| ------------------------- | ---------------------------------- | ------------------------------------------- | -------------------- | -------------------- | ------------------------------------------------------------ |
+| _                         | **rtp**                            | _                                           |                      |                      | 1. [rtptools版本库](https://gitee.com/yejinlei-mirror/rtptools) |
+| _                         | **flv**(Flash Video)               |                                             |                      |                      | [flv工具](https://share.weiyun.com/5h54Qqp)                  |
+| _                         | **mp4**(MPEG-4 part 14)            | h264视频编码+aac音频编码                    |                      | H5 video标签原生支持 | 1. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>2. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js) |
+| _                         | **fmp4(fragment mp4)**             | h264视频编码+aac音频编码                    |                      |                      |                                                              |
+| _                         | **m4v**(raw MPEG-4 video)          |                                             |                      |                      |                                                              |
+| _                         | **webm**                           | vp8视频编码+vorbis音频编码                  |                      | H5 video标签原生支持 |                                                              |
+| _                         | **ogg**                            | theora视频编码+vorbis音频编码               |                      | H5 video标签原生支持 |                                                              |
+| _                         | **hds**(HDS Muxer)                 |                                             |                      |                      |                                                              |
+| _                         | **mpegts**(MPEG2 Transport Stream) | mpeg1video/mpeg2video视频编码+mp1/2音频编码 |                      |                      | 1. [雷霄骅 / TS_Analysis](https://gitee.com/leixiaohua/TS_Analysis)<br>2. [EasyICE](https://share.weiyun.com/LPCJIjEG) |
+| _                         | **aac**(Advanced Audio Coding)     |                                             |                      |                      | [雷霄骅 / AAC_Analysis](https://gitee.com/leixiaohua/AAC_Analysis) |
+| _                         | **adts**(ADTS AAC)                 |                                             |                      |                      |                                                              |
 
-## 二、视频质量分析
+### 2.1、MP4 容器
 
-## 三、工具
+​	**mp4** 或称 **MPEG-4 Part 14**，是一种多媒体容器格式，扩展名为`.mp4`。
 
-### 3.1、MP4工具
+#### 2.2.1、MP4 标准
 
-#### [bento4](https://www.bento4.com/documentation/mp4info/)
+#### 2.1.2、工具
 
-#### [MP4Box](https://gpac.wp.imt.fr/)
+##### [bento4](https://www.bento4.com/documentation/mp4info/)
 
-####  [mp4box.js](https://gpac.github.io/mp4box.js/) 一个在线解析mp4的工具
+##### [MP4Box](https://gpac.wp.imt.fr/)
+
+#####  [mp4box.js](https://gpac.github.io/mp4box.js/) 一个在线解析mp4的工具
+
+## 三、开源项目
+
+- RTSPtoWebRTC，[源码](https://github1s.com/deepch/RTSPtoWebRTC)
+
+- deepch/vdk，[源码](https://github1s.com/deepch/vdk)
 
 ## 四、参考资料
 
