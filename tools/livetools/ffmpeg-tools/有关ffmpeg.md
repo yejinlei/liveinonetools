@@ -110,6 +110,14 @@ enum AVHWDeviceType {
 >
 > 该命令将从Video4Linux2设备/dev/video0和ALSA设备hw:0中读取音视频数据，并使用libx264编码器和AAC编码器进行编码。同时，它还将音视频数据写入输出文件output.mp4中。
 
+#### 2.3.1 命令
+
+##### 显示所有支持的设备
+
+- ```sh
+  ffmpeg -devices
+  ```
+
 ### 2.4、libavfilter：滤波器模块
 
 > libavfilter是FFmpeg的一个可选模块，用于音视频滤镜和效果处理。它提供了多种音视频滤镜和效果，例如裁剪、缩放、旋转、模糊、去噪等。

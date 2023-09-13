@@ -9,12 +9,11 @@ Media as a Service, from codec to server architecture...✍
 
   protocols（流协议及其他） | formats(封装容器,通常为本地音视文件格式(如mp4)及适用于网络传输的传输流及其本地文件形式(如fmp4,ts/ps流)) | codecs（音视频编解码） | hwaccels（硬件加速） | 协议/文档 | 工具/库
   ---|---|---|---|---|---
-  **直播↷** | **----** | **---** | **---** | **---**
   **rtmp** | flv tag | | | | 1. [librtmp's github](https://github.com/yixia/librtmp/tree/master/librtmp)<br>2. [nginx-rtmp-module(支持h265)代码](https://github.com/adwpc/nginx-rtmp-module)
-  **rtmps** | | | |
-  **rtmpt** | | | |
-  **rtmpts** | | | |
-  **udt（可靠udp协议）** | | | |
+  **rtmps** | | | ||
+  **rtmpt** | | | ||
+  **rtmpts** | | | ||
+  **udt（可靠udp协议）** | | | ||
   **srt（基于udt）** | | | | | 1. [srt's github](https://github.com/Haivision/srt)<br>2. [srt-live-server's github](https://github.com/Edward-Wu/srt-live-server)
   **hls**(Apple HTTP Live Streaming) | m3u8+mpegts部分 | | | ![](tools/liveanalysis/doc/hls.png)<br>*HLS架构图*<br>1. H5 video标签原生支持 or H5 MSE扩展<br>2. 协议 - [HTTP Live Streaming draft-pantos-http-live-streaming-12](https://tools.ietf.org/html/draft-pantos-http-live-streaming-12)<br>3. HLS协议编码格式要求：<br>- 视频的编码格式：H264<br>音频的编码格式：AAC、MP3、AC-3<br>- 视频的封装格式：ts<br>- 保存 ts 索引的 m3u8 文件 |
   **hls+**|||| 非标准 | [PingOS](https://pingos.io/)
@@ -22,34 +21,33 @@ Media as a Service, from codec to server architecture...✍
   **llhls**|||| 非标准 |
   **dash**(Dynamic adaptive streaming over HTTP) | mpd+m4v/m4a\|webm\|3gp | | | | 1. [video.js dash插件](https://github.com/videojs/videojs-contrib-dash.git)<br>2. [dash测试页](http://reference.dashif.org/dash.js/nightly/samples/dash-if-reference-player/index.html)<br>3. [Bento4's github](https://github.com/axiomatic-systems/Bento4)<br>4. [Bento4's Bin](https://share.weiyun.com/5w4fPrC)<br>5. [DASHEncoder2's github](https://github.com/zhanghuicuc/DASHEncoder2/tree/dev-v2)<br>6. [DASH website demo's github（类似bitcodin网站）](https://github.com/zhanghuicuc/dash_website_demo)
   **dash-ll**|||||
-  **http-flv** | | | | H5 MSE扩展
-  **http-fmp4** | | | | H5 MSE扩展
-  **websocket-flv** | | | | H5 MSE扩展
-  **websocket-fmp4** | | | | H5 MSE扩展
-  **rtmp over quic（基于udp）** | | | |
-  **http-flv over quic（基于udp）** | | | |
-  **hls over quic（基于udp）** | | | |
+  **http-flv** | | | | H5 MSE扩展|
+  **http-fmp4** | | | | H5 MSE扩展|
+  **websocket-flv** | | | | H5 MSE扩展|
+  **websocket-fmp4** | | | | H5 MSE扩展|
+  **rtmp over quic（基于udp）** | | | ||
+  **http-flv over quic（基于udp）** | | | ||
+  **hls over quic（基于udp）** | | | ||
   **kmp（私有协议，基于可靠udp协议kcp）** | | | | | [媒体服务器NodeMediaServer](https://github.com/NodeMedia/NodeMediaServer)
   **rtsp** | | | | |
   **rtcp** | | | | |
   _ | **rtp** |_| | | 1. [rtptools版本库](https://gitee.com/yejinlei-mirror/rtptools)
   _ |**flv**(Flash Video) |    | | | [flv工具](https://share.weiyun.com/5h54Qqp)
-  _ |**mp4**(MPEG-4 part 14) | h264视频编码+aac音频编码 | | H5 video标签原生支持 | 1. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>2. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
-  _ |**fmp4(fragment mp4)** | h264视频编码+aac音频编码 | | | 
+ **fmp4(fragment mp4)** |**mp4**(MPEG-4 part 14) | h264视频编码+aac音频编码 | | H5 video标签原生支持 | 1. [mp4工具](https://share.weiyun.com/5pM2dwF)<br>2. [GPAC's github](https://github.com/gpac/gpac)<br>3. [mp4box.js's github](https://github.com/gpac/mp4box.js)
   _ |**m4v**(raw MPEG-4 video) | | | |
   _ |**webm** | vp8视频编码+vorbis音频编码 | | H5 video标签原生支持 |
   _ |**ogg** | theora视频编码+vorbis音频编码 | | H5 video标签原生支持 |
   _ |**hds**(HDS Muxer) |    | | |
   _ |**mpegts**(MPEG2 Transport Stream) | mpeg1video/mpeg2video视频编码+mp1/2音频编码 | | | 1. [雷霄骅 / TS_Analysis](https://gitee.com/leixiaohua/TS_Analysis)<br>2. [EasyICE](https://share.weiyun.com/LPCJIjEG)
   _ |**aac**(Advanced Audio Coding) | | | | [雷霄骅 / AAC_Analysis](https://gitee.com/leixiaohua/AAC_Analysis)
-  _ |**adts**(ADTS AAC)
+  _ |**adts**(ADTS AAC)||||
   _ |_ |**mpeg1video**(MPEG-1 video)    | | |
   _ |_ |**mpeg2video**(MPEG-2 video)    | | |
   _ |_ |**mpeg4**(MPEG-4 part 2)    | | |
   _ |_ |**h264**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | | 1. [x264 github](https://code.videolan.org/videolan/x264.git)<br>2. [openh264 github](https://github.com/cisco/openh264)<br>3. [雷霄骅 / H264_Analysis](https://gitee.com/leixiaohua/H264_Analysis)
   _ |_ |**avc1**(H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)    | | |
-  _ |_ |**hevc**(H.265 / HEVC (High Efficiency Video Coding))    | | | 
-  _ |_ |**av1**(Alliance for Open Media Video 1)    | | H5 video标签原生支持(av1/mp4, 新版浏览器webrtc同样支持) | 
+  _ |_ |**hevc**(H.265 / HEVC (High Efficiency Video Coding))    | | |
+  _ |_ |**av1**(Alliance for Open Media Video 1)    | | H5 video标签原生支持(av1/mp4, 新版浏览器webrtc同样支持) |
   _ |_ |**theora** | | |
   _ |_ |**vp8**(On2 VP8)) | | |
   _ |_ |**vorbis** | | |
