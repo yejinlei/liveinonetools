@@ -8,4 +8,9 @@
 
 ## 三、内置方案 - webassembly
 
-## 四、其他资料
+## 四、播放器项目
+
+- [nplayer.js](https://nplayer.js.org/)
+- [FILExt](https://filext.com/zh/wenjian-kuozhan-ming/DAV)
+
+## 五、其他资料
