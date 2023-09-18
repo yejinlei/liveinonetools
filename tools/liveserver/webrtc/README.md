@@ -2448,4 +2448,6 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 2. [Real-Time Communication in WEB-browsers (rtcweb)](https://datatracker.ietf.org/wg/rtcweb/documents/)
 2. [Build the backend services needed for a WebRTC app](https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/)
 2. [leggetter/realtime-web-technologies-guide](https://github.com/leggetter/realtime-web-technologies-guide)
+2. [l7mp.io](https://l7mp.io/), Moving WebRTC backend services to Kubernetes
+2. [Managed WebRTC TURN: The need for speed](https://bloggeek.me/managed-webrtc-turn-speed/)
 

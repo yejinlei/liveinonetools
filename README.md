@@ -386,31 +386,19 @@ Media as a Service, from codec to server architecture...✍
 ### 9.1 流媒体地址
 
 - rtmp，rtmp://202.69.69.180:443/webcast/bshdlive-pc
-
 - rtmp，rtmp://1011.lssplay.aodianyun.com/demo/game
-
 - rtmp，rtmp://play.nodemedia.io/live/ljq
-
 - kmp，kmp://play.nodemedia.io/live/ljq
-
 - http-flv(h265)，http://alplay.nodemedia.cn/live/cam_178.flv
-
 - http-flv(h265)，http://alplay.nodemedia.cn/live/cam_180.flv
-
 - http-flv(h265)，http://alplay.nodemedia.cn/live/cam_112.flv
-
+- https-flv(h264)， https://sf1-hscdn-tos.pstatp.com/obj/media-fe/xgplayer_doc_video/flv/xgplayer-demo-720p.flv
 - rtsp，rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov
-
 - rtsp，rtsp://170.93.143.139/rtplive/470011e600ef003a004ee33696235daa
-
 - hls，https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8
-
 - hls，http://220.161.87.62:8800/hls/0/index.m3u8
-
 - hls，http://220.161.87.62:8800/hls/1/index.m3u8
-
 - mp4，http://www.w3school.com.cn/i/movie.mp4
-
 - av1/mp4, https://media.vued.vanthink.cn/video.av1.mp4
 
 ### 9.2、工具
