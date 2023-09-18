@@ -12,5 +12,6 @@
 
 - [nplayer.js](https://nplayer.js.org/)
 - [FILExt](https://filext.com/zh/wenjian-kuozhan-ming/DAV)
+- [jessibuca](https://jessibuca.com/pro/), [测试页](https://jessibuca.com/pro/)
 
 ## 五、其他资料
