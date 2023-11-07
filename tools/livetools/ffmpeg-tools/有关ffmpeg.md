@@ -68,7 +68,7 @@ sudo apt-get install libfdk-aac-dev libspeex-dev libx264-dev libx265-dev
 >
 > 该命令将输入视频文件input.mp4进行编码，并使用libx264编码器、medium预设和film调整参数。同时，它还将音频流直接复制到输出文件中，以保持音频的原始格式。
 
-#### 源码中支持哪些硬解
+#### 2.2.1、源码中支持哪些硬解
 
 ```cpp
 // libavutil/hwcontext.h
@@ -87,6 +87,11 @@ enum AVHWDeviceType {
 };
 ```
 
+#### 2.2.2、参考资料
+
+- [ffmpeg HWAccelIntro](https://trac.ffmpeg.org/wiki/HWAccelIntro)
+- [w3 webcodecs](https://w3c.github.io/webcodecs)
+
 ### 2.3、libavdevice：设备输入输出模块
 
 > libavdevice是FFmpeg的一个可选模块，用于音视频设备的输入和输出。它提供了多种音视频设备的输入和输出接口，例如摄像头、麦克风、扬声器等。
@@ -104,6 +109,14 @@ enum AVHWDeviceType {
 > ```
 >
 > 该命令将从Video4Linux2设备/dev/video0和ALSA设备hw:0中读取音视频数据，并使用libx264编码器和AAC编码器进行编码。同时，它还将音视频数据写入输出文件output.mp4中。
+
+#### 2.3.1 命令
+
+##### 显示所有支持的设备
+
+- ```sh
+  ffmpeg -devices
+  ```
 
 ### 2.4、libavfilter：滤波器模块
 
@@ -213,8 +226,11 @@ enum AVHWDeviceType {
 
 ## 三、其他资料
 
-\- [FFmpeg官方网站](https://www.ffmpeg.org/)
-\- [FFmpeg文档](https://www.ffmpeg.org/documentation.html)
-\- [FFmpeg API参考](https://www.ffmpeg.org/doxygen/trunk/index.html)
-\- [FFmpeg示例代码](https://github.com/FFmpeg/FFmpeg/tree/master/doc/examples)
-\- [FFmpeg开发者社区](https://trac.ffmpeg.org/wiki/Community)
+- [FFmpeg官方网站](https://www.ffmpeg.org/)
+- [FFmpeg文档](https://www.ffmpeg.org/documentation.html)
+- [FFmpeg API参考](https://www.ffmpeg.org/doxygen/trunk/index.html)
+- [FFmpeg示例代码](https://github.com/FFmpeg/FFmpeg/tree/master/doc/examples)
+- [FFmpeg开发者社区](https://trac.ffmpeg.org/wiki/Community)
+- [FFmpeg wiki]()
+  - [Capture/Webcam](https://trac.ffmpeg.org/wiki/Capture/Webcam)
+- [流媒体视频基础 MSE 入门 & FFmpeg 制作视频预览缩略图和 fmp4](https://juejin.cn/post/6953777965838630926)
