@@ -1,0 +1,30 @@
+FROM golang:1.20 as builder
+WORKDIR /app
+ENV GOPROXY https://goproxy.cn
+ENV GO111MODULE=on
+
+ENV GIN_MODE=release
+WORKDIR /go/src/app
+COPY .  .
+
+ENV CGO_ENABLED=0
+RUN cd RTSPtoWeb \
+    && go get \
+    && go mod download \
+    && go build -a -o rtsp-to-webrtc
+
+EXPOSE 8081
+
+FROM ubuntu:focal AS runner
+WORKDIR /app
+
+COPY --from=builder /go/src/app/RTSPtoWeb/rtsp-to-webrtc /app/
+COPY --from=builder /go/src/app/RTSPtoWeb/web /app/web
+
+RUN mkdir -p /config
+COPY --from=builder /go/src/app/RTSPtoWeb/config.json /app/
+
+#ENV GO111MODULE="on"
+#ENV GIN_MODE="release"
+
+CMD ["./rtsp-to-webrtc"]
