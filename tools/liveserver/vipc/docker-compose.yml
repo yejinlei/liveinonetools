@@ -1,0 +1,35 @@
+version: '3.5'
+services:
+  server:
+    hostname: vipc-server
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/multi.vipc-server:1.0.0
+    networks:                                                                                                                                                                         
+      - vipc-network                                                                                                                                                                
+    ports:
+      - "8554:8554" #RTSP
+        #- "8332:8332" #RTSPS
+        #- "1935:1935" #RTMP
+        #- "1936:1936" #RTMPS
+        #- "8888:8888" #HLS
+        #- "9997:9997" #api
+        #- "9998:9998" #metrics
+        #- "9999:9999" #ppof
+    volumes:
+      - ./vipc-server/mediamtx.yml:/rtsp-simple-server/mediamtx.yml
+
+  push:
+    hostname: vipc-ingest
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/multi:vipc-ingest:1.0.0 
+    networks:                                                                                                                                                                         
+      - vipc-network                                                                                                                                                                
+    #links:
+    #  - vipc
+    depends_on:
+      - server
+    volumes:
+      - ./vipc-ingest/vipc_argv.conf:/argv.conf:ro
+      - ./vipc-ingest/vipc_camera.conf:/camera.conf:ro
+
+networks:
+  vipc-network:
+    driver: bridge
