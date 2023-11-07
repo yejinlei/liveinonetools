@@ -19,7 +19,7 @@ services:
 
   push:
     hostname: vipc-ingest
-    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/multi:vipc-ingest:1.0.0 
+    image: registry.cn-hangzhou.aliyuncs.com/yejinlei/multi.vipc-ingest:1.0.0 
     networks:                                                                                                                                                                         
       - vipc-network                                                                                                                                                                
     #links:
