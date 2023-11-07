@@ -6,7 +6,7 @@ services:
     networks:                                                                                                                                                                         
       - vipc-network                                                                                                                                                                
     ports:
-      - "1935:1935" #RTSP
+      - "8554:8554" #RTSP
         #- "8332:8332" #RTSPS
         #- "1935:1935" #RTMP
         #- "1936:1936" #RTMPS
