@@ -120,6 +120,7 @@
 - [q191201771/lal](https://github1s.com/q191201771/lal)
 - [dusong7/rtspserver](https://gitee.com/dusong7/rtspserver/tree/master/src/RTSP)
 - [korandiz/v4l](https://github.com/korandiz/v4l)
+- [rust-av](https://github.com/rust-av)
 
 ## 四、参考资料
 
@@ -128,5 +129,6 @@
 3. [基于OpenCV实现图像质量评价](https://blog.csdn.net/luohenyj/article/details/108984313)
 4. [图像增强算法效果评价指标及实现](https://www.coder55.com/article/51157)
 5. [FFmpeg原理](https://ffmpeg.xianwaizhiyin.net/cover.html)
-5. [HTML5 视频直播（一）](https://imququ.com/post/html5-live-player-1.html)
-6. [H5直播系列二 MSE(Media Source Extensions)](https://www.jianshu.com/p/1bfe4470349b)
+6. [HTML5 视频直播（一）](https://imququ.com/post/html5-live-player-1.html)
+7. [H5直播系列二 MSE(Media Source Extensions)](https://www.jianshu.com/p/1bfe4470349b)
+8. [雷霄骅专栏](https://blog.csdn.net/leixiaohua1020)
