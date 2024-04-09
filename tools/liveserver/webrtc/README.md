@@ -2370,13 +2370,36 @@ turnutils_uclient -u user -w  uerpassword -L 172.22.61.84 -v 123.60.88.103 -e 10
 
 ## 五、其他开源项目
 
+库
+
 1. [MultiStreamsMixer.js](https://github.com/muaz-khan/MultiStreamsMixer)
-1. [livekit](https://github.com/livekit/)
-1. [pion]()
-1. [webrtc.rs]()
 1. [deepch/vdk](https://github.com/deepch/vdk)
+1. [libdatachannel](https://github.com/paullouisageneau/libdatachannel), C++实现的开源WebRTC协议栈
+1. [node-webrtc](https://github.com/node-webrtc/node-webrtc), nodejs针对WebRTC的binding
+1. [aiortc](https://github.com/aiortc/aiortc), python语言的WebRTC协议栈实现, 可以与pyav无缝对接
+1. [webrtc.rs](https://github.com/webrtc-rs/webrtc), rust语言的WebRTC协议栈实现
+1. [Amzaon Kinesis Video SDK](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c), amazon开源的纯c的WebRTC实现
+1. [Flutter WebRTC](https://github.com/flutter-webrtc), flutter版本的WebRTC binding
+1. [React Native WebRTC](https://github.com/react-native-webrtc), reactnative版本WebRTC binding
+1. [pion](https://github.com/pion/webrtc), golang版本WebRTC协议栈
+
+------
+
+服务器
+
+1. [licode](https://github.com/lynckia/licode)
+1. [janus-gateway](https://github.com/meetecho/janus-gateway)
+1. [mediasoap](https://github.com/versatica/mediasoup/)
+1. [medooze-server](https://github.com/medooze)
+1. [ion](https://github.com/ionorg/ion), 基于pion
+1. [livekit](https://github.com/livekit/), 基于pion
+1. [cloud-morph](https://github.com/giongto35/cloud-morph), 基于pion的开源云游戏方案
+1. [owt](https://github.com/open-webrtc-toolkit)
+1. [Kurento](https://github.com/kurento/)
+1. [Red5](https://github.com/Red5)
 1. [yapingcat/turn-server](https://github.com/yapingcat/turn-server/)，Go语言实现的stun/turn服务器
 1. [stunner](https://github.com/l7mp/stunner)，STUNner: A Kubernetes media gateway for WebRTC
+1. [webrtc-streamer](https://github.com/mpromonet/webrtc-streamer), 一个使用简单机制通过 WebRTC 流式传输视频捕获设备和 RTSP 源的项目,它内置了一个小型的 HTTP server 来对 WebRTC需要的相关接口提供支持
 
 ## 六、 RFC汇总及参考资料
 
